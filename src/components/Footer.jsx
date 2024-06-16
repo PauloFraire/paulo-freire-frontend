@@ -7,6 +7,7 @@ import {
 } from "react-icons/bs";
 import { motion } from "framer-motion";
 import logo from "../assets/logo.png";
+import { logos } from '../data/Data';
 
 const Footer = () => {
     return (
@@ -17,12 +18,12 @@ const Footer = () => {
             className="border-t-2 border-slate-500 bg-[#201E1E] p-5"
         >
             <div className="grid md:grid-cols-4 sm:grid-cols-3 xs:grid-cols-2 grid-cols-1 place-items-start gap-8 text-white font-semibold">
-                <div>
-                    <div className="font-bold mb-6">Escuela Paulo Freire</div>
+                <div className='flex flex-col justify-center items-center'>
+                    <p className="font-bold mb-6 text-center">CENTRO REGIONAL DE EDUCACIÓN SUPERIOR PAULO FREIRE</p>
                     <img
                         src={logo}
                         alt="logo"
-                        className="mx-auto md:mx-0 p-2 bg-Teal"
+                        className="h-36 w-40"
                     />
                 </div>
                 <div>
@@ -69,8 +70,7 @@ const Footer = () => {
                 </div>
                 <div>
                     <div className="font-bold mb-6">Siguenos</div>
-                    <div className="text-sm mb-4">correoescolar@gmail.com</div>
-                    <div className="text-sm">+959883271929</div>
+                    <div className="text-sm mb-4">centrodeeducacionsuperiorpaulo@gmail.com</div>
                     <div className="flex gap-4 mt-4">
                         <a href="" className="hover:scale-110 text-xl">
                             <BsFacebook />
@@ -81,14 +81,11 @@ const Footer = () => {
                         <a href="" className="hover:scale-110 text-xl">
                             <BsTwitter />
                         </a>
-                        <a href="" className="hover:scale-110 text-xl">
-                            <BsPinterest />
-                        </a>
                     </div>
                 </div>
             </div>
             <p className="font-bold text-center text-white">
-                Todos los derechos reservados 2023
+                Todos los derechos reservados 2024
             </p>
         </motion.div>
     )

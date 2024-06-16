@@ -8,13 +8,16 @@ export default {
     fontFamily: {
       Poppins: "Poppins"
     },
+    container: {
+      center: true,
+    },
     extend: {
       colors: {
         Teal: "#336846",
         HummingBird: "#d1f1ee",
         Yellow: "#e4d63b",
         Solitude: "#e9e9ea",
-        gray: "#4B4B4C",
+
         Naranja: "#EC8F36",
         Cafe: "#C89768",
         Rojo: "#ED3E37"

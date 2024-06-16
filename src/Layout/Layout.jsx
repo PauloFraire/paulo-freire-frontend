@@ -3,6 +3,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import imgChat from '../assets/img/chat.png'
+import { Toaster } from 'react-hot-toast';
 
 const Layout = () => {
 
@@ -16,11 +17,16 @@ const Layout = () => {
 
   return (
     <>
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+      />
+
       <Header />
       <div className='fixed bottom-9 right-4 '>
         <img src={imgChat} alt="" width={35} height={35} />
       </div>
-      <div className='section animate__animated animate__fadeIn'>
+      <div className='section animate__animated animate__fadeIn bg-gray-100'>
         <Outlet />
       </div>
       <Footer />

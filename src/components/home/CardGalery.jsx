@@ -1,12 +1,16 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import clientAxios from '../../config/clientAxios';
 
-const CardGalery = ({ imgGalery, category }) => {
+const CardGalery = ({ id, category }) => {
 
 
     const categoryContainer = useRef(null);
     const [isScroll, setIsscroll] = useState(false);
+    const [imageActivity, setImageActivity] = useState([]);
+
+
     const scrollContainer = (direction) => {
         direction === "right"
             ? (categoryContainer.current.scrollLeft += 200)
@@ -16,11 +20,27 @@ const CardGalery = ({ imgGalery, category }) => {
             : setIsscroll(false);
     };
 
+    useEffect(() => {
+
+        const getAcademyActivities = async () => {
+            try {
+                const response = await clientAxios.get(`/image-activity/${id}`);
+                setImageActivity(response.data);
+                console.log(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        getAcademyActivities();
+
+    }, []);
+
     return (
 
         <div className="grid grid-cols-1 gap-16 sm:grid-cols-2 md:grid-cols-4">
             <div className="md:col-span-1 flex justify-center items-center ">
-                <h1 className="ml-5 text-2xl  text-center p-2 font-extrabold text-gray-900 dark:text-white md:text-2xl lg:text-4xl ">
+                <h1 className="ml-5 text-2xl  text-center p-2 font-extrabold text-blue-900  md:text-2xl lg:text-4xl ">
                     {category}
                 </h1>
 
@@ -47,7 +67,7 @@ const CardGalery = ({ imgGalery, category }) => {
                     className="gap-3 mt-4 overflow-auto flex items-center scroll-smooth hide-scrollbar"
                     ref={categoryContainer}
                 >
-                    {imgGalery.map(({ id, img, tittle, description }) => (
+                    {imageActivity.map(({ _id, url }) => (
                         <div
                             key={id}
                             className="relative flex-shrink-0 w-[300px] group rounded-lg overflow-hidden"
@@ -55,18 +75,14 @@ const CardGalery = ({ imgGalery, category }) => {
                             <div className="overflow-hidden rounded-lg hover:opacity-50">
                                 <Link className="!opacity-100">
                                     <img
-                                        src={img}
-                                        alt={tittle}
+                                        src={url}
+                                        alt={_id}
                                         className="w-full  h-[300px] object-cover group-hover:scale-125 transition-a"
                                         loading="lazy"
                                     />
                                 </Link>
                             </div>
-                            {/* <div className="absolute  bottom-0 left-0 w-full px-2 py-2 transition-transform bg-gradient-to-t from-black/80 text-slate-100 to-transparent">
-                                <h1 className="text-lg font-semibold">{tittle}</h1>
-                                <p> {description}
-                                </p>
-                            </div> */}
+
                         </div>
                     ))}
                 </div>

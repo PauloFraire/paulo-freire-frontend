@@ -7,6 +7,8 @@ import DigitalLibrary from '../components/home/DigitalLibrary';
 import Galery from '../components/home/Galery';
 import History from '../components/home/History';
 import Inscripciones from '../components/home/Inscripciones';
+import PromotionalVideo from '../components/home/PromotionalVideo';
+import DiplomadoInformation from '../components/home/DiplomadoInformation';
 
 const Home = () => {
 
@@ -14,7 +16,9 @@ const Home = () => {
   return (
     <Fragment className="">
       <Hero />
-      <Inscripciones />
+      <PromotionalVideo />
+      {/* <Inscripciones /> */}
+      <DiplomadoInformation />
       <Welcome />
       <News />
       {/* <Galery /> */}

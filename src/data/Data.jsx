@@ -96,6 +96,11 @@ export const navLinks = [
         link: "Actividades Académicas",
         path: "/academy-activities",
     },
+    {
+        id: 6,
+        link: "Análisis del contexto educativo contamporáneo",
+        path: "/contexto-educativo"
+    }
 ];
 
 //autoridadeS

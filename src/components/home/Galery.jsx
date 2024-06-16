@@ -1,46 +1,51 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { imgGalery } from '../../data/Data';
 import { imageCHC, imageDDOC, imageTP } from '../../data/DataGalery';
 import CardGalery from './CardGalery';
-
+import clientAxios from '../../config/clientAxios';
+import Spinner from '../Spinner';
 
 const Galery = () => {
 
-    const { id, } = imgGalery;
+    const [academyActivities, setAcademyActivities] = useState([]);
+    const [loading, setLoading] = useState(false)
 
-    const categoryContainer = useRef(null);
-    const [isScroll, setIsscroll] = useState(false);
-    const scrollContainer = (direction) => {
-        direction === "right"
-            ? (categoryContainer.current.scrollLeft += 200)
-            : (categoryContainer.current.scrollLeft -= 200);
-        categoryContainer.current.scrollLeft > 0
-            ? setIsscroll(true)
-            : setIsscroll(false);
-    };
+    useEffect(() => {
+        const getAcademyActivities = async () => {
+            setLoading(true);
+            try {
+                const response = await clientAxios.get('/academy-activities');
+                setAcademyActivities(response.data);
+                setLoading(false);
+                console.log(response.data);
+            } catch (error) {
+                setLoading(false)
+                console.log(error);
+            }
+        }
+
+        getAcademyActivities();
+
+
+
+    }, []);
 
     return (
-        <div className="pt-10 pb-10 space-y-8">
-            <CardGalery
-                imgGalery={imgGalery}
-                category={"Diplomado Herramientas Digitales para la gestión de investigaciones educativas"}
-            />
+        <div className="pt-10 pb-10 space-y-8 bg-gray-100">
+
+            {
+                loading ? <Spinner /> :
 
 
-            <CardGalery
-                imgGalery={imageCHC}
-                category={"Congreso Internacional en modalidad híbrida Pedagogía 2023 en la Habana Cuba"}
-            />
-            <CardGalery
-                imgGalery={imageDDOC}
-                category={"Debates del Doctorado en Educación y Cultura Digital Pedagógica"}
+                    academyActivities.map((activity) => (
+                        <CardGalery
+                            key={activity._id}
+                            id={activity._id}
+                            category={activity.title}
+                        />
+                    ))
+            }
 
-            />
-            <CardGalery
-                imgGalery={imageTP}
-                category={"Toma de protesta y entrega de grados académicos"}
-
-            />
         </div>
 
     )

@@ -1,54 +1,78 @@
 import { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Sidebar } from 'flowbite-react';
-import {
-    HiUser,
-    HiArrowSmRight,
-    HiDocumentText,
-    HiOutlineUserGroup,
-    HiAnnotation,
-    HiChartPie,
-    HiOutlineArrowSmRight,
-} from 'react-icons/hi';
+import { Link, NavLink, useLocation } from 'react-router-dom';
+import { FaNewspaper } from "react-icons/fa";
+import { TiThMenuOutline } from "react-icons/ti";
+import { BiHomeAlt, BiLogInCircle, BiSelectMultiple } from "react-icons/bi";
+import { SiGoogleclassroom, SiInstructure } from "react-icons/si"
+
+const adminNavItems = [
+    {
+        to: "/admin/home",
+        icon: <BiHomeAlt className="text-2xl" />,
+        label: "Inicio",
+    },
+    {
+        to: "/admin/news",
+        icon: <FaNewspaper className="text-2xl" />,
+        label: "Noticias",
+    },
+    {
+        to: "/admin/academy-activities",
+        icon: <BiSelectMultiple className="text-2xl" />,
+        label: "Actividades Academicas",
+    },
+    {
+        to: "/admin/admin-h",
+        icon: <SiGoogleclassroom className="text-2xl" />,
+        label: "Convocatorias",
+    },
+    {
+        to: "/admin/admin-",
+        icon: <SiInstructure className="text-2xl" />,
+        label: "Oferta Educativa",
+    },
+]
+
 
 const SideBar = () => {
+
+    const [open, setOpen] = useState(true);
+
     return (
         <>
-            <Sidebar className='w-full md:w-56 shadow bg-gradient-to-tr from-yellow-500 to-orange-300'>
-                <Sidebar.Items>
-                    <Sidebar.ItemGroup className='flex flex-col gap-1'>
+            <div className={`${open ? 'w-72 overflow-y-auto' : 'w-[90px] overflow-auto'}  p-5 md:block hidden pt-8 relative duration-300 shadow-xl bg-slate-200   `}>
 
-                        <Link to='/dashboard?tab=profile'>
-                            <Sidebar.Item
-                                // active={tab === 'profile'}
-                                icon={HiUser}
-                                // label={currentUser.isAdmin ? 'Admin' : 'User'}
-                                labelColor='dark'
-                                as='div'
-                            >
-                                Inicio
-                            </Sidebar.Item>
-                        </Link>
+                <div className="flex gap-x-4 items-center">
+                    <div
+                        onClick={() => setOpen(!open)}
+                        className={`cursor-pointer h-6 w-6 duration-500 ${open && "rotate-[360deg]"}`}
+                    >
+                        <TiThMenuOutline className="h-6 w-6" />
+                    </div>
+                    <h1
+                        onClick={() => setOpen(!open)}
+                        className={`text-slate-700 cursor-pointer font-bold origin-left duration-200 ${!open && 'scale-0'}`}
+                    >Administrador</h1>
+                </div>
+
+                {/* NavLinks */}
+
+                <ul className="pt-6">
+                    <p className={`ml-3 text-gray-600 ${!open && 'hidden'} text-sm text-center mb-2`}>Menu</p>
+                    {
+                        adminNavItems.map((item, index) => (
+                            <li key={index} className="space-y-2">
+                                <NavLink className={({ isActive }) => `flex ${isActive ? 'bg-red-500 text-white' : 'text-[#413f44]'} duration-150 rounded-md p-2 cursor-pointer  hover:bg-Teal hover:text-white font-bold text-sm items-center gap-2 `} to={item.to}>
+                                    {item.icon}
+                                    <span className={`${!open && 'hidden'}  duration-200`}>{item.label}</span>
+                                </NavLink>
+                            </li>
+                        ))
+                    }
+                </ul>
 
 
-                        <Sidebar.Item
-                            icon={HiDocumentText}
-                            as='div'
-                        >
-                            Documents
-                        </Sidebar.Item>
-
-                        <Sidebar.Item
-                            icon={HiOutlineArrowSmRight}
-                            className='cursor-pointer'
-                        // onClick={handleSignout}
-                        >
-                            Cerrar Sesión
-                        </Sidebar.Item>
-
-                    </Sidebar.ItemGroup>
-                </Sidebar.Items>
-            </Sidebar >
+            </div>
         </>
     )
 }

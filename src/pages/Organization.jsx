@@ -38,12 +38,10 @@ const Organization = () => {
 
 
         <section className=''>
-
-
           <CardProfile profile={authorities[1]} />
 
           <div
-            className='grid sm:grid-cols-2 grid-cols-1 md:grid-cols-3 gap-4 mx-5 mt-5'
+            className='grid sm:grid-cols-2 grid-cols-1 md:grid-cols-3 gap-4  mt-5'
           >
 
             <CardProfile profile={authorities[0]} />

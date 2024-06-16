@@ -1,0 +1,212 @@
+import React, { useEffect, useState } from 'react'
+import ReactQuill from 'react-quill'
+import Spinner from '../../../components/Spinner';
+import clientAxios from '../../../config/clientAxios';
+import { useNavigate, useParams } from 'react-router-dom';
+import parse from 'html-react-parser';
+import { toast } from 'react-hot-toast';
+
+const modules = {
+    toolbar: [
+        [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
+        // [{ size: [] }],
+        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+        [{ 'list': 'ordered' }, { 'list': 'bullet' },
+        { 'indent': '-1' }, { 'indent': '+1' }],
+        ['link'],
+        ['clean'],
+    ],
+};
+const formats = [
+    "header",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "blockquote",
+    "list",
+    "bullet",
+    "indent",
+    "link",
+
+];
+
+const EditNews = () => {
+
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const [blog, setBlog] = useState({
+        title: '',
+        description: '',
+        date: ''
+    });
+    const [loading, setLoading] = useState(false);
+    const [img, setImg] = useState(null);
+    const [imgUrl, setImgUrl] = useState(null);
+    console.log(blog);
+    console.log(img);
+
+    const updateState = (e) => {
+        setBlog({ ...blog, [e.target.name]: e.target.value })
+    }
+
+
+    useEffect(() => {
+        const getBlog = async () => {
+            try {
+                const response = await clientAxios.get(`/blog/${id}`);
+                setBlog(response.data);
+                setImg(response.data?.img);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        getBlog();
+    }, [])
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+
+        if (blog.title.trim() === '' || blog.description.trim() === '' || blog.date.trim() === '') {
+            setLoading(false);
+            toast.error('Todos los campos son obligatorios');
+            return;
+        }
+
+        try {
+            const formData = new FormData();
+            formData.append('title', blog.title);
+            formData.append('description', blog.description);
+            formData.append('date', blog.date);
+            formData.append('img', imgUrl);
+
+            const response = await clientAxios.put(`/blog/${id}`, formData);
+
+            setLoading(false);
+
+            if (response.status === 200) {
+                toast.success('Noticia actualizada correctamente');
+                setTimeout(() => {
+                    navigate('/admin/news');
+                }, 2000);
+            }
+
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+        }
+    }
+
+    return (
+        <section className="container mx-auto ">
+
+            <h1 className="text-center text-3xl font-bold text-slate-600 mt-10 ">Edita una Noticia</h1>
+
+            <div className='p-3 max-w-5xl mx-auto min-h-screen '>
+                <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
+                    <div className='flex flex-col gap-4 justify-between'>
+                        <div className='grid grid-cols-2 gap-2'>
+                            <div className='w-full'>
+                                <label htmlFor="title" className="font-semibold text-slate-700 pb-2">
+                                    Titulo:
+                                </label>
+                                <input
+                                    type="text"
+                                    name="title"
+                                    id="title"
+                                    className='input-auth'
+                                    placeholder="Ej. Noticia de la semana"
+                                    defaultValue={blog.title}
+                                    onChange={updateState}
+                                />
+                            </div>
+                            <div className='w-full'>
+                                <label htmlFor="date" className="font-semibold text-slate-700 pb-2">
+                                    Fecha:
+                                </label>
+                                <input
+                                    type="text"
+                                    name="date"
+                                    id="date"
+                                    className='input-auth'
+                                    placeholder="Ej. 23 de Enero del 2023"
+                                    defaultValue={blog.date}
+                                    onChange={updateState}
+                                />
+                            </div>
+                        </div>
+                        <div className='w-full flex items-center gap-x-5'>
+                            <div className='flex items-center w-full'>
+                                <label htmlFor="img" className="font-semibold text-slate-700 pb-2">
+                                    Imagen:
+                                </label>
+
+                                <input
+                                    type="file"
+                                    name="img"
+                                    id="img"
+                                    className='input-auth'
+                                    accept='.jpg,.png,.jpeg, .gif, .webp'
+                                    placeholder="Ej. 23 de Enero del 2023"
+                                    onChange={e => setImgUrl(e.target.files[0])}
+                                />
+
+                            </div>
+                            <div className='flex justify-center items-center w-full'>
+                                {
+                                    img ? (
+                                        <div className='p-2 border border-slate-200 flex justify-center items-center'>
+                                            <img
+                                                src={imgUrl ? URL.createObjectURL(imgUrl) : img}
+                                                alt="imagen"
+                                                className='mb-4 h-36 w-36 object-cover  '
+                                            />
+                                        </div>
+                                    )
+                                        : null
+                                }
+                            </div>
+                        </div>
+
+                        <div>
+                            <label htmlFor="email" className="font-semibold text-slate-700 pb-2">
+                                Descripción:
+                            </label>
+                            <ReactQuill
+                                placeholder='Write something...'
+                                className='h-72 mb-12'
+                                formats={formats}
+                                modules={modules}
+                                value={blog.description}
+                                onChange={(e) => setBlog({ ...blog, description: e })}
+                            />
+
+                            <div>
+                                {
+                                    parse(blog.description)
+                                }
+                            </div>
+                        </div>
+
+
+                        {
+                            loading ? <Spinner /> : (
+                                <button
+                                    type="submit"
+                                    className="btn-action"
+                                >
+                                    Actualizar Noticia
+                                </button>
+                            )
+                        }
+                    </div>
+
+                </form>
+            </div>
+        </section>
+    )
+}
+
+export default EditNews

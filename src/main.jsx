@@ -16,15 +16,22 @@ import Organization from './pages/Organization.jsx';
 import EducationalOffer from './pages/EducationalOffer';
 import AcademyActivities from './pages/AcademyActivities.jsx';
 import CallsEducational from './pages/CallsEducational.jsx';
-import NewMtroMarcelo from './pages/NewMtroMarcelo.jsx';
-import NewMtroReynaldo from './pages/NewMtroReynaldo.jsx';
-import NewMtroJuan from './pages/NewMtroJuan.jsx';
-import NewReunion from './pages/NewReunion.jsx';
+import NewsDetail from './pages/NewsDetail.jsx';
 import Bibloteca from './pages/Bibloteca.jsx';
 import Login from './auth/pages/Login.jsx';
+import NewItemPage from './admin/pages/news/NewItemPage.jsx';
+import HistoryDetail from './pages/HistoryDetail.jsx';
 
+//admin
 import DashboardLayout from './admin/DashboardLayout.jsx';
-import Dashboard from './admin/Dashboard.jsx';
+import Dashboard from './admin/pages/Dashboard.jsx';
+import AcademyActivitiesAdmin from './admin/pages/academy/AcademyActivitiesAdmin.jsx';
+import AdminNews from './admin/pages/news/AdminNews.jsx';
+import AddNews from './admin/pages/news/AddNews.jsx';
+import EditNews from './admin/pages/news/EditNews.jsx';
+
+
+import ContextContemporaneo from './contexto-comtemporaneo/ContextContemporaneo.jsx';
 
 const router = createBrowserRouter([
   {
@@ -36,13 +43,12 @@ const router = createBrowserRouter([
       { path: '/educational-offer', element: <EducationalOffer /> },
       { path: '/calls', element: <CallsEducational /> },
       { path: '/academy-activities', element: <AcademyActivities /> },
-      { path: '/noticia-mtro-marcelo', element: <NewMtroMarcelo /> },
-      { path: '/noticia-mtro-reynaldo', element: <NewMtroReynaldo /> },
-      { path: '/noticia-mtro-juan', element: <NewMtroJuan /> },
-      { path: '/noticia-reunion', element: <NewReunion /> },
       { path: '/biblioteca', element: <Bibloteca /> },
       { path: '/login', element: <Login /> },
-      { path: '*', element: <div>Not Found</div> }
+      { path: '/new-item/:id', element: <NewItemPage /> },
+      { path: '/contexto-educativo', element: <ContextContemporaneo /> },
+      { path: '*', element: <div>Not Found</div> },
+      { path: '/historia', element: <HistoryDetail /> },
     ]
   },
 
@@ -51,12 +57,24 @@ const router = createBrowserRouter([
     element: <DashboardLayout />,
     children: [
       {
-        path: '/admin',
+        path: '/admin/home',
         element: <Dashboard />
       },
       {
-        path: '/admin/organization',
-        element: <Organization />
+        path: '/admin/academy-activities',
+        element: <AcademyActivitiesAdmin />
+      },
+      {
+        path: '/admin/news',
+        element: <AdminNews />
+      },
+      {
+        path: '/admin/add-news',
+        element: <AddNews />
+      },
+      {
+        path: '/admin/edit-news/:id',
+        element: <EditNews />
       },
       {
         path: '*',

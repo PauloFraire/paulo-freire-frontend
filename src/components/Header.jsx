@@ -20,32 +20,34 @@ const Header = () => {
   }, [active]);
 
   return (
-    <div className="">
+    <div className="sm:mb-0 navbar bg-Teal mb-12">
       <div className={`${active ? "" : ""} `}>
-        <div className="flex justify-between  items-center bg-Teal">
+        <div className="flex sm:flex-row  flex-col justify-center items-center gap-2">
 
-          <div className="text-xl  uppercase tracking-wide  justify-center ">
-            <img src={logos[0]} alt="Logo principal" className="h-20 w-auto" />
+          <div className="text-xl  uppercase   justify-center ">
+            <img src={logos[0]} alt="Logo principal" className="h-20 p-2" />
           </div>
-          <div className="text-xl w-full uppercase tracking-wide ml-2 justify-center">
-            <img src={logos[3]} alt="Logo principal" className="h-20" />
+
+          <div className=" flex items-center justify-center">
+            <p className="text-xl text-slate-200 font-medium uppercase text-center">Centro Regional de Educación Superior Paulo Freire</p>
           </div>
+
         </div>
       </div>
 
       <header
         className={`${active ? "top-0" : ""
-          } shadow-lg   w-full  left-0  bg-[#201E1E]`}
+          } shadow-lg   w-full  left-0  bg-gray-500`}
       >
 
         <div>
           <div
-            className={`${active ? " transition-all duration-300" : "py-4"
-              } mx-auto flex items-center justify-between px-2 py-4`}
+            className={`${active ? " transition-all duration-300" : "py-2"
+              } mx-auto flex items-center justify-between px-2 py-2`}
           >
-            <div className="flex items-center gap-4 bg-slate-50">
+            <div className="flex items-center gap-4 ">
               <HiMenuAlt1
-                className="text-3xl sm:hidden cursor-pointer"
+                className="text-3xl sm:hidden cursor-pointer text-white"
                 onClick={() => setToggle(true)}
               />
             </div>
@@ -90,7 +92,7 @@ const Header = () => {
         </div>
         <div className=""></div>
       </header>
-    </div>
+    </div >
   )
 }
 

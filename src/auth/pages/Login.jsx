@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { IoIosEyeOff } from "react-icons/io";
 import { IoLogIn } from "react-icons/io5";
 import Spinner from '../../components/Spinner'
+import { toast } from 'react-hot-toast';
 
 const Login = () => {
 
@@ -23,7 +24,7 @@ const Login = () => {
         //fetch to backend
 
         if (user.email.trim() === '' || user.password.trim() === '') {
-            console.log('no puede haber campos vacios')
+            toast.error('No puede haber campos vacios')
             return
         }
         setLoading(true)

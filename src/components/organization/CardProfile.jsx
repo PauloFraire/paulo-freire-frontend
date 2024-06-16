@@ -3,13 +3,12 @@ import React from 'react';
 const CardProfile = ({ profile }) => {
     return (
         <div
-
-            className="w-full hover:scale-x-110"
+            className="w-full hover:scale-110 transition-all duration-300 ease-in-out"
         >
-            <div className="flex flex-col justify-center max-w-xs mx-auto bg-white shadow-xl rounded-xl p-5 border-t-8 border-gray">
-                <div className="">
+            <div className="flex flex-col justify-center max-w-xs mx-auto  shadow-xl rounded-sm p-5 border-t-8 border-teal-900 bg-gradient-to-bl from-slate-200 to-gray-300">
+                <div className="rounded-full">
                     <img
-                        className="w-32 mx-auto shadow-xl rounded-full"
+                        className="h-32 w-32 mx-auto object-cover object-center rounded-full"
                         src={profile.photo}
                         alt="Profile face"
                     />

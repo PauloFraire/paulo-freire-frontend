@@ -48,7 +48,7 @@ const Hero = () => {
 
 
   return (
-    <div className="w-full  mx-auto home bg-lime-50 py-16" >
+    <div className="w-full  mx-auto home bg-gradient-to-t from-green-100 to-lime-100 py-16" >
       <div className="md:flex items-center justify-center">
         <div className='flex-1 basis-[20rem] '>
           <div className="my-5 flex justify-center w-full space-x-5 flex-col  items-center sm:flex-row mx-auto p-4">
@@ -105,24 +105,20 @@ const Hero = () => {
       </div>
 
       {/* <div className='mt-10'>
-
         <motion.div
           variants={container}
           initial="hidden"
           whileInView="visible"
           className="flex sm:items-center justify-evenly gap-8  py-5 flex-col sm:flex-row "
         >
-
           <motion.div variants={item} className="w-36 flex " >
             <img src={imgMoodle} alt="" className="w-full " />
             <a href='https://moodlecrespf.moodlecloud.com/login/index.php' className=' text-xl underline text-rose-600'>Plataforma Institucional del Crespf</a>
           </motion.div>
-
           <motion.div variants={item} className="w-36 flex " >
             <img src={imgAgenda} alt="" className="w-full object-cover" />
             <p className=' text-xl underline text-rose-600'>Agenda estratégica Mensual</p>
           </motion.div>
-
         </motion.div>
 
       </div> */}
