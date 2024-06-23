@@ -8,6 +8,7 @@ import {
 import { motion } from "framer-motion";
 import logo from "../assets/logo.png";
 import { logos } from '../data/Data';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
     return (
@@ -29,17 +30,17 @@ const Footer = () => {
                 <div>
                     <div className="font-bold mb-6">Inicio</div>
                     <div className="flex flex-col gap-4">
-                        <a href="" className="text-sm hover:underline">
-
-                        </a>
-                        <a href="" className="text-sm hover:underline">
+                        <a href="#quienes-somos" className="text-sm hover:underline">
                             ¿Quiénes Somos?
                         </a>
-                        <a href="" className="text-sm hover:underline">
+                        <a href="#mision" className="text-sm hover:underline">
                             {" "}
                             Misión
                         </a>
-                        <a href="" className="text-sm hover:underline">
+                        <a href="#vision" className="text-sm hover:underline">
+                            Visión
+                        </a>
+                        <a href="#valores" className="text-sm hover:underline">
                             Valores Institucionales
                         </a>
                     </div>
@@ -47,24 +48,24 @@ const Footer = () => {
                 <div>
                     <div className="font-bold mb-6">Organización</div>
                     <div className="flex flex-col gap-4">
-                        <a href="" className="text-sm hover:underline">
+                        <Link to={`/organization`} className="text-sm hover:underline">
                             Directorio
-                        </a>
-                        <a href="" className="text-sm hover:underline">
+                        </Link>
+                        <Link to={`/organization`} className="text-sm hover:underline">
                             Organigrama
-                        </a>
+                        </Link>
 
                     </div>
                 </div>
                 <div>
                     <div className="font-bold mb-6">Oferta Educativa</div>
                     <div className="flex flex-col gap-4">
-                        <a href="" className="text-sm hover:underline">
+                        <Link to={`/educational-offer`} className="text-sm hover:underline">
                             Maestría en Tecnologías Aplicadas a la Educación
-                        </a>
-                        <a href="" className="text-sm hover:underline">
+                        </Link>
+                        <Link to={`/educational-offer`} className="text-sm hover:underline">
                             Doctorado en Educación y Cultura Digital Pedagógica
-                        </a>
+                        </Link>
 
                     </div>
                 </div>
@@ -72,13 +73,13 @@ const Footer = () => {
                     <div className="font-bold mb-6">Siguenos</div>
                     <div className="text-sm mb-4">centrodeeducacionsuperiorpaulo@gmail.com</div>
                     <div className="flex gap-4 mt-4">
-                        <a href="" className="hover:scale-110 text-xl">
+                        <a href="https://www.facebook.com/profile.php?id=61561008735948" className="hover:scale-110 text-xl" target='_blank'>
                             <BsFacebook />
                         </a>
                         <a href="" className="hover:scale-110 text-xl">
                             <BsInstagram />
                         </a>
-                        <a href="" className="hover:scale-110 text-xl">
+                        <a href="https://x.com/centropaulofrei" className="hover:scale-110 text-xl" target='_blank'>
                             <BsTwitter />
                         </a>
                     </div>

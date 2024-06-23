@@ -220,11 +220,13 @@ body {
 @media screen and (max-width: 768px) {
 
     .image-wrapper {
-        flex-direction: column;
-        height: 100vh;
+        /* unset */
+        display: block;
+        ;
     }
 
     .item-img {
         flex-basis: 100%;
+        margin: 2rem ;
     }
 }

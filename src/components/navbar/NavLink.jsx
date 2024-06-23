@@ -5,7 +5,7 @@ import { Link, useLocation } from "react-router-dom";
 const NavLink = ({ path, link }) => {
     const location = useLocation();
     return (
-        <li className="list-none cursor-pointer mr-8">
+        <li className="list-none cursor-pointer mr-8 text-center flex items-center justify-center">
             <Link
                 to={path}
                 className={`${location.pathname === path ? "border-b-4 border-Teal" : ""}

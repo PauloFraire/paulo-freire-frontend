@@ -1,8 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FiArrowRight, FiHome } from "react-icons/fi";
+import clientAxios from '../../config/clientAxios';
+import Spinner from '../Spinner';
+import { toast } from 'react-hot-toast';
 
 const ContactForm = () => {
+
+    const [loading, setLoading] = useState(false);
+    const [email, setEmail] = useState('');
+    const [message, setMessage] = useState('');
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+
+        if (!email.trim() || !message.trim()) {
+            setLoading(false);
+            return toast.error('Todos los campos son obligatorios');
+        }
+
+        try {
+            const response = await clientAxios.post('/api/email', { email, message });
+            setLoading(false);
+
+            if (response.status === 200) {
+                toast.success('Mensaje enviado correctamente');
+            }
+
+        } catch (error) {
+            setLoading(false);
+            toast.error('Ocurrió un error al enviar el mensaje');
+        }
+    }
+
     return (
         <div>
             <div className=" pb-16 container mx-auto flex justify-center">
@@ -16,8 +47,9 @@ const ContactForm = () => {
                             <div className="flex sm:text-3xl justify-center text-2xl font-bold mb-5 ">
                                 <p className='tetx-center text-slate-100'> Contáctanos</p>
                             </div>
-                            <h3 className="t ">
+                            <h3 className="text-center ">
                                 Escribe un Mensaje y nos pondremos en contacto contigo.
+                                <span className='block'>centrodeeducacionsuperiorpaulo@gmail.com</span>
                             </h3>
 
                             <div className="mt-5 flex-align-center gap-x-3">
@@ -28,10 +60,13 @@ const ContactForm = () => {
                                     className="mt-5 "
                                 >
                                     <div>
+
                                         <input
                                             type="text"
                                             placeholder="Ingresa tu correo "
                                             className="input-auth text-slate-500"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
                                         />
                                     </div>
                                     <div className='mt-5'>
@@ -42,12 +77,21 @@ const ContactForm = () => {
 
                                             placeholder="Escribe tu mensaje"
                                             className="input-auth text-slate-500"
+                                            value={message}
+                                            onChange={(e) => setMessage(e.target.value)}
                                         ></textarea>
                                     </div>
                                     <div className='w-full flex justify-end mt-5'>
-                                        <button className="bg-sky-700 p-4 rounded-sm hover:bg-sky-800 cursor-pointer">
-                                            Enviar Mensaje
-                                        </button>
+                                        {
+                                            loading ? <Spinner /> : <button
+                                                onClick={handleSubmit}
+                                                className="btn-action"
+                                            >
+                                                Enviar
+                                                <FiArrowRight className='ml-2' />
+                                            </button>
+
+                                        }
                                     </div>
                                 </motion.form>
                             </div>

@@ -8,7 +8,7 @@ const EducationalOffer = () => {
   const breadcrumbs = ['Oferta Educativa'];
 
   return (
-    <div>
+    <section className='my-20 container mx-auto'>
       <Breadcrumbs breadcrumbs={breadcrumbs} />
 
       <div className="container mx-auto mt-10">
@@ -25,7 +25,7 @@ const EducationalOffer = () => {
         </div>
       </div>
 
-    </div>
+    </section>
   )
 }
 

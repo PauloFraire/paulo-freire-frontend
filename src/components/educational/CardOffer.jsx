@@ -29,7 +29,7 @@ const CardOffer = ({ maestria }) => {
                         {maestria.description}
                     </p>
                     <ul className="max-w-md space-y-1 text-gray-500 list-inside dark:text-gray-400">
-                        <a className="flex items-center" href='/pdf/PLAN DE ESTUDIOS, INSCRIPCIONES Y REQUISITOS.pdf'>
+                        <a className="flex items-center" href={maestria.plan} >
                             <svg className="w-3.5 h-3.5 me-2 text-green-500 dark:text-green-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
                             </svg>
@@ -38,7 +38,7 @@ const CardOffer = ({ maestria }) => {
                             </p>
                         </a>
                         <a className="flex items-center"
-                            href={`/pdf/${maestria.ficha}`}
+                            href={maestria.ficha}
                         >
                             <svg className="w-3.5 h-3.5 me-2 text-green-500 dark:text-green-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
@@ -48,7 +48,7 @@ const CardOffer = ({ maestria }) => {
                             </p>
                         </a>
                         <a className="flex items-center"
-                            href={`/pdf/${maestria.carta}`}
+                            href={maestria.carta}
                         >
                             <svg className="w-3.5 h-3.5 me-2 text-green-500 dark:text-green-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
@@ -61,21 +61,11 @@ const CardOffer = ({ maestria }) => {
 
                     </ul>
                 </div>
-                <a href="#" className="inline-block mt-5">
-                    <button
-                        className="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-lg select-none disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none hover:bg-gray-900/10 active:bg-gray-900/20"
-                        type="button">
-                        Conoce Más
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                            stroke-width="2" className="w-4 h-4">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"></path>
-                        </svg>
-                    </button>
-                </a>
+
             </div>
 
 
-        </div>
+        </div >
     )
 }
 

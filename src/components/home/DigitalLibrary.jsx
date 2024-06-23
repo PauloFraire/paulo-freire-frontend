@@ -1,9 +1,53 @@
-import React from 'react'
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react'
+import { Link, useNavigate, useNavigation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import imgBook from "../../assets/imgBook.png";
+import clientAxios from '../../config/clientAxios';
+import Spinner from '../Spinner';
+import { toast } from 'react-hot-toast'
 
 const DigitalLibrary = () => {
+
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [loading, setLoading] = useState(false)
+
+    //navegacion
+
+    const navigate = useNavigate();
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        setLoading(true)
+
+        if (!email.trim() || !password.trim()) {
+            toast.error('Debes llenar todos los campos')
+            setLoading(false)
+            return
+        }
+
+        try {
+            const response = await clientAxios.post('/login', { email, password })
+
+            setLoading(false)
+
+            if (response.status === 200) {
+                localStorage.setItem('token', response.data.token)
+                setTimeout(() => {
+                    navigate('/biblioteca')
+                }, 2000)
+            }
+
+
+        }
+        catch (error) {
+            toast.error('Error al iniciar sesión')
+            setLoading(false)
+            console.log(error)
+        }
+    }
+
     return (
         <div className='news-section bg-gradient-to-br bg-blue-600'>
 
@@ -13,16 +57,16 @@ const DigitalLibrary = () => {
 
                     <div className=" flex  md:gap-x-5 gap-y-5 pb-10 items-center justify-center">
 
-                        <div className="flex shadow-2xl p-4 items-center bg-gradient-to-tr from-blue-700 to-green-600" >
+                        <div className="flex shadow-2xl p-4 items-center bg-gradient-to-tr bg-gray-200" >
                             <div className='  p-2'>
                                 <img src={imgBook} alt="image book" className='rounded-lg' />
 
                             </div>
-                            <form className="text-center max-w-[600px] mx-auto  p-14  rounded-e-xl">
-                                <h3 className="sm:text-3xl text-2xl font-bold mb-5 text-slate-700">
+                            <form className=" max-w-[600px] mx-auto  p-10  rounded-e-xl" onSubmit={handleSubmit}>
+                                <h3 className="sm:text-3xl text-2xl font-bold mb-5 text-slate-700 text-center">
                                     Repositorio digital de trabajos recepcionales y antologías del DECDP y MTAE
                                 </h3>
-                                <div className='mb-5'>
+                                <div className='space-y-2'>
                                     <label htmlFor="email" className='font-medium text-slate-700 pb-2'>
                                         Ingresa tu correo:
                                     </label>
@@ -31,10 +75,12 @@ const DigitalLibrary = () => {
                                         type="text"
                                         placeholder="Ingresa tu correo "
                                         className="input-auth"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
                                     />
                                 </div>
 
-                                <div>
+                                <div className='space-y-2'>
                                     <label htmlFor="password" className='font-medium text-slate-700 pb-2'>
                                         Ingresa tu contraseña:
                                     </label>
@@ -43,14 +89,32 @@ const DigitalLibrary = () => {
                                         type="password"
                                         placeholder="Ingresa tu correo "
                                         className="input-auth"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
                                     />
                                 </div>
                                 {/* boton */}
 
                                 <div className='mt-5'>
-                                    <Link to='/biblioteca' className="btn-action">
-                                        Ingresar
-                                    </Link>
+                                    {
+                                        loading ? (
+                                            <motion.div
+                                                initial={{ opacity: 0 }}
+                                                animate={{ opacity: 1 }}
+                                                transition={{ duration: 1 }}
+                                            >
+                                                <Spinner />
+                                            </motion.div>
+                                        ) : (
+                                            <button
+                                                type='submit'
+                                                className='btn-action'
+                                            >
+                                                Iniciar Sesión
+                                            </button>
+                                        )
+
+                                    }
                                 </div>
                             </form>
                         </div>

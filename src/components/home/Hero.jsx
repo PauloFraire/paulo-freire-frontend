@@ -44,14 +44,14 @@ const Hero = () => {
     return () => clearInterval(timer); // Limpia el intervalo cuando el componente se desmonta
   }, [currentImage]);
 
-  console.log(images)
+
 
 
   return (
     <div className="w-full  mx-auto home bg-gradient-to-t from-green-100 to-lime-100 py-16" >
       <div className="md:flex items-center justify-center">
         <div className='flex-1 basis-[20rem] '>
-          <div className="my-5 flex justify-center w-full space-x-5 flex-col  items-center sm:flex-row mx-auto p-4">
+          <div className="my-5 flex justify-center  space-y-5 flex-col  items-center sm:flex-row mx-auto p-4 item gap-2">
 
             <img src={logos[0]} className='w-36' loading='lazy' />
             <img src={logos[5]} className='w-36' loading='lazy' />
@@ -71,7 +71,7 @@ const Hero = () => {
               Tel. 52(228)8113228
             </p> */}
 
-            <div className='mt-4 space-y-1'>
+            <div className='mt-4 mx-4 text-slate-600 space-y-3'>
               <p className='sm:text-xl text-xl font-semibold uppercase leading-relaxed'>
                 CLAVE DEL CENTRO DE TRABAJO:
                 <span className='font-normal'> 30PSU0029L</span>

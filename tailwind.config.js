@@ -9,6 +9,7 @@ export default {
       Poppins: "Poppins"
     },
     container: {
+      width: "90%",
       center: true,
     },
     extend: {

@@ -35,6 +35,15 @@ import img17 from "../assets/img/img17.jpeg";
 import img18 from "../assets/img/img18.jpeg";
 import img23 from "../assets/img/img23.jpeg";
 
+
+import pdfFichaMaestria from "../assets/pdf/FICHA DE INSCRIPCION MAESTRÍA 2024.pdf";
+
+import pdfFichaDoctorado from "../assets/pdf/FICHA DE INSCRIPCION DOCTORADO 2024.pdf";
+
+import pdfFichaMaestriaAmbiental from "../assets/pdf/FICHA DE INSCRIPCION MAESTRÍA EDUCACIÓN AMBIENTAL.pdf";
+import pdfCartaMaestriaAmbiental from "../assets/pdf/CARTA COMPROMISO MAESTRÍA EDUCACIÓN AMBIENTAL.pdf";
+import pdfPlanEstudios from "../assets/pdf/PLAN DE ESTUDIOS, INSCRIPCIONES Y REQUISITOS.pdf";
+
 export const logos = [logo1, logo2, logo4, logo5, logo6, logosep, logousi, logosev];
 
 export const imgGalery = [
@@ -224,24 +233,27 @@ export const maestrias = [
         description: "La Maestría en Tecnologías Aplicadas a la Educación (MTAE) es un programa de posgrado que se imparte en la modalidad en línea, que tiene como propósito formar profesionales de la educación con un alto nivel de competencias en el uso de las tecnologías de la información y la comunicación (TIC) para la innovación educativa.",
         photo: img6,
         state: true,
-        ficha: "FICHA DE INSCRIPCION MAESTRÍA TAE.pdf",
-        carta: "CARTA COMPROMISO MAESTRÍA TAE_.pdf"
+        ficha: pdfFichaMaestria,
+        carta: pdfFichaMaestria,
+        plan: pdfPlanEstudios
     },
     {
         name: "Doctorado en Educación y Cultura Digital Pedagógica",
         description: "El Doctorado en Educación y Cultura Digital Pedagógica (DECDP) es un programa de posgrado que se imparte en la modalidad en línea, que tiene como propósito formar investigadores de alto nivel con capacidad para generar conocimiento y desarrollar proyectos de investigación en el campo de la educación y la cultura digital pedagógica.",
         photo: img13,
         state: false,
-        ficha: "FICHA DE INSCRIPCION DOCTORADO.pdf",
-        carta: "CARTA COMPROMISO DOCTORADO.pdf"
+        ficha: pdfFichaDoctorado,
+        carta: pdfFichaDoctorado,
+        plan: pdfPlanEstudios
     },
     {
         name: "Maestría en Educación Ambiental",
         description: "La Maestría en Educación Ambiental (MEA) es un programa de posgrado que se imparte en la modalidad en línea, que tiene como propósito formar profesionales de la educación con un alto nivel de competencias en el campo de la educación ambiental.",
         photo: img7,
         state: true,
-        ficha: "FICHA DE INSCRIPCION MAESTRÍA EDUCACIÓN AMBIENTAL.pdf",
-        carta: "CARTA COMPROMISO MAESTRÍA EDUCACIÓN AMBIENTAL.pdf"
+        ficha: pdfFichaMaestriaAmbiental,
+        carta: pdfCartaMaestriaAmbiental,
+        plan: pdfPlanEstudios
     }
 ]
 

@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom'
 const MobileNavLinks = ({ path, link, setToggle }) => {
     return (
         <div>
-            <li className="list-none cursor-pointer mr-8">
+            <li className="list-none cursor-pointer mr-8 text-center">
                 <Link
                     to={path}
-                    className="font-bold text-gray-500 hover:text-gray-900 transition-all duration-300 text-slate-100"
+                    className="font-bold text-center hover:text-gray-900 transition-all duration-300 text-slate-100"
                     onClick={() => setToggle(false)}
                 >
                     {link}

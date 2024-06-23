@@ -25,7 +25,7 @@ const Header = () => {
         <div className="flex sm:flex-row  flex-col justify-center items-center gap-2">
 
           <div className="text-xl  uppercase   justify-center ">
-            <img src={logos[0]} alt="Logo principal" className="h-20 p-2" />
+            <img src={logos[0]} alt="Logo principal" className="h-24 w-28 p-2" />
           </div>
 
           <div className=" flex items-center justify-center">

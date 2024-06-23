@@ -24,7 +24,7 @@ const Welcome = () => {
                         <div className='flex items-center mb-4 '>
 
                             <div className=''>
-                                <h2 className='font-bold text-xl '>¿Quiénes Somos  ?</h2>
+                                <h2 className='font-bold text-xl ' id='quienes-somos'>¿Quiénes Somos  ?</h2>
 
                                 <p className='leading-relaxed mt-4 text-lg'>
                                     El Centro Regional de Educación Superior “Paulo Freire” (CRESPF), fue fundado hace ya más de catorce años por un grupo de maestros mexicanos con amplia experiencia educativa en distintos niveles y modalidades de la educación durante muchos años dentro del Sistema Educativo Nacional.
@@ -36,7 +36,7 @@ const Welcome = () => {
 
                         {/* Misión */}
 
-                        <div className='flex items-center  mb-4'>
+                        <div className='flex items-center  mb-4' id='mision'>
                             <div className=''>
                                 <h2 className='font-bold text-xl'>Misión</h2>
                                 <p className='leading-relaxed mt-5 text-lg'>Somos una Institución preocupados por ofrecer posgrados de calidad, que apoyen a liberar al ser humano de sus enajenaciones y demás presiones socioeconómicas, políticas y culturales en general por medio de una “EDUCACIÓN PARA LA LIBERTAD”. </p>
@@ -45,14 +45,14 @@ const Welcome = () => {
 
                         {/* Visión */}
 
-                        <div className='flex items-center  mb-4'>
+                        <div className='flex items-center  mb-4' id='vision'>
                             <div className=''>
                                 <h2 className='font-bold text-xl'>Visión</h2>
                                 <p className='leading-relaxed mt-5 text-lg'>Ser una escuela de posgrado con referente internacional, generadora de conocimiento e innovación comprometida con la formación sólida e integral de profesionales, especialistas e investigadores de excelencia, brindando una oferta académica flexible y dinámica que responda a las necesidades del mundo globalizado. </p>
                             </div>
                         </div>
 
-                        <div className='flex items-center  mb-4'>
+                        <div className='flex items-center  mb-4' id='valores'>
 
                             <div className=''>
                                 <h2 className='font-bold text-xl'>Valores Institucionales</h2>

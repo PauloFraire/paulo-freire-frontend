@@ -27,7 +27,7 @@ const DiplomadoInformation = () => {
             <h3 className='text-4xl font-extrabold text-center text-teal-600 uppercase py-2'>Información del Diplomado</h3>
 
             <div className='max-w-[1200px] mx-auto my-10'>
-                <h3 className='text-2xl font-bold mx-auto  my-4 capitalize text-slate-400 flex gap-2 items-center'>
+                <h3 className='text-2xl font-bold mx-auto  my-4 capitalize text-slate-400 flex gap-2 items-center text-center justify-center'>
                     <FaSignsPost />
                     Carteles promocionales
                 </h3>
@@ -53,9 +53,6 @@ const DiplomadoInformation = () => {
                 </div>
             </div>
 
-            <div className='max-w-7xl mx-auto'>
-
-            </div>
 
             <div className='grid md:grid-cols-3 grid-cols-1 py-5'>
 
@@ -119,12 +116,12 @@ const DiplomadoInformation = () => {
 
             <div className='grid md:grid-cols-3 grid-cols-1 mt-20'>
 
-                <div className='col-span-2 my-4  p-4'>
+                <div className='col-span-2 my-4   md:p-2'>
                     <h3 className='text-2xl font-bold mx-auto  my-4 capitalize text-slate-400 text-center'>
 
                         Invitaciones
                     </h3>
-                    <div className='flex gap-2'>
+                    <div className='grid sm:grid-cols-2 gap-2'>
                         <figure className='item-img'>
                             <img src={invitacion1} alt="" />
                         </figure>
