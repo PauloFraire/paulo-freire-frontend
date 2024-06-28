@@ -16,7 +16,7 @@ const Layout = () => {
   }, [pathname]);
 
   return (
-    <>
+    <div>
       <Toaster
         position="top-right"
         reverseOrder={false}
@@ -27,10 +27,10 @@ const Layout = () => {
         <img src={imgChat} alt="" width={35} height={35} />
       </div>
       <div className='section animate__animated animate__fadeIn bg-gray-100'>
-        <Outlet />
       </div>
+      <Outlet />
       <Footer />
-    </>
+    </div>
   )
 }
 

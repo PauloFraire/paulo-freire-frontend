@@ -17,7 +17,6 @@ const Galery = () => {
                 const response = await clientAxios.get('/academy-activities');
                 setAcademyActivities(response.data);
                 setLoading(false);
-                console.log(response.data);
             } catch (error) {
                 setLoading(false)
                 console.log(error);

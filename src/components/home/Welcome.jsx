@@ -11,7 +11,7 @@ const Welcome = () => {
                     <div className="text-xl w-full uppercase tracking-wide bg-slate-100 justify-center">
                         <img src={logos[4]} alt="Logo principal" className="h-6/6" />
                     </div>
-                    <iframe src="https://www.youtube.com/embed/dgImRg7Xqkk?si=Px4HxRVQd6_9yHjG" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" className='w-[600px] h-[500px]'></iframe>
+                    <iframe src="https://www.youtube.com/embed/dgImRg7Xqkk?si=Px4HxRVQd6_9yHjG" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" className='w-[600px] h-[500px]'></iframe>
                 </div>
                 <div className='p-10  '>
                     <div className="text-4xl font-bold capitalize lg:text-5xl text-center border-b-4 border-orange-600 p-2">

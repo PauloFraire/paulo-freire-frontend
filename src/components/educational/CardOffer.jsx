@@ -4,7 +4,7 @@ const CardOffer = ({ maestria }) => {
 
 
     return (
-        <div class="relative flex bg-clip-border rounded-xl bg-white text-gray-700 shadow-md w-full max-w-[48rem] flex-row">
+        <div className="relative flex bg-clip-border rounded-xl bg-white text-gray-700 shadow-md w-full max-w-[48rem] flex-row">
             <div className={` ${maestria.state ? 'bg-amber-500' : 'bg-sky-700'}  w-8`}>
 
             </div>
@@ -25,7 +25,7 @@ const CardOffer = ({ maestria }) => {
 
                 </h4>
                 <div>
-                    <p class="font-sans text-base antialiased font-light leading-relaxed text-inherit mb-5">
+                    <p className="font-sans text-base antialiased font-light leading-relaxed text-inherit mb-5">
                         {maestria.description}
                     </p>
                     <ul className="max-w-md space-y-1 text-gray-500 list-inside dark:text-gray-400">

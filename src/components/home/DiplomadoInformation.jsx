@@ -54,6 +54,7 @@ const DiplomadoInformation = () => {
             </div>
 
 
+
             <div className='grid md:grid-cols-3 grid-cols-1 py-5'>
 
                 <div className='col-span-1 my-4  p-4 '>
@@ -99,11 +100,11 @@ const DiplomadoInformation = () => {
                     <div className='flex h-full '>
                         <div className='grid justify-center items-center mx-5 mt-10 grid-cols-1 xl:grid-cols-2 gap-2'>
                             <video className='' controls >
-                                <source src={videoPromotional2} type='video/mp4' au />
+                                <source src={videoPromotional2} type='video/mp4' />
                                 Your browser does not support the video tag.
                             </video>
                             <video className='' controls >
-                                <source src={videoPromotional3} type='video/mp4' au />
+                                <source src={videoPromotional3} type='video/mp4' />
                                 Your browser does not support the video tag.
                             </video>
                         </div>
@@ -139,16 +140,16 @@ const DiplomadoInformation = () => {
 
                     <div className='py-10 flex ju'>
                         <div className='flex'>
-                            <div class="block max-w-sm p-6 bg-gradient-to-tr from-purple-300 to-blue-200 rounded-lg shadow hover:bg-gray-100 flex-grow hover:scale-105 transition-all duration-300 ease-in-out ">
+                            <div className="block max-w-sm p-6 bg-gradient-to-tr from-purple-300 to-blue-200 rounded-lg shadow hover:bg-gray-100 flex-grow hover:scale-105 transition-all duration-300 ease-in-out ">
                                 <FaRegFilePdf className='text-center mx-auto text-red-600 my-2 h-8 w-8' />
-                                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-700 dark:text-white text-center mt-4">La Escuela Infinita Libro</h5>
+                                <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-700 dark:text-white text-center mt-4">La Escuela Infinita Libro</h5>
 
                                 <p className='font-normal text-gray-700'>
                                     Aprender y Enseñar en Entornos Ubicos
                                 </p>
 
                                 <div className='flex justify-around mt-5'>
-                                    <a class="flex flex-col justify-center items-center font-semibold text-green-700 " href='https://laescuelainfinita.aprendiendo.cu' target='_blank'>
+                                    <a className="flex flex-col justify-center items-center font-semibold text-green-700 " href='https://laescuelainfinita.aprendiendo.cu' target='_blank'>
                                         <CiLink />
                                         Ver en línea
                                     </a>

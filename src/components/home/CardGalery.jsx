@@ -26,7 +26,6 @@ const CardGalery = ({ id, category }) => {
             try {
                 const response = await clientAxios.get(`/image-activity/${id}`);
                 setImageActivity(response.data);
-                console.log(response.data);
             } catch (error) {
                 console.log(error);
             }
@@ -69,7 +68,7 @@ const CardGalery = ({ id, category }) => {
                 >
                     {imageActivity.map(({ _id, url }) => (
                         <div
-                            key={id}
+                            key={_id}
                             className="relative flex-shrink-0 w-[300px] group rounded-lg overflow-hidden"
                         >
                             <div className="overflow-hidden rounded-lg hover:opacity-50">

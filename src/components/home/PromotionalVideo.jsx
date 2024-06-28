@@ -18,7 +18,7 @@ const PromotionalVideo = () => {
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mx-2'>
                     <div className='flex justify-center items-center'>
                         <video className='w-full' controls >
-                            <source src={videoPromotional} type='video/mp4' au />
+                            <source src={videoPromotional} type='video/mp4' />
                             Your browser does not support the video tag.
                         </video>
                     </div>

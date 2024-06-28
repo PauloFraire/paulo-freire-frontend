@@ -39,7 +39,7 @@ const ContactForm = () => {
             <div className=" pb-16 container mx-auto flex justify-center">
                 <div className="grid grid-cols-1 overflow-hidden  sm:grid-cols-2 md:grid-cols-2">
                     <div className="md:col-span-1 flex justify-center items-center">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3758.7870156061335!2d-96.99303821896235!3d19.593623320515885!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85db2f3be7c3af49%3A0x919fee000616836b!2sCentro%20Regional%20de%20Educaci%C3%B3n%20Superior%20Paulo%20Freire%20A.C.!5e0!3m2!1ses-419!2smx!4v1705433781568!5m2!1ses-419!2smx" width="600" height="450" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3758.7870156061335!2d-96.99303821896235!3d19.593623320515885!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85db2f3be7c3af49%3A0x919fee000616836b!2sCentro%20Regional%20de%20Educaci%C3%B3n%20Superior%20Paulo%20Freire%20A.C.!5e0!3m2!1ses-419!2smx!4v1705433781568!5m2!1ses-419!2smx" width="600" height="450" allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade">
                         </iframe>
                     </div>
                     <div className="md:col-span-1 flex-col gap-5 p-5 bg-gradient-to-tr from-blue-400 to-blue-800 text-slate-100 flex justify-center items-center ">

@@ -22,7 +22,7 @@ const News = () => {
             try {
                 const response = await clientAxios.get('/blog');
                 setBlog(response.data);
-                console.log(response.data);
+
             } catch (error) {
                 console.log(error);
             }
@@ -44,6 +44,7 @@ const News = () => {
                         {
                             blog.map(({ _id, title, img, date }) => (
                                 <div
+                                    key={_id}
                                     className={`shadow-xl bg-slate-50 bg-clip-border border-2 border-solid border-slate-200 cursor-pointer transition-all duration-300 ease-in-out transform hover:scale-105`}
                                 >
                                     <div className='flex justify-center'>

@@ -14,7 +14,7 @@ const Home = () => {
 
 
   return (
-    <Fragment className="">
+    <Fragment >
       <Hero />
       <PromotionalVideo />
       {/* <Inscripciones /> */}

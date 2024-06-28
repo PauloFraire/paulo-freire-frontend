@@ -65,47 +65,47 @@ const ContextContemporaneo = () => {
 
                 <div className='grid md:grid-cols-2 xl:grid-cols-3 gap-2 grid-cols-1'>
                     <div className='flex'>
-                        <a href={pdf1} class="block max-w-sm p-6 bg-gradient-to-tr from-purple-300 to-blue-200 rounded-lg shadow hover:bg-gray-100 flex-grow hover:scale-105 transition-all duration-300 ease-in-out ">
+                        <a href={pdf1} className="block max-w-sm p-6 bg-gradient-to-tr from-purple-300 to-blue-200 rounded-lg shadow hover:bg-gray-100 flex-grow hover:scale-105 transition-all duration-300 ease-in-out ">
                             <FaRegFilePdf className='text-center mx-auto text-red-600 my-2' />
-                            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Comunidades de aprendizaje_práctica educativa de aprendizaje dialógico para la sociedad de la información.pdf</h5>
-                            <p class="font-normal text-gray-700 dark:text-gray-400">
+                            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Comunidades de aprendizaje_práctica educativa de aprendizaje dialógico para la sociedad de la información.pdf</h5>
+                            <p className="font-normal text-gray-700 dark:text-gray-400">
                                 Esta es una tesis teórica que se incluye en el área de estudio de Pedagogía y Social.
                             </p>
                         </a>
                     </div>
                     {/*  */}
                     <div className='flex'>
-                        <a href={pdf2} class="block max-w-sm p-6 bg-gradient-to-tr from-orange-300 to-yellow-200 border rounded-lg shadow hover:bg-gray-100 flex-grow hover:scale-105 transition-all duration-300 ease-in-out ">
+                        <a href={pdf2} className="block max-w-sm p-6 bg-gradient-to-tr from-orange-300 to-yellow-200 border rounded-lg shadow hover:bg-gray-100 flex-grow hover:scale-105 transition-all duration-300 ease-in-out ">
                             <FaRegFilePdf className='text-center mx-auto text-red-600 my-2' />
-                            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white ">Educación y globalización_una visión crítica.pdf</h5>
-                            <p class="font-normal text-gray-700 dark:text-gray-400">Este artículo aborda un tema de total vigencia para la educación: las relaciones existentes entre educación y globalización desde una visión crítica.</p>
+                            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white ">Educación y globalización_una visión crítica.pdf</h5>
+                            <p className="font-normal text-gray-700 dark:text-gray-400">Este artículo aborda un tema de total vigencia para la educación: las relaciones existentes entre educación y globalización desde una visión crítica.</p>
                         </a>
                     </div>
                     {/*  */}
                     <div className='flex'>
-                        <a href={pdf3} class="block max-w-sm p-6 bg-gradient-to-tr from-pink-300 to-yellow-100 border rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 hover:scale-105 transition-all duration-300 ease-in-out ">
+                        <a href={pdf3} className="block max-w-sm p-6 bg-gradient-to-tr from-pink-300 to-yellow-100 border rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 hover:scale-105 transition-all duration-300 ease-in-out ">
                             <FaRegFilePdf className='text-center mx-auto text-red-600 my-2' />
-                            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Geopolítica_origen del concepto y su evolución.pdf</h5>
-                            <p class="font-normal text-gray-700 dark:text-gray-400">Este trabajo tiene por objetivo destacar algunos momentos del desarrollo
+                            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Geopolítica_origen del concepto y su evolución.pdf</h5>
+                            <p className="font-normal text-gray-700 dark:text-gray-400">Este trabajo tiene por objetivo destacar algunos momentos del desarrollo
                                 del concepto “Geopolítica” que permitan identificar su perfil epistemológico
                                 .</p>
                         </a>
                     </div>
                     {/*  */}
                     <div className='flex'>
-                        <a href={pdf4} class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 bg-gradient-to-tr from-blue-300 to-sky-100 hover:scale-105 transition-all duration-300 ease-in-out ">
+                        <a href={pdf4} className="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 bg-gradient-to-tr from-blue-300 to-sky-100 hover:scale-105 transition-all duration-300 ease-in-out ">
                             <FaRegFilePdf className='text-center mx-auto text-red-600 my-2' />
-                            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">La investigación cualitativa en educacion_necesidad y reto para los modelos pedagogicos contemporaneos.pdf</h5>
-                            <p class="font-normal text-gray-700 dark:text-gray-400">En el presente artículo se plantean los presupuestos básicos, los objetivos e interrogantes de la
+                            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">La investigación cualitativa en educacion_necesidad y reto para los modelos pedagogicos contemporaneos.pdf</h5>
+                            <p className="font-normal text-gray-700 dark:text-gray-400">En el presente artículo se plantean los presupuestos básicos, los objetivos e interrogantes de la
                                 investigación cualitativa.</p>
                         </a>
                     </div>
                     {/*  */}
                     <div className='flex'>
-                        <a href={pdf5} class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100  bg-gradient-to-tr from-green-300 to-yellow-100 flex-grow hover:scale-105 transition-all duration-300 ease-in-out ">
+                        <a href={pdf5} className="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100  bg-gradient-to-tr from-green-300 to-yellow-100 flex-grow hover:scale-105 transition-all duration-300 ease-in-out ">
                             <FaRegFilePdf className='text-center mx-auto text-red-600 my-2 ' />
-                            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Modelo didáctico alternativo para transformar la Educación.pdf</h5>
-                            <p class="font-normal text-gray-700 dark:text-gray-400">
+                            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Modelo didáctico alternativo para transformar la Educación.pdf</h5>
+                            <p className="font-normal text-gray-700 dark:text-gray-400">
                                 Este artículo presenta un modelo didáctico renovador, que pretende
                                 transformar la educación: el "Modelo de Investigación en la Escuela", asumido en el proyecto curricular
                                 "Investigación y Renovación Escolar".
@@ -114,10 +114,10 @@ const ContextContemporaneo = () => {
                     </div>
                     {/*  */}
                     <div className='flex'>
-                        <a href={pdf6} class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100  bg-gradient-to-tr from-red-200 to-red-300 flex-grow hover:scale-105 transition-all duration-300 ease-in-out ">
+                        <a href={pdf6} className="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100  bg-gradient-to-tr from-red-200 to-red-300 flex-grow hover:scale-105 transition-all duration-300 ease-in-out ">
                             <FaRegFilePdf className='text-center mx-auto text-red-600 my-2 ' />
-                            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Líneas de mensaje para Diplomado Innovación escolar e inteligencia artificial generativa. Claves para </h5>
-                            <p class="font-normal text-gray-700 dark:text-gray-400">
+                            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Líneas de mensaje para Diplomado Innovación escolar e inteligencia artificial generativa. Claves para </h5>
+                            <p className="font-normal text-gray-700 dark:text-gray-400">
                                 Innovación escolar e inteligencia artificial generativa: Claves para su aplicación en el marco de la nueva escuela mexicana.
                             </p>
                         </a>
@@ -128,7 +128,7 @@ const ContextContemporaneo = () => {
             </div>
 
             <div className='container mx-auto mt-10 max-w-5xl flex justify-center'>
-                <img class="h-auto max-w-lg rounded-lg object-cover object-center" src="https://assets.isu.pub/document-structure/221022193407-97668cb58b1c5b49c96732ab70a64e6c/v1/d3330072c89656bc5ad6e65908a5638e.jpeg" alt="image description" />
+                <img className="h-auto max-w-lg rounded-lg object-cover object-center" src="https://assets.isu.pub/document-structure/221022193407-97668cb58b1c5b49c96732ab70a64e6c/v1/d3330072c89656bc5ad6e65908a5638e.jpeg" alt="image description" />
             </div>
 
 
