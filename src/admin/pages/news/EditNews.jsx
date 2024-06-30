@@ -5,6 +5,7 @@ import clientAxios from '../../../config/clientAxios';
 import { useNavigate, useParams } from 'react-router-dom';
 import parse from 'html-react-parser';
 import { toast } from 'react-hot-toast';
+import useAuth from '../../../hooks/useAuth';
 
 const modules = {
     toolbar: [
@@ -34,6 +35,7 @@ const formats = [
 const EditNews = () => {
 
     const { id } = useParams();
+    const { token } = useAuth();
     const navigate = useNavigate();
     const [blog, setBlog] = useState({
         title: '',
@@ -75,6 +77,13 @@ const EditNews = () => {
             return;
         }
 
+        const config = {
+            headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`
+            }
+        }
+
         try {
             const formData = new FormData();
             formData.append('title', blog.title);
@@ -82,7 +91,7 @@ const EditNews = () => {
             formData.append('date', blog.date);
             formData.append('img', imgUrl);
 
-            const response = await clientAxios.put(`/blog/${id}`, formData);
+            const response = await clientAxios.put(`/blog/${id}`, formData, config);
 
             setLoading(false);
 

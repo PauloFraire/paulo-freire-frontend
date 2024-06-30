@@ -5,17 +5,26 @@ import clientAxios from "../../../config/clientAxios";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { TiEdit } from "react-icons/ti";
 import Swal from 'sweetalert2';
-
+import useAuth from "../../../hooks/useAuth";
 
 const AdminNews = () => {
 
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const { token } = useAuth();
+
+    const config = {
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        }
+    }
+
     useEffect(() => {
         const getBlogs = async () => {
             try {
-                const response = await clientAxios.get('/blog');
+                const response = await clientAxios.get('/blog', config);
                 console.log(response);
                 setBlogs(response.data);
                 setLoading(false);
@@ -28,6 +37,14 @@ const AdminNews = () => {
     }, []);
 
     const handleDelete = (id) => {
+
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            }
+        }
+
         Swal.fire({
             title: '¿Estas seguro?',
             text: "Una vez eliminado, no podras recuperar la noticia",
@@ -39,7 +56,7 @@ const AdminNews = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    await clientAxios.delete(`/blog/${id}`);
+                    await clientAxios.delete(`/blog/${id}`, config);
                     const newBlogs = blogs.filter(blog => blog._id !== id);
                     setBlogs(newBlogs);
                     Swal.fire(

@@ -17,8 +17,6 @@ const ContextContemporaneo = () => {
                 Información para un educación critica
             </h1 >
 
-
-
             <div className='container mx-auto max-w-4xl my-10 '>
                 <p className='text-center text-lg font-abold uppercase text-slate-700 mx-2'>"Lo que distingue las mentes verdaderamente originales no es que sean las primeras en ver algo nuevo, sino que son capaces de ver como nuevo lo que es viejo, conocido, visto y menospreciado"
                     <br />

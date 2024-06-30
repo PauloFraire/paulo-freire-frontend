@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, json, useNavigate } from 'react-router-dom';
 import { IoIosEyeOff } from "react-icons/io";
 import { IoLogIn } from "react-icons/io5";
 import Spinner from '../../components/Spinner'
 import { toast } from 'react-hot-toast';
+import clientAxios from '../../config/clientAxios';
 
 const Login = () => {
 
@@ -29,20 +30,18 @@ const Login = () => {
         }
         setLoading(true)
         try {
-            const response = await fetch('http://localhost:3000/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(user)
-            })
-
-            console.log(response)
+            const response = await clientAxios.post('/login', user);
             setLoading(false)
-            navigate('/admin')
+            console.log(response.data)
+
+            if (response.status === 200) {
+                localStorage.setItem('token', JSON.stringify(response.data.user))
+                navigate('/admin/home')
+            }
+
         } catch (error) {
             console.log(error)
-            setLoading(false)
+            setLoading(false);
         }
     }
 
@@ -139,16 +138,7 @@ const Login = () => {
                             </button> :
                             <Spinner />
                     }
-                    {/* <Spinner /> */}
-                    {/* <p className="text-center">Aún no tienes cuenta?
-                        <Link
-                            to='/register'
-                            className="text-blue-600 font-medium inline-flex space-x-1 items-center"
-                        >
-                            <span>Registrate Ahora </span>
-                            <LuExternalLink className="w-4 h-4" />
-                        </Link>
-                    </p> */}
+
                 </div>
             </form>
 

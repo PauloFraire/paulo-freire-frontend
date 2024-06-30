@@ -9,6 +9,7 @@ import {
 } from 'react-router-dom';
 
 import Layout from './Layout/Layout.jsx';
+import AuthProvider from './context/AuthProvider.jsx';
 
 //pages
 import Home from './pages/Home.jsx';
@@ -23,6 +24,7 @@ import NewItemPage from './admin/pages/news/NewItemPage.jsx';
 import HistoryDetail from './pages/HistoryDetail.jsx';
 
 //admin
+import PrivateRoute from './pages/PrivateRoute.jsx';
 import DashboardLayout from './admin/DashboardLayout.jsx';
 import Dashboard from './admin/pages/Dashboard.jsx';
 import AcademyActivitiesAdmin from './admin/pages/academy/AcademyActivitiesAdmin.jsx';
@@ -33,10 +35,20 @@ import EditNews from './admin/pages/news/EditNews.jsx';
 
 import ContextContemporaneo from './contexto-comtemporaneo/ContextContemporaneo.jsx';
 
+
+//Dummy authentication functions
+
+const isAuthenticated = () => true;
+const isAdmin = () => true;
+
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Layout />,
+    element:
+      <AuthProvider>
+        <Layout />
+      </AuthProvider>
+    ,
     children: [
       { index: true, element: <Home /> },
       { path: '/organization', element: <Organization /> },
@@ -54,7 +66,13 @@ const router = createBrowserRouter([
 
   {
     path: '/admin',
-    element: <DashboardLayout />,
+    element:
+      < AuthProvider >
+        <PrivateRoute>
+          <DashboardLayout />
+        </PrivateRoute>
+      </AuthProvider>
+    ,
     children: [
       {
         path: '/admin/home',

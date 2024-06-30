@@ -43,8 +43,12 @@ const Footer = () => {
                         <a href="#valores" className="text-sm hover:underline">
                             Valores Institucionales
                         </a>
+                        <Link to="/login" className="text-sm hover:underline">
+                            Iniciar Sesión
+                        </Link>
                     </div>
                 </div>
+
                 <div>
                     <div className="font-bold mb-6">Organización</div>
                     <div className="flex flex-col gap-4">

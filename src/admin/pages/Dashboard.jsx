@@ -12,6 +12,9 @@ const Dashboard = () => {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
 
+    const token = localStorage.getItem('token')
+    console.log(token)
+
     const handleImage = async (e) => {
         setLoading(true);
         const file = e.target.files[0];

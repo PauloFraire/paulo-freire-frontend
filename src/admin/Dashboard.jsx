@@ -3,19 +3,22 @@ import { Link } from "react-router-dom"
 import { IoIosAddCircle } from "react-icons/io";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import clientAxios from "../config/clientAxios";
 
 const Dashboard = () => {
 
 
     const [data, setData] = useState([])
 
+    const token = localStorage.getItem('token')
+    console.log(token)
+
     useEffect(() => {
         const getHero = async () => {
             try {
-                const response = await fetch('http://localhost:3000/api/customsize');
+                const response = await clientAxios.get('/customsize')
                 console.log(response)
-                setData(await response.json())
-
+                setData(response.data)
 
             } catch (error) {
                 console.log(error)
