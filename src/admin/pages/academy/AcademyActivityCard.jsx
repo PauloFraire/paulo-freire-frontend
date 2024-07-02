@@ -3,12 +3,14 @@ import AllImages from './AllImages';
 import { IoIosAddCircle } from "react-icons/io";
 import clientAxios from '../../../config/clientAxios';
 import toast from 'react-hot-toast';
+import useAuth from '../../../hooks/useAuth';
 
 const AcademyActivityCard = ({ activity }) => {
 
     const { _id } = activity;
     const [image, setImage] = useState([]);
     const [loading, setLoading] = useState(false);
+    const { token } = useAuth();
 
     const handleUploadImage = async (e) => {
         setLoading(true);
@@ -18,6 +20,7 @@ const AcademyActivityCard = ({ activity }) => {
         formData.append('description', 'imagen de actividad');
         formData.append('id', _id);
 
+        
         try {
             const response = await clientAxios.post('/image-activity', formData, {
                 headers: {

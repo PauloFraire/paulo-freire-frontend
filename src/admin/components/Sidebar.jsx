@@ -22,9 +22,9 @@ const adminNavItems = [
         label: "Actividades Academicas",
     },
     {
-        to: "/admin/admin-h",
+        to: "/admin/users",
         icon: <SiGoogleclassroom className="text-2xl" />,
-        label: "Convocatorias",
+        label: "Usuarios",
     },
     {
         to: "/admin/admin-",

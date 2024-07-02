@@ -25,7 +25,7 @@ const AuthProvider = ({ children }) => {
     const isAuthenticated = () => localStorage.getItem('token') ? JSON.parse(localStorage.getItem("token")) : false;
 
     const isAdmin = () => localStorage.getItem("token")
-        ? JSON.parse(localStorage.getItem("token")).role === 0
+        ? JSON.parse(localStorage.getItem("token")).role === 0 || JSON.parse(localStorage.getItem("token")).role === 1
         : false;
 
 

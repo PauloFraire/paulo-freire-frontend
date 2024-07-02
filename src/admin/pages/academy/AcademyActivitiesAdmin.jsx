@@ -5,18 +5,27 @@ import { IoIosAddCircle } from "react-icons/io";
 import { toast } from 'react-hot-toast';
 import AddAcademyModal from "./AddAcademyModal";
 import AcademyActivityCard from "./AcademyActivityCard";
+import useAuth from "../../../hooks/useAuth";
 
 const AcademyActivitiesAdmin = () => {
 
     const [academyActivities, setAcademyActivities] = useState([]);
 
     const [open, setOpen] = useState(false);
-
+    const { token } = useAuth();
 
     useEffect(() => {
         const getAcademyActivities = async () => {
+
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            }
+
             try {
-                const response = await clientAxios.get(`/academy-activities`);
+                const response = await clientAxios.get(`/academy-activities`, config);
                 setAcademyActivities(response.data);
                 console.log(response);
             } catch (error) {

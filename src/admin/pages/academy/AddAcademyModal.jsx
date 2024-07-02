@@ -26,14 +26,20 @@ const AddAcademyModal = ({ open, setOpen }) => {
         e.preventDefault();
         setLoading(true);
 
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            }
+        }
+
         if (academyActivity.title.trim() === '' || academyActivity.description.trim() === '') {
             toast.error('No puede haber campos vacios');
             setLoading(false);
             return;
         }
-
         try {
-            const response = await clientAxios.post(`/academy-activities`, academyActivity);
+            const response = await clientAxios.post(`/academy-activities`, academyActivity, config);
             console.log(response);
             setLoading(false);
             if (response.status === 200) {

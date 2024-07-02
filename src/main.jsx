@@ -31,6 +31,8 @@ import AcademyActivitiesAdmin from './admin/pages/academy/AcademyActivitiesAdmin
 import AdminNews from './admin/pages/news/AdminNews.jsx';
 import AddNews from './admin/pages/news/AddNews.jsx';
 import EditNews from './admin/pages/news/EditNews.jsx';
+import AdminUsers from './admin/pages/users/AdminUsers.jsx';
+import AddUser from './admin/pages/users/AddUser.jsx';
 
 
 import ContextContemporaneo from './contexto-comtemporaneo/ContextContemporaneo.jsx';
@@ -93,6 +95,14 @@ const router = createBrowserRouter([
       {
         path: '/admin/edit-news/:id',
         element: <EditNews />
+      },
+      {
+        path: '/admin/users',
+        element: <AdminUsers />
+      },
+      {
+        path: '/admin/add-user',
+        element: <AddUser />
       },
       {
         path: '*',

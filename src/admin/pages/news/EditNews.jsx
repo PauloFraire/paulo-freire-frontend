@@ -45,9 +45,7 @@ const EditNews = () => {
     const [loading, setLoading] = useState(false);
     const [img, setImg] = useState(null);
     const [imgUrl, setImgUrl] = useState(null);
-    console.log(blog);
-    console.log(img);
-
+    
     const updateState = (e) => {
         setBlog({ ...blog, [e.target.name]: e.target.value })
     }
