@@ -41,6 +41,7 @@ const Login = () => {
 
         } catch (error) {
             console.log(error)
+            toast.error('Hubo un error')
             setLoading(false);
         }
     }

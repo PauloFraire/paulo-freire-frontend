@@ -11,8 +11,8 @@ import imgl4 from "../../assets/img/lucio4.jpg";
 import { Link } from 'react-router-dom';
 
 const History = () => {
-    return (
 
+    return (
         <section className='history mt-10' >
             <h1 className=" text-center mb-8 sm:text-5xl  text-slate-100 font-bold ">
                 Historia y Cultura Regional

@@ -9,13 +9,14 @@ import hero2 from "../../assets/img/img15.jpeg";
 import hero3 from "../../assets/img/img16.jpeg";
 import hero4 from "../../assets/img/img19.jpeg";
 import hero5 from "../../assets/img/img20.jpeg";
+import hero6 from "../../assets/img24.jpeg";
 
 const Hero = () => {
 
-  const images = [hero1, hero2, hero3, hero4, hero5];
+  const images = [hero1, hero2, hero3, hero4, hero5, hero6];
 
   const [data, setData] = useState([])
-  const [currentImage, setCurrentImage] = useState(hero);
+  const [currentImage, setCurrentImage] = useState(hero6);
 
   //fetch a las imagenes
 
@@ -95,10 +96,10 @@ const Hero = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-1 basis-[20rem] justify-center items-center mt-2 animate-fade">
+        <div className="flex flex-1 basis-[20rem] justify-center items-center mt-2 animate-fade lg:mx-4 sm:mx-8">
 
           {
-            < img src={currentImage} alt="imagen hero" className='w-4/5 shadow-lg bg-slate-200 p-2' />
+            < img src={currentImage} alt="imagen hero" className='w-[800px] h-[500px] object-cover object-top shadow-lg bg-slate-200 p-2' />
           }
 
         </div>

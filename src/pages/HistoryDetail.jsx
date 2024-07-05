@@ -113,7 +113,7 @@ const HistoryDetail = () => {
 
                             <div className='mt-10'>
                                 <h3 className="mt-4 text-4xl font-bold text-center text-slate-700 mb-10">
-                                    Libro Perote
+                                    De Xalapa a Perote en el Siglo XVI: Caminos, ventas y prácticas pre-mercantiles.
                                 </h3>
 
                                 <p className="mt-3 max-w-5xl mx-auto text-lg leading-relaxed mb-5 text-slate-500 ">
@@ -142,7 +142,9 @@ const HistoryDetail = () => {
                                         <div className='flex'>
                                             <div class="block max-w-sm p-6 bg-gradient-to-tr from-green-300 to-blue-200 rounded-lg shadow hover:bg-gray-100 flex-grow hover:scale-105 transition-all duration-300 ease-in-out ">
                                                 <FaRegFilePdf className='text-center mx-auto text-red-600 my-2 h-8 w-8' />
-                                                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-700 dark:text-white text-center mt-4">La Escuela Infinita Libro</h5>
+                                                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-700 dark:text-white text-center mt-4">
+                                                    De Xalapa a Perote en el Siglo XVI: Caminos, ventas y prácticas pre-mercantiles.
+                                                </h5>
 
                                                 <p className='font-normal text-gray-700 text-center'>
                                                     De Xalapa a Perote en el Siglo XVI: Caminos, ventas y prácticas pre-mercantiles.

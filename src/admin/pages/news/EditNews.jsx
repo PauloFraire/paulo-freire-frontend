@@ -7,6 +7,7 @@ import parse from 'html-react-parser';
 import { toast } from 'react-hot-toast';
 import useAuth from '../../../hooks/useAuth';
 
+
 const modules = {
     toolbar: [
         [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
@@ -40,16 +41,19 @@ const EditNews = () => {
     const [blog, setBlog] = useState({
         title: '',
         description: '',
-        date: ''
+        date: '',
+        isPublished: false
     });
     const [loading, setLoading] = useState(false);
     const [img, setImg] = useState(null);
     const [imgUrl, setImgUrl] = useState(null);
-    
+
     const updateState = (e) => {
         setBlog({ ...blog, [e.target.name]: e.target.value })
     }
 
+
+    console.log(blog);
 
     useEffect(() => {
         const getBlog = async () => {
@@ -87,6 +91,7 @@ const EditNews = () => {
             formData.append('title', blog.title);
             formData.append('description', blog.description);
             formData.append('date', blog.date);
+            formData.append('isPublished', blog.isPublished);
             formData.append('img', imgUrl);
 
             const response = await clientAxios.put(`/blog/${id}`, formData, config);
@@ -101,7 +106,8 @@ const EditNews = () => {
             }
 
         } catch (error) {
-            console.log(error);
+            console.log(error.response.data.msg);
+            toast.error(error.response.data.msg);
             setLoading(false);
         }
     }
@@ -174,6 +180,33 @@ const EditNews = () => {
                                     )
                                         : null
                                 }
+                            </div>
+                        </div>
+
+                        <div className='w-full flex items-center gap-x-5'>
+                            <div className='flex items-center w-full gap-2'>
+                                <label htmlFor="isPublished" className="font-semibold text-slate-700 pb-2">
+                                    Estado:
+                                </label>
+
+                                <select
+                                    name="isPublished"
+                                    id="isPublished"
+                                    className='input-auth'
+                                    onChange={updateState}
+                                >
+                                    {
+                                        blog.isPublished ? (
+                                            <option value="true">Publicado</option>
+                                        ) : (
+                                            <option value="false">No Publicado</option>
+                                        )
+                                    }
+                                    <option value="true">Publicado</option>
+                                    <option value="false">No Publicado</option>
+
+                                </select>
+
                             </div>
                         </div>
 

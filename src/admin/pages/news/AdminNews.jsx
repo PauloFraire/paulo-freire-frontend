@@ -104,6 +104,7 @@ const AdminNews = () => {
                                 <th className="px-2 py-2 border text-gray-600">No.</th>
                                 <th className="px-2 py-2 border text-gray-600">Titulo</th>
                                 <th scope="col" className="px-2 py-2 border text-gray-600">Fecha</th>
+                                <th scope="col" className="px-2 py-2 border text-gray-600">Estado</th>
                                 <th className="px-2 py-2 border text-gray-600">Imagen</th>
                                 <th className="px-2 py-2 border text-gray-600">Acciones</th>
                                 <th scope="col" className="px-2 py-2 border text-gray-600">Ver</th>
@@ -127,7 +128,13 @@ const AdminNews = () => {
                                             </td>
                                             <td className="px-2 py-2 border text-center">
                                                 {blog.date}
-
+                                            </td>
+                                            <td className="px-2 py-2 border text-center">
+                                                {blog.isPublished ? (
+                                                    <span className="text-green-600 bg-green-200 p-1 rounded-md">Publicado</span>
+                                                ) : (
+                                                    <span className="text-red-600 bg-red-200 p-1  rounded-md">No Publicado</span>
+                                                )}
                                             </td>
                                             <td className="px-2 py-2 border flex items-center justify-center">
                                                 <img src={blog.img} alt={blog.title} className="w-16 h-16 object-cover" />

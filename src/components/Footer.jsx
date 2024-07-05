@@ -80,9 +80,7 @@ const Footer = () => {
                         <a href="https://www.facebook.com/profile.php?id=61561008735948" className="hover:scale-110 text-xl" target='_blank'>
                             <BsFacebook />
                         </a>
-                        <a href="" className="hover:scale-110 text-xl">
-                            <BsInstagram />
-                        </a>
+
                         <a href="https://x.com/centropaulofrei" className="hover:scale-110 text-xl" target='_blank'>
                             <BsTwitter />
                         </a>

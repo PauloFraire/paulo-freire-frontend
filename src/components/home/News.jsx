@@ -20,7 +20,7 @@ const News = () => {
     useEffect(() => {
         const getBlogs = async () => {
             try {
-                const response = await clientAxios.get('/blog');
+                const response = await clientAxios.get('/blog/published');
                 setBlog(response.data);
 
             } catch (error) {
