@@ -10,10 +10,12 @@ import hero3 from "../../assets/img/img16.jpeg";
 import hero4 from "../../assets/img/img19.jpeg";
 import hero5 from "../../assets/img/img20.jpeg";
 import hero6 from "../../assets/img24.jpeg";
+import hero7 from "../../assets/img25.jpeg";
+import hero8 from "../../assets/img26.jpeg";
 
 const Hero = () => {
 
-  const images = [hero1, hero2, hero3, hero4, hero5, hero6];
+  const images = [hero1, hero7, hero2, hero8, hero3, hero4, hero5, hero6];
 
   const [data, setData] = useState([])
   const [currentImage, setCurrentImage] = useState(hero6);
@@ -40,7 +42,7 @@ const Hero = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentImage(images[(images.indexOf(currentImage) + 1) % images.length]);
-    }, 10000);
+    }, 8000);
 
     return () => clearInterval(timer); // Limpia el intervalo cuando el componente se desmonta
   }, [currentImage]);

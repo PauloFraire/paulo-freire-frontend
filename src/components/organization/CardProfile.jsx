@@ -2,8 +2,8 @@ import React from 'react';
 
 const CardProfile = ({ profile }) => {
     return (
-        <div class="card">
-            <div class="image-box">
+        <div class="card shadow-md rounded-md">
+            <div class="image-box rounded-sm shadow-lg">
                 <img src={profile.photo} alt="" />
             </div>
             <div class="text-box">
@@ -15,4 +15,4 @@ const CardProfile = ({ profile }) => {
 
 }
 
-export default CardProfile
+export default CardProfile;

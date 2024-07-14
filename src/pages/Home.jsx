@@ -9,6 +9,7 @@ import History from '../components/home/History';
 import Inscripciones from '../components/home/Inscripciones';
 import PromotionalVideo from '../components/home/PromotionalVideo';
 import DiplomadoInformation from '../components/home/DiplomadoInformation';
+import Anniversary from '../components/home/Anniversary';
 
 const Home = () => {
 
@@ -16,6 +17,7 @@ const Home = () => {
   return (
     <Fragment >
       <Hero />
+      <Anniversary />
       <PromotionalVideo />
       {/* <Inscripciones /> */}
       <DiplomadoInformation />
