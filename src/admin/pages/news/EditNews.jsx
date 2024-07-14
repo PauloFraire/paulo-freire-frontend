@@ -167,6 +167,9 @@ const EditNews = () => {
                                 />
 
                             </div>
+                            <div>
+                                alan 
+                            </div>
                             <div className='flex justify-center items-center w-full'>
                                 {
                                     img ? (
@@ -181,7 +184,8 @@ const EditNews = () => {
                                         : null
                                 }
                             </div>
-                        </div>
+                            
+                       </div>
 
                         <div className='w-full flex items-center gap-x-5'>
                             <div className='flex items-center w-full gap-2'>

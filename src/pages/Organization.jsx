@@ -28,22 +28,26 @@ const Organization = () => {
 
 
   return (
-    <div>
+    <div className='bg-white'>
 
-      <Breadcrumbs
-        breadcrumbs={breadcrumbs}
-      />
 
-      <div className="container mx-auto mt-10">
+      <div className='flex justify-center my-5'>
+
+        <Breadcrumbs
+          breadcrumbs={breadcrumbs}
+        />
+      </div>
+
+      <div className=" max-w-6xl container mx-auto mt-10">
 
 
         <section className=''>
-          <CardProfile profile={authorities[1]} />
 
           <div
             className='grid sm:grid-cols-2 grid-cols-1 md:grid-cols-3 gap-4  mt-5'
           >
 
+            <CardProfile profile={authorities[1]} />
             <CardProfile profile={authorities[0]} />
             <CardProfile profile={authorities[2]} />
             <CardProfile profile={authorities[3]} />
