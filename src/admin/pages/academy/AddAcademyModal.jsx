@@ -5,10 +5,13 @@ import { toast } from 'react-hot-toast';
 import clientAxios from '../../../config/clientAxios';
 import { useNavigate } from 'react-router-dom';
 import { FaSave } from "react-icons/fa";
+import useAuth from '../../../hooks/useAuth';
 
 const AddAcademyModal = ({ open, setOpen }) => {
 
     const navigate = useNavigate();
+
+    const { token } = useAuth();
 
     const [academyActivity, setAcademyActivity] = useState({
         title: '',

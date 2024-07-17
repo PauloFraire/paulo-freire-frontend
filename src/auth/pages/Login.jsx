@@ -9,7 +9,7 @@ import clientAxios from '../../config/clientAxios';
 const Login = () => {
 
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const [user, setUser] = useState({
         email: '',
         password: ''

@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { FaNewspaper } from "react-icons/fa";
 import { TiThMenuOutline } from "react-icons/ti";
 import { BiHomeAlt, BiLogInCircle, BiSelectMultiple } from "react-icons/bi";
 import { SiGoogleclassroom, SiInstructure } from "react-icons/si"
+import { TbLogin } from "react-icons/tb";
 
 const adminNavItems = [
     {
@@ -31,12 +32,20 @@ const adminNavItems = [
         icon: <SiInstructure className="text-2xl" />,
         label: "Oferta Educativa",
     },
+
 ]
 
 
 const SideBar = () => {
 
     const [open, setOpen] = useState(true);
+
+    const navigate = useNavigate();
+
+    const handleSubmit = () => {
+        localStorage.removeItem('token')
+        navigate('/')
+    }
 
     return (
         <>
@@ -69,6 +78,15 @@ const SideBar = () => {
                             </li>
                         ))
                     }
+                    <li className='space-y-2'>
+                        <button
+                            className=' duration-150 rounded-md p-2 cursor-pointer  hover:bg-Teal hover:text-white font-bold text-sm items-center gap-2 flex'
+                            onClick={handleSubmit}
+                        >
+                            <TbLogin className="text-2xl" />
+                            Cerrar sesión
+                        </button>
+                    </li>
                 </ul>
 
 
