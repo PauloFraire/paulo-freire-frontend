@@ -4,7 +4,7 @@ import imgCartel2 from '../../assets/img/Cartel2.jpeg';
 import imgCartel3 from '../../assets/img/Cartel3.jpeg';
 import imgCartel4 from '../../assets/img/Cartel4.jpeg';
 import { FaRegFilePdf, FaSignsPost } from "react-icons/fa6";
-import { CiLink } from 'react-icons/ci';
+import { CiBookmark, CiLink, CiVideoOn } from 'react-icons/ci';
 import { MdOutlineFileDownload } from "react-icons/md";
 import { RiLinksLine } from "react-icons/ri";
 import { FaVideo } from "react-icons/fa";
@@ -16,9 +16,8 @@ import pdfCronograma from '../../assets/pdf/CRONOGRAMA EVENTOS DIPLOMADO 2024.pd
 import pdfDiptico from '../../assets/pdf/DIPTICO DISEÑO 1.pdf'
 import pdfInnovacionEscolar from '../../assets/pdf/INNOVACIÓN ESCOLAR E INTELIGENCIA ARTIFICIAL - CRESPF.pdf'
 import pdfProgramadaDiplomado from '../../assets/pdf/PROGRAMA DIPLOMADO INNOVACIÓN ESCOLAR E INTELIGENCIA ARTIFICIAL GENERATIVA - CRESPF 2024.pdf'
-import invitacion1 from '../../assets/img/invitacion1.jpeg';
-import invitacion2 from '../../assets/img/invitacion2.jpeg';
-
+import { GoBook } from "react-icons/go";
+import { GiInauguration } from "react-icons/gi";
 
 const DiplomadoInformation = () => {
     return (
@@ -27,9 +26,11 @@ const DiplomadoInformation = () => {
             <h3 className='text-4xl font-extrabold text-center text-teal-600 uppercase py-2'>Información del Diplomado</h3>
 
             <div className='max-w-[1200px] mx-auto my-10'>
-                <h3 className='text-2xl font-bold mx-auto  my-4 capitalize text-slate-400 flex gap-2 items-center text-center justify-center'>
-                    <FaSignsPost />
-                    Carteles promocionales
+                <h3 className=' font-semibold mx-auto  my-4 capitalize text-slate-400 flex gap-2 items-center text-center justify-center'>
+                    <CiBookmark />
+                    <span className="text-2xl">
+                        Carteles promocionales
+                    </span>
                 </h3>
                 <div className='image-wrapper gap-2'>
                     <figure className='item-img'>
@@ -53,15 +54,15 @@ const DiplomadoInformation = () => {
                 </div>
             </div>
 
-
-
             <div className='grid md:grid-cols-3 grid-cols-1 py-5'>
 
                 <div className='col-span-1 my-4  p-4 '>
 
-                    <p className="text-slate-400 text-center font-bold text-2xl flex items-center justify-center gap-2">
+                    <p className="text-slate-400 text-center font-semibold  flex items-center justify-center gap-2">
                         <RiLinksLine />
-                        Díptico e infomación
+                        <span className="text-2xl">
+                            Díptico e infomación
+                        </span>
                     </p>
                     <div className='flex flex-col gap-2 mt-10 items-center justify-center h-full'>
                         <a href={pdfCronograma} className="inline-flex items-center justify-center p-5 text-base font-medium text-gray-700 rounded-lg bg-gray-50 hover:text-gray-900 hover:bg-gray-100 gap-2 bg-gradient-to-tr from-orange-300 to-yellow-200 w-full">
@@ -92,9 +93,11 @@ const DiplomadoInformation = () => {
                 </div>
 
                 <div className='col-span-2 my-4  p-4'>
-                    <p className="text-slate-400 text-center font-bold text-2xl flex items-center justify-center gap-2">
-                        <FaVideo />
-                        Videos Promocionales
+                    <p className="text-slate-400 text-center font-semibold  flex items-center justify-center gap-2">
+                        <CiVideoOn />
+                        <span className='text-2xl'>
+                            Videos Promocionales
+                        </span>
                     </p>
 
                     <div className='flex h-full '>
@@ -118,24 +121,24 @@ const DiplomadoInformation = () => {
             <div className='grid md:grid-cols-3 grid-cols-1 mt-20'>
 
                 <div className='col-span-2 my-4   md:p-2'>
-                    <h3 className='text-2xl font-bold mx-auto  my-4 capitalize text-slate-400 text-center'>
-
-                        Invitaciones
+                    <h3 className='font-semibold mx-auto  my-4 capitalize text-slate-400 text-center'>
+                        <span className="text-2xl">
+                            Inaguración del Diplomado
+                        </span>
                     </h3>
-                    <div className='grid sm:grid-cols-2 gap-2'>
-                        <figure className='item-img'>
-                            <img src={invitacion1} alt="" />
-                        </figure>
-                        <figure className='item-img'>
-                            <img src={invitacion2} alt="" />
-                        </figure>
+                    <div className='flex justify-center h-full'>
+
+                        <iframe src="https://www.youtube.com/embed/799YJ9SHLak?si=OyKnzG0ydpL_4Lt_" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen className='sm:w-3/6 h-full'>
+                        </iframe>
                     </div>
                 </div>
 
                 <div className='col-span-1 my-4  p-4'>
-                    <h3 className='text-2xl font-bold mx-auto  my-4 capitalize text-slate-400 flex gap-2 items-center text-center'>
-                        <FaSignsPost />
-                        Libro “La Escuela Infinita”
+                    <h3 className='font-semibold mx-auto  my-4 capitalize text-slate-400 flex gap-2 items-center text-center'>
+                        <GoBook />
+                        <span className="text-2xl">
+                            Libro “La Escuela Infinita”
+                        </span>
                     </h3>
 
                     <div className='py-10 flex ju'>
@@ -163,8 +166,6 @@ const DiplomadoInformation = () => {
                     </div>
                 </div>
             </div>
-
-
         </section >
     )
 }

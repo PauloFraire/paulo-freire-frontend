@@ -8,7 +8,7 @@ const HistoryAnniversary = () => {
         <div className='bg-gradient-to-tr from-purple-200 to-pink-200'>
 
             <p className='text-2xl font-bold text-gray-500 text-center mb-2 uppercase '>
-                Historia del aniversario
+                Historia del CRESPF
             </p>
             <span className='text-green-700 block font-bold text-center my-3'> ¡ Gracias por ser parte de esta comunidad !</span>
 

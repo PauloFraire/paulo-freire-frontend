@@ -325,14 +325,15 @@ body {
 }
 
 .swiper {
-    width: 250px;
-    height: 320px;
+    width: 220px;
+    height: 300px;
 }
 
 .swiper2 {
     width: 380px;
     height: 450px;
 }
+
 
 .swiper-slide {
     display: flex;

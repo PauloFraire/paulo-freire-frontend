@@ -17,7 +17,7 @@ function Invitations() {
         <section className='max-w-[1400px] container mx-auto  bg-gradient-to-tr from-green-200 to-cyan-200 p-2'>
 
             <p className='text-2xl font-bold text-gray-500 text-center mb-2 uppercase '>
-                Invitaciones
+                Invitación al evento
             </p>
 
             <div className='flex justify-center'>

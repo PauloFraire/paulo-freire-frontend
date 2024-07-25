@@ -65,7 +65,7 @@ const Hero = () => {
 
           </div>
           <div className="sm:text text-3xl font-extrabold uppercase text-center">
-            Cursos Validados ante  la usicamm
+            Posgrados Validados ante  la usicamm
             <p className="text-lg leading-7 text-gray font-medium mt-5 mx-4 text-center capitalize">
               "en esta vida no solo los talentos son los que triunfan, también las voluntades".
             </p>
@@ -106,25 +106,6 @@ const Hero = () => {
 
         </div>
       </div>
-
-      {/* <div className='mt-10'>
-        <motion.div
-          variants={container}
-          initial="hidden"
-          whileInView="visible"
-          className="flex sm:items-center justify-evenly gap-8  py-5 flex-col sm:flex-row "
-        >
-          <motion.div variants={item} className="w-36 flex " >
-            <img src={imgMoodle} alt="" className="w-full " />
-            <a href='https://moodlecrespf.moodlecloud.com/login/index.php' className=' text-xl underline text-rose-600'>Plataforma Institucional del Crespf</a>
-          </motion.div>
-          <motion.div variants={item} className="w-36 flex " >
-            <img src={imgAgenda} alt="" className="w-full object-cover" />
-            <p className=' text-xl underline text-rose-600'>Agenda estratégica Mensual</p>
-          </motion.div>
-        </motion.div>
-
-      </div> */}
 
     </div>
   )
