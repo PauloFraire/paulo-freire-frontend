@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import Spinner from '../../../components/Spinner';
 import clientAxios from '../../../config/clientAxios';
+import useAuth from '../../../hooks/useAuth';
 
 const AllImages = ({ loading, id }) => {
 
     const [images, setImages] = useState([]);
+    const { token } = useAuth();
 
     useEffect(() => {
         const getImages = async () => {
@@ -22,7 +24,11 @@ const AllImages = ({ loading, id }) => {
 
     const deleteImageReq = async (id) => {
         try {
-            const response = await clientAxios.delete(`/image-activity/${id}`);
+            const response = await clientAxios.delete(`/image-activity/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             console.log(response);
             setImages(images.filter(image => image._id !== id));
 
