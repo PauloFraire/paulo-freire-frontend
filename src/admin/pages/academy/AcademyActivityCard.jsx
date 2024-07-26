@@ -20,11 +20,12 @@ const AcademyActivityCard = ({ activity }) => {
         formData.append('description', 'imagen de actividad');
         formData.append('id', _id);
 
-        
+
         try {
             const response = await clientAxios.post('/image-activity', formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${token}`
                 }
             });
             setLoading(false);
