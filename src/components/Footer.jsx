@@ -1,9 +1,8 @@
 import React from 'react';
 import {
     BsFacebook,
-    BsInstagram,
+
     BsTwitter,
-    BsPinterest,
 } from "react-icons/bs";
 import { motion } from "framer-motion";
 import logo from "../assets/logo.png";
@@ -77,12 +76,15 @@ const Footer = () => {
                     <div className="font-bold mb-6">Siguenos</div>
                     <div className="text-sm mb-4">centrodeeducacionsuperiorpaulo@gmail.com</div>
                     <div className="flex gap-4 mt-4">
-                        <a href="https://www.facebook.com/profile.php?id=61561008735948" className="hover:scale-110 text-xl" target='_blank'>
-                            <BsFacebook />
+                        <a href="https://www.facebook.com/PauloFreirePosgradosCRESPF?mibextid=ZbWKwL" className="hover:scale-110 text-xl" target='_blank'>
+                            <BsFacebook className='text-blue-500 h-6 w-6' />
+                        </a>
+                        <a href="https://www.facebook.com/profile.php?id=100002763439288&mibextid=ZbWKwL" className="hover:scale-110 text-xl" target='_blank'>
+                            <BsFacebook className='text-blue-500 h-6 w-6' />
                         </a>
 
                         <a href="https://x.com/centropaulofrei" className="hover:scale-110 text-xl" target='_blank'>
-                            <BsTwitter />
+                            <BsTwitter className='text-blue-400 h-6 w-6' />
                         </a>
                     </div>
                 </div>

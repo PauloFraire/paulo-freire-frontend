@@ -12,39 +12,40 @@ import hero5 from "../../assets/img/img20.jpeg";
 import hero6 from "../../assets/img24.jpeg";
 import hero7 from "../../assets/img25.jpeg";
 import hero8 from "../../assets/img26.jpeg";
+import clientAxios from '../../config/clientAxios'
 
 const Hero = () => {
 
-  const images = [hero1, hero7, hero2, hero8, hero3, hero4, hero5, hero6];
-
-  const [data, setData] = useState([])
+  const [images, setImages] = useState([])
   const [currentImage, setCurrentImage] = useState(hero6);
 
   //fetch a las imagenes
 
-  // useEffect(() => {
-  //   const getHero = async () => {
-  //     try {
-  //       const response = await fetch('http://localhost:3000/api/customsize');
-  //       const json = await response.json()
-  //       setData(json)
-
-  //       const imageArray = data.map((item) => item.slideImg);
-  //       images.push(...imageArray);
-
-  //     } catch (error) {
-  //       console.log(error)
-  //     }
-  //   }
-  //   getHero()
-  // }, [])
+  useEffect(() => {
+    const getHero = async () => {
+      try {
+        const response = await clientAxios.get('/customsize')
+        const imagenes = response.data.map(item => item.slideImg); // Extraemos solo los URLs de las imágenes
+        setImages(imagenes);
+        setCurrentImage(imagenes[0]); // Iniciar con la primera imagen
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getHero()
+  }, [])
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentImage(images[(images.indexOf(currentImage) + 1) % images.length]);
-    }, 8000);
+    const interval = setInterval(() => {
+      const index = images.indexOf(currentImage);
+      if (index === images.length - 1) {
+        setCurrentImage(images[0]);
+      } else {
+        setCurrentImage(images[index + 1]);
+      }
+    }, 5000);
 
-    return () => clearInterval(timer); // Limpia el intervalo cuando el componente se desmonta
+    return () => clearInterval(interval);
   }, [currentImage]);
 
 
@@ -99,7 +100,6 @@ const Hero = () => {
           </div>
         </div>
         <div className="flex flex-1 basis-[20rem] justify-center items-center mt-2 animate-fade lg:mx-4 sm:mx-8">
-
           {
             < img src={currentImage} alt="imagen hero" className='w-[800px] h-[500px] object-cover object-top shadow-lg bg-slate-200 p-2' />
           }

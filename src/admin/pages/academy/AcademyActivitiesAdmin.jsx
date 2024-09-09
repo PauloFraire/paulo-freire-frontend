@@ -6,12 +6,14 @@ import { toast } from 'react-hot-toast';
 import AddAcademyModal from "./AddAcademyModal";
 import AcademyActivityCard from "./AcademyActivityCard";
 import useAuth from "../../../hooks/useAuth";
+import EditAcademyActivityModal from "./EditAcademyActivityModal";
 
 const AcademyActivitiesAdmin = () => {
 
     const [academyActivities, setAcademyActivities] = useState([]);
 
     const [open, setOpen] = useState(false);
+
     const { token } = useAuth();
 
     useEffect(() => {
@@ -62,6 +64,8 @@ const AcademyActivitiesAdmin = () => {
                     open={open}
                     setOpen={setOpen}
                 />
+
+
 
                 {
                     academyActivities.length > 0 ? academyActivities.map((activity, index) => (

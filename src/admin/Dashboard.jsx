@@ -10,8 +10,6 @@ const Dashboard = () => {
 
     const [data, setData] = useState([])
 
-    const token = localStorage.getItem('token')
-    console.log(token)
 
     useEffect(() => {
         const getHero = async () => {
@@ -45,7 +43,7 @@ const Dashboard = () => {
                         <Link className="btn-action p-2">
                             <IoIosAddCircle className="text-2xl" />
                             Agregar Imagen
-                        </Link>
+                        </Link>.
                     </div>
                 </div>
 

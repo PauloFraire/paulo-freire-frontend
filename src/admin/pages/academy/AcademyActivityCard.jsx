@@ -4,12 +4,17 @@ import { IoIosAddCircle } from "react-icons/io";
 import clientAxios from '../../../config/clientAxios';
 import toast from 'react-hot-toast';
 import useAuth from '../../../hooks/useAuth';
+import { MdDelete } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
+import Swal from 'sweetalert2';
+import EditAcademyActivityModal from './EditAcademyActivityModal';
 
 const AcademyActivityCard = ({ activity }) => {
 
     const { _id } = activity;
     const [image, setImage] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [openEdit, setOpenEdit] = useState(false);
     const { token } = useAuth();
 
     const handleUploadImage = async (e) => {
@@ -41,32 +46,87 @@ const AcademyActivityCard = ({ activity }) => {
         }
     }
 
+    const handleDelete = async () => {
+        const result = await Swal.fire({
+            title: '¿Estas seguro?',
+            text: "Una vez eliminado, no podras recuperar la actividad",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, Eliminar'
+        });
+
+        if (result.isConfirmed) {
+            try {
+                const response = await clientAxios.delete(`/academy-activities/${_id}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+
+                toast.success(response.data)
+
+            } catch (error) {
+                toast.error('No se pudo eliminar la actividad');
+            }
+        }
+    }
+
 
     return (
-        <div className="relative  m-4 bg-white p-4 shadow-lg">
-            <h3 className="border-b-2 border-yellow-700 mb-4 pb-2 text-2xl font-semibold">
-                {activity.title}
-            </h3>
-            <p>{_id}</p>
-            <div className="relative flex flex-col space-y-2">
-                <div className="relative z-0 px-4 py-2 rounded text-white flex justify-center space-x-2 md:w-4/12 bg-Teal">
-                    <IoIosAddCircle className="text-2xl" />
-                    <span>Subir Imagen</span>
+        <>
+            <div className="relative  m-4 bg-white p-4 shadow-lg">
+                <div className='flex justify-between items-center w-full border-b-2 border-indigo-700 mb-2'>
+                    <div className='flex-col'>
+                        <h3 className=" mt-2 pb-2 text-2xl font-semibold">
+                            {activity.title}
+                        </h3>
+                        <p className="text-sm text-gray-600 mb-2">
+                            {activity.description}
+                        </p>
+                    </div>
+                    <div className='flex gap-4'>
+                        <button
+                            type='button'
+                            onClick={() => handleDelete()}
+                        >
+                            <MdDelete className='w-6 h-6 text-red-500' />
+                        </button>
+                        <button
+                            type='button'
+                            onClick={() => setOpenEdit(!openEdit)}
+                        >
+                            <FaEdit className='w-6 h-6 text-blue-500' />
+                        </button>
+                    </div>
                 </div>
-                <input
-                    onChange={handleUploadImage}
-                    type="file"
-                    name="image"
-                    accept=".jpg, .jpeg, .png, .gif, .bmp , .svg .tif, .tiff|image/*"
-                    className="absolute z-10 opacity-0 cursor-pointer w-full h-full top-0 left-0"
+                <div className="relative flex flex-col space-y-2">
+                    <div className="relative z-0 px-4 py-2 rounded text-white flex justify-center space-x-2 md:w-4/12 bg-Teal">
+                        <IoIosAddCircle className="text-2xl" />
+                        <span>Subir Imagen</span>
+                    </div>
+                    <input
+                        onChange={handleUploadImage}
+                        type="file"
+                        name="image"
+                        accept=".jpg, .jpeg, .png, .gif, .bmp , .svg .tif, .tiff|image/*"
+                        className="absolute z-10 opacity-0 cursor-pointer w-full h-full top-0 left-0"
+                    />
+                </div>
+
+                <AllImages
+                    loading={loading}
+                    id={_id}
                 />
             </div>
-
-            <AllImages
-                loading={loading}
+            <EditAcademyActivityModal
+                openEdit={openEdit}
+                setOpenEdit={setOpenEdit}
                 id={_id}
+
             />
-        </div>
+        </>
     )
 }
 

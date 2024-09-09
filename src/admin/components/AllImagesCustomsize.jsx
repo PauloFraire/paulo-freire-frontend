@@ -1,10 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import clientAxios from '../../config/clientAxios'
 import Spinner from '../../components/Spinner'
+import useAuth from '../../hooks/useAuth'
 
 const AllImagesCustomsize = ({ loading }) => {
 
     const [images, setImages] = useState([]);
+
+    const { token } = useAuth();
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
 
     useEffect(() => {
         const getImages = async () => {
@@ -21,8 +30,8 @@ const AllImagesCustomsize = ({ loading }) => {
 
     const deleteImageReq = async (id) => {
         try {
-            const response = await clientAxios.delete(`/customsize/${id}`);
-            console.log(response);
+            const response = await clientAxios.delete(`/customsize/${id}`, config);
+    
             setImages(images.filter(image => image._id !== id));
 
         } catch (error) {

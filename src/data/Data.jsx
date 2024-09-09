@@ -181,7 +181,7 @@ export const contactInfo = [
     },
     {
         location: "TANTOYUCA NORTE",
-        personal: [{ name: "Dr. ECDP: Edel García García", phone: "789 106 78 59" }],
+        personal: [{ name: "Dr.ECDP Alfonso Zenteno Cabrales", phone: "789 891 7562" }],
     },
     {
         location: "TANTOYUCA SUR",

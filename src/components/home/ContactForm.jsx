@@ -21,11 +21,13 @@ const ContactForm = () => {
         }
 
         try {
-            const response = await clientAxios.post('/api/email', { email, message });
+            const response = await clientAxios.post('/contact', { email, message });
             setLoading(false);
 
             if (response.status === 200) {
-                toast.success('Mensaje enviado correctamente');
+                toast.success('Mensaje enviado correctamente, Estaremos en contacto contigo');
+                setEmail('');
+                setMessage('');
             }
 
         } catch (error) {

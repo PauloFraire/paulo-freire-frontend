@@ -131,9 +131,9 @@ const AdminNews = () => {
                                             </td>
                                             <td className="px-2 py-2 border text-center">
                                                 {blog.isPublished ? (
-                                                    <span className="text-green-600 bg-green-200 p-1 rounded-md">Publicado</span>
+                                                    <span className="font-bold text-xs uppercase bg-green-50 text-green-500 border-green-500 p-1 border-2 rounded-lg inline-block py-1 px-5">Publicado</span>
                                                 ) : (
-                                                    <span className="text-red-600 bg-red-200 p-1  rounded-md">No Publicado</span>
+                                                    <span className="font-bold text-xs uppercase bg-red-50 text-red-500 border-red-500 p-1 border-2 rounded-lg inline-block py-1 px-5">No Publicado</span>
                                                 )}
                                             </td>
                                             <td className="px-2 py-2 border flex items-center justify-center">

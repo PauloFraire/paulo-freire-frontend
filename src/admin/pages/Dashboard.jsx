@@ -5,6 +5,7 @@ import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import AllImagesCustomsize from "../components/AllImagesCustomsize";
 import clientAxios from "../../config/clientAxios";
+import useAuth from "../../hooks/useAuth";
 
 const Dashboard = () => {
 
@@ -12,18 +13,19 @@ const Dashboard = () => {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
 
-    const token = localStorage.getItem('token')
-    console.log(token)
+    const { token } = useAuth();
 
     const handleImage = async (e) => {
         setLoading(true);
         const file = e.target.files[0];
         const formData = new FormData();
         formData.append('img', file);
+
         try {
             const response = await clientAxios.post('/customsize', formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${token}`
                 }
             });
             console.log(response);
