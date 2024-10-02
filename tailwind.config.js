@@ -6,7 +6,7 @@ export default {
   ],
   theme: {
     fontFamily: {
-      Poppins: "Poppins"
+      Poppins: "poppins"
     },
     container: {
       width: "90%",

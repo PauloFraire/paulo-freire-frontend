@@ -20,8 +20,6 @@ const EducationalOffer = () => {
           <CardOffer maestria={maestrias[0]} />
           <CardOffer maestria={maestrias[1]} />
           <CardOffer maestria={maestrias[2]} />
-
-
         </div>
       </div>
 

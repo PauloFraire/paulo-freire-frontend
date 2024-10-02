@@ -16,7 +16,7 @@ const Layout = () => {
   }, [pathname]);
 
   return (
-    <div>
+    <>
       <Toaster
         position="top-right"
         reverseOrder={false}
@@ -30,7 +30,7 @@ const Layout = () => {
       </div>
       <Outlet />
       <Footer />
-    </div>
+    </>
   )
 }
 

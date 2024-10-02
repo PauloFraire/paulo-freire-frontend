@@ -38,11 +38,9 @@ import AddUser from './admin/pages/users/AddUser.jsx';
 import ContextContemporaneo from './contexto-comtemporaneo/ContextContemporaneo.jsx';
 
 
+
+
 //Dummy authentication functions
-
-const isAuthenticated = () => true;
-const isAdmin = () => true;
-
 const router = createBrowserRouter([
   {
     path: '/',
@@ -69,7 +67,7 @@ const router = createBrowserRouter([
   {
     path: '/admin',
     element:
-      < AuthProvider >
+      <AuthProvider >
         <PrivateRoute>
           <DashboardLayout />
         </PrivateRoute>

@@ -1,12 +1,8 @@
-import { Link, NavLink, Outlet } from "react-router-dom"
+import { Outlet } from "react-router-dom"
 import SideBar from "./components/Sidebar"
 import Header from "../components/Header"
-import { logos } from "../data/Data"
-import { useState } from "react"
 
 import { Toaster } from "react-hot-toast"
-
-
 
 const DashboardLayout = () => {
 
@@ -30,3 +26,4 @@ const DashboardLayout = () => {
 }
 
 export default DashboardLayout
+

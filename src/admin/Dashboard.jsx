@@ -10,12 +10,10 @@ const Dashboard = () => {
 
     const [data, setData] = useState([])
 
-
     useEffect(() => {
         const getHero = async () => {
             try {
                 const response = await clientAxios.get('/customsize')
-                console.log(response)
                 setData(response.data)
 
             } catch (error) {

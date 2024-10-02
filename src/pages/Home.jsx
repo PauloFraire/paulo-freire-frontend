@@ -17,10 +17,10 @@ const Home = () => {
   return (
     <Fragment >
       <Hero />
-      {/* <Anniversary /> */}
-      {/* <PromotionalVideo /> */}
       <Inscripciones />
-      {/* <DiplomadoInformation /> */}
+      <Anniversary />
+      <PromotionalVideo />
+      <DiplomadoInformation />
       <Welcome />
       <News />
       {/* <Galery /> */}

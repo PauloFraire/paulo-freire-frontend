@@ -1,7 +1,6 @@
-import React from 'react'
+import React from 'react';
 import { createContext } from 'react';
 import { useState, useEffect } from 'react';
-import clientAxios from '../config/clientAxios';
 
 
 export const AuthContext = createContext();
@@ -11,7 +10,7 @@ const AuthProvider = ({ children }) => {
 
     const [user, setUser] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [token, setToken] = useState('')
+    const [token, setToken] = useState('');
 
     useEffect(() => {
         const checkUser = async () => {
@@ -20,7 +19,7 @@ const AuthProvider = ({ children }) => {
         }
         checkUser();
     }, [])
-
+ 
 
     const isAuthenticated = () => localStorage.getItem('token') ? JSON.parse(localStorage.getItem("token")) : false;
 

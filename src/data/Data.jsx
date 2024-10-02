@@ -44,6 +44,10 @@ import pdfFichaMaestriaAmbiental from "../assets/pdf/FICHA DE INSCRIPCION MAESTR
 import pdfCartaMaestriaAmbiental from "../assets/pdf/CARTA COMPROMISO MAESTRÍA EDUCACIÓN AMBIENTAL.pdf";
 import pdfPlanEstudios from "../assets/pdf/PLAN DE ESTUDIOS, INSCRIPCIONES Y REQUISITOS.pdf";
 
+import pdfCartaCompromisoD from "../assets/pdf/CARTA COMPROMISO DOCTORADO_OK.pdf";
+import pdfCartaCompromisoMEA from "../assets/pdf/CARTA COMPROMISO MAESTRÍA EDUCACIÓN AMBIENTAL.pdf";
+import pdfCartaCompromisoMT from "../assets/pdf/CARTA COMPROMISO MAESTRÍA SEP2024-MARZO2025.pdf";
+
 export const logos = [logo1, logo2, logo4, logo5, logo6, logosep, logousi, logosev];
 
 export const imgGalery = [
@@ -234,7 +238,7 @@ export const maestrias = [
         photo: img6,
         state: true,
         ficha: pdfFichaMaestria,
-        carta: pdfFichaMaestria,
+        carta: pdfCartaCompromisoMT,
         plan: pdfPlanEstudios
     },
     {
@@ -243,7 +247,7 @@ export const maestrias = [
         photo: img13,
         state: false,
         ficha: pdfFichaDoctorado,
-        carta: pdfFichaDoctorado,
+        carta: pdfCartaCompromisoD,
         plan: pdfPlanEstudios
     },
     {
