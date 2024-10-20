@@ -194,7 +194,7 @@ export default function Registro() {
       <form onSubmit={handleSubmit} className="my-5">
         <div className="flex flex-col space-y-5">
           <div>
-            <label htmlFor="name" className="font-medium text-slate-700 pb-2">Nombre:</label>
+            <label htmlFor="name" className="font-medium text-slate-700 pb-2">Nombres:</label>
             <input
               type="text"
               name="name"
@@ -207,7 +207,7 @@ export default function Registro() {
             />
           </div>
           <div>
-            <label htmlFor="lastName" className="font-medium text-slate-700 pb-2">Apellido:</label>
+            <label htmlFor="lastName" className="font-medium text-slate-700 pb-2">Apellidos:</label>
             <input
               type="text"
               name="lastName"
