@@ -5,8 +5,6 @@ import imgPromocion2 from '../../assets/img/promocion 2.jpeg';
 import imgPromocion3 from '../../assets/img/promocion 3.jpeg';
 import videoInscripcionesAbiertas from '../../assets/img/Inscripciones-abiertas.mp4'
 
-
-
 const Inscripciones = () => {
 
     //typewritter  text animation "¡Estudia tu posgrado con nosotros y únete a la familia CRESPF!"

@@ -45,6 +45,9 @@ const Footer = () => {
                         <Link to="/login" className="text-sm hover:underline">
                             Iniciar Sesión
                         </Link>
+                        <Link to="/registro" className="text-sm hover:underline">
+                            Registrarse
+                        </Link>
                     </div>
                 </div>
 

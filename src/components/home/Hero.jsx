@@ -32,7 +32,7 @@ const Hero = () => {
       } else {
         setCurrentImage(images[index + 1]);
       }
-    }, 5000);
+    }, 8000);
 
     return () => clearInterval(interval);
   }, [currentImage]);
