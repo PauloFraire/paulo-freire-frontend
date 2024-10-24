@@ -20,6 +20,7 @@ import CallsEducational from './pages/CallsEducational.jsx';
 import Bibloteca from './pages/Bibloteca.jsx';
 import Login from './auth/pages/Login.jsx';
 import Registro from './auth/pages/Registro.jsx';
+import Recuperar from './auth/pages/Recuperar.jsx';
 import NewItemPage from './admin/pages/news/NewItemPage.jsx';
 import HistoryDetail from './pages/HistoryDetail.jsx';
 
@@ -60,6 +61,7 @@ const router = createBrowserRouter([
       { path: '/new-item/:id', element: <NewItemPage /> },
       { path: '/contexto-educativo', element: <ContextContemporaneo /> },
       { path: '/historia', element: <HistoryDetail /> },
+      { path: '/olvide-password', element: <Recuperar /> },
       { path: '*', element: <div>Not Found</div> },
     ]
   },

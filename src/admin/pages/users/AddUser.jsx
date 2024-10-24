@@ -134,8 +134,8 @@ const AddUser = () => {
                                     onChange={e => setUser({ ...user, role: e.target.value })}
                                 >
                                     <option value="">--Seleccione un Rol</option>
-                                    <option value="1">Editor</option>
-                                    <option value="2">Biblioteca</option>
+                                    <option value="2">Editor</option>
+                                    <option value="3">Biblioteca</option>
                                 </select>
                             </div>
                         </div>

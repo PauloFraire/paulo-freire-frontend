@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import clientAxios from '../../config/clientAxios';
 import Spinner from '../../components/Spinner';
-import CryptoJS from 'crypto-js';
 
 export default function Registro() {
   const navigate = useNavigate();
@@ -15,6 +14,9 @@ export default function Registro() {
     confirmPassword: ''
   });
   const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [token, setToken] = useState('');
+  const [loadingToken, setLoadingToken] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [passwordStrengthText, setPasswordStrengthText] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -23,15 +25,14 @@ export default function Registro() {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-  
+
   const toggleConfirmPasswordVisibility = () => {
     setShowConfirmPassword(!showConfirmPassword);
-  };  
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-  
-    // Validar si se trata de los campos de 'name' o 'lastName'
+
     if (name === 'name' || name === 'lastName') {
       const regex = /^[a-zA-ZñÑüÜáéíóúÁÉÍÓÚ\s]*$/;
       if (!regex.test(value)) {
@@ -39,17 +40,16 @@ export default function Registro() {
         return;
       }
     }
-  
+
     setFormData({
       ...formData,
       [name]: value,
     });
-  
-    // Evaluar la fortaleza de la contraseña al escribir
+
     if (name === 'password') {
       evaluatePasswordStrength(value);
     }
-  };  
+  };
 
   const evaluatePasswordStrength = (password) => {
     const hasMinLength = password.length >= 8;
@@ -69,44 +69,12 @@ export default function Registro() {
 
     setPasswordStrength(strength);
 
-    // Establecer el texto de fortaleza de la contraseña
     if (strength <= 2) {
       setPasswordStrengthText('Débil');
     } else if (strength <= 4) {
       setPasswordStrengthText('Media');
     } else {
       setPasswordStrengthText('Fuerte');
-    }
-  };
-
-  const checkPasswordPwned = async (password) => {
-    // Calcular el hash SHA-1 de la contraseña
-    const hash = CryptoJS.SHA1(password).toString(CryptoJS.enc.Hex).toUpperCase();
-    const hashPrefix = hash.substring(0, 5);
-    const hashSuffix = hash.substring(5);
-  
-    try {
-      // Llamar a la API de HIBP con el prefijo del hash
-      const response = await fetch(`https://api.pwnedpasswords.com/range/${hashPrefix}`);
-      const data = await response.text();
-  
-      // Comprobar si el sufijo del hash está en la respuesta
-      const lines = data.split('\n');
-      const found = lines.some(line => {
-        const [suffix, count] = line.split(':');
-        return suffix.trim() === hashSuffix;
-      });
-  
-      if (found) {
-        toast.error('La contraseña ingresada ha sido filtrada anteriormente. Por favor, elige otra.');
-        return false;
-      }
-  
-      return true;
-    } catch (error) {
-      console.error('Error al verificar la contraseña:', error);
-      toast.error('Hubo un error al verificar la contraseña.');
-      return false;
     }
   };
 
@@ -122,53 +90,72 @@ export default function Registro() {
       return;
     }
 
-    if (!/[A-Z]/.test(formData.password) || 
-    !/[!@#$%^&*(),.?":{}|<>]/.test(formData.password) ||
-    formData.password.length < 8) {
-      toast.error('La contraseña debe tener al menos 8 caracteres, una mayúscula y un carácter especial.');
-      return;
-    }
-
     if (formData.password !== formData.confirmPassword) {
       toast.error('Las contraseñas no coinciden');
       return;
     }
 
     if (passwordStrengthText === 'Débil') {
-      toast.error('La contraseña es débil. Por favor, elija una más fuerte.',{ icon: '⚠️' });
+      toast.error('La contraseña es débil. Por favor, elija una más fuerte.', { icon: '⚠️' });
       return;
     } else if (passwordStrengthText === 'Media') {
       toast('La contraseña es media, Por favor, elija una más fuerte.', { icon: '⚠️' });
       return;
     }
 
-    const isPasswordSafe = await checkPasswordPwned(formData.password);
-    if (!isPasswordSafe) {
-      return;
-    }
-
     setLoading(true);
-
     try {
-      const response = await clientAxios.post('/user', {
-        name: formData.name,
-        lastName: formData.lastName,
+      const response = await clientAxios.post('/token-create', {
         email: formData.email,
-        password: formData.password,
-        role: 0
       });
 
-      setLoading(false);
-      
-      if (response.status === 200) {
-        toast.success('Usuario registrado correctamente');
-        navigate('/login');
+      if (response.status === 201) {
+        toast.success('Se ha enviado un token de verificación a tu correo');
+        console.log(response.data.message); // Mensaje de éxito
+        setShowModal(true); // Mostrar el modal
       }
-
     } catch (error) {
-      console.error(error.response?.data || error); 
-      toast.error('Hubo un error en el registro');
+      console.error(error.response?.data || error);
+      toast.error('Hubo un error al enviar el token');
+    } finally {
       setLoading(false);
+    }
+  };
+
+  const handleTokenSubmit = async (e) => {
+    e.preventDefault();
+    setLoadingToken(true);
+    try {
+      const response = await clientAxios.post('/token-verify', {
+        email: formData.email,
+        token,
+      });
+
+      if (response.status === 200) {
+        const userResponse = await clientAxios.post('/user', {
+          name: formData.name,
+          lastName: formData.lastName,
+          email: formData.email,
+          password: formData.password,
+          role: 0
+        });
+
+        if (userResponse.status === 200) {
+
+          toast.success('Usuario registrado correctamente');
+          navigate('/login');
+
+          await clientAxios.delete('/tokens-delete-email', {
+            data: { email: formData.email },
+          });
+        }
+      }
+    } catch (error) {
+      console.error(error.response?.data || error);
+      toast.error('Token inválido o ya utilizado');
+    } finally {
+      setLoadingToken(false);
+      setShowModal(false); // Cerrar el modal
     }
   };
 
@@ -289,6 +276,25 @@ export default function Registro() {
           }
         </div>
       </form>
+
+      {/* Modal para ingresar el token */}
+      {showModal && (
+        <div className="modal">
+          <h2>Ingrese el Token de Verificación</h2>
+          <form onSubmit={handleTokenSubmit}>
+            <input
+              type="text"
+              value={token}
+              onChange={(e) => setToken(e.target.value)}
+              placeholder="Ingrese el token"
+              required
+            />
+            <button type="submit" disabled={loadingToken}>
+              {loadingToken ? 'Verificando...' : 'Verificar'}
+            </button>
+          </form>
+        </div>
+      )}
     </div>
-  );  
+  );
 }
