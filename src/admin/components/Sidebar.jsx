@@ -43,6 +43,11 @@ const adminNavItems = [
       // Puedes agregar más subopciones aquí
     ],
   },
+  {
+    to: "/admin/configempresa",
+    icon: <SiInstructure className="text-2xl" />,
+    label: "Configuración datos de la empresa",
+  },
 ];
 
 const SideBar = () => {

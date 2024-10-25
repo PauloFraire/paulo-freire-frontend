@@ -36,6 +36,9 @@ import Terminos from "./admin/pages/about/Terminos.tsx";
 import Politica from "../../PauloFraireBack/models/Politicas.js";
 import Deslinde from "./admin/pages/about/Deslinde.tsx";
 
+//configuracion de la empresa
+import Empresa from "./admin/pages/Empresa/Configempresa.jsx";
+
 //ContextContemporaneo
 import ContextContemporaneo from "./contexto-comtemporaneo/ContextContemporaneo.jsx";
 
@@ -93,6 +96,8 @@ const router = createBrowserRouter([
       { path: "/admin/about/deslinde", element: <Deslinde /> },
       { path: "/admin/about/politicas", element: <Politicas /> },
       { path: "/admin/about/terminos", element: <Terminos /> },
+      { path: "/admin/configempresa", element: <Empresa /> },
+
       { path: "*", element: <div>Not Found</div> },
     ],
   },
