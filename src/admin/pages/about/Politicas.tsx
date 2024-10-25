@@ -7,6 +7,7 @@ interface Politica {
   title: string;
   content: string;
   versions: { version: string; createdAt: Date }[]; // Cambiado para incluir versiones
+  isActive?: boolean;
 }
 
 const Politicas: React.FC = () => {
@@ -21,6 +22,7 @@ const Politicas: React.FC = () => {
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [viewContentId, setViewContentId] = useState<string | null>(null); // Nuevo estado para manejar el contenido a mostrar
+  const [selectedVigente, setSelectedVigente] = useState<string | null>(null);
 
   // Efecto para cargar las políticas al iniciar
   useEffect(() => {
@@ -64,6 +66,7 @@ const Politicas: React.FC = () => {
         const response = await clientAxios.post("/politicas", {
           title,
           content,
+          // No se necesita la versión, ya se gestiona en el backend
         });
 
         setPoliticas((prevPoliticas) => [...prevPoliticas, response.data]);
@@ -107,6 +110,15 @@ const Politicas: React.FC = () => {
     setSelectedPolitica(politica);
     setShowForm(true);
   };
+  // Manejar la selección del término vigente
+  const handleSetVigente = async (id: string) => {
+    try {
+      await clientAxios.put(`/politicas/vigente/${id}`);
+      setSelectedVigente(id);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   // Manejar la visualización del contenido completo
   const toggleViewContent = (id: string) => {
@@ -128,7 +140,7 @@ const Politicas: React.FC = () => {
 
           <div className="text-center">
             <button
-              className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200"
+              className="bg-blue-500 text-white px-4 py-2 rounded-md"
               onClick={() => {
                 setShowForm(!showForm);
                 setSelectedPolitica(null);
@@ -155,7 +167,7 @@ const Politicas: React.FC = () => {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   required
-                  className="border p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="border p-2 w-full rounded-md"
                 />
               </div>
               <div>
@@ -165,13 +177,13 @@ const Politicas: React.FC = () => {
                   onChange={(e) => setContent(e.target.value)}
                   rows={4}
                   required
-                  className="border p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="border p-2 w-full rounded-md"
                 />
               </div>
               <div className="flex justify-between">
                 <button
                   type="submit"
-                  className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-200"
+                  className="bg-green-500 text-white px-4 py-2 rounded-md"
                 >
                   {selectedPolitica
                     ? "Actualizar Política"
@@ -179,7 +191,7 @@ const Politicas: React.FC = () => {
                 </button>
                 <button
                   type="button"
-                  className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-200"
+                  className="bg-red-500 text-white px-4 py-2 rounded-md"
                   onClick={() => setShowForm(false)}
                 >
                   Cancelar
@@ -217,13 +229,13 @@ const Politicas: React.FC = () => {
                     </div>
                     <div className="space-x-2">
                       <button
-                        className="bg-yellow-500 text-white px-2 py-1 rounded-md hover:bg-yellow-600 transition duration-200"
+                        className="bg-yellow-500 text-white px-2 py-1 rounded-md"
                         onClick={() => handleEdit(politica)}
                       >
                         Editar
                       </button>
                       <button
-                        className="bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600 transition duration-200"
+                        className="bg-blue-500 text-white px-2 py-1 rounded-md"
                         onClick={() => toggleViewContent(politica._id)}
                       >
                         {viewContentId === politica._id
@@ -231,10 +243,19 @@ const Politicas: React.FC = () => {
                           : "Ver Contenido"}
                       </button>
                       <button
-                        className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 transition duration-200"
+                        className="bg-red-500 text-white px-2 py-1 rounded-md"
                         onClick={() => handleDelete(politica._id)}
                       >
                         Eliminar
+                      </button>
+                      <button
+                        className="bg-green-500 text-white px-2 py-1 rounded-md hover:bg-green-600 transition duration-200"
+                        onClick={() => handleSetVigente(politica._id)}
+                        disabled={selectedVigente === politica._id}
+                      >
+                        {selectedVigente === politica._id
+                          ? "Vigente"
+                          : "Hacer Vigente"}
                       </button>
                     </div>
                   </li>

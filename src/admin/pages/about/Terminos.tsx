@@ -1,42 +1,44 @@
 import React, { useEffect, useState } from "react";
 import clientAxios from "../../../config/clientAxios";
 
-// Definir el tipo para un terminos
-interface terminos {
+// Definir el tipo para un término
+interface Termino {
   _id: string;
   title: string;
   content: string;
-  versions: { version: string; createdAt: Date }[]; // Cambiado para incluir versiones
+  versions: { version: string; createdAt: Date }[];
+  isActive?: boolean;
 }
 
-const terminos: React.FC = () => {
-  const [terminos, setterminos] = useState<terminos[]>([]);
+const Terminos: React.FC = () => {
+  const [terminos, setTerminos] = useState<Termino[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [showForm, setShowForm] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState<string>("");
-  const [selectedterminos, setSelectedterminos] = useState<terminos | null>(
-    null
-  );
+  const [selectedTermino, setSelectedTermino] = useState<Termino | null>(null);
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [viewContentId, setViewContentId] = useState<string | null>(null);
+  const [selectedVigente, setSelectedVigente] = useState<string | null>(null);
 
-  // Efecto para cargar los terminos al iniciar
+  // Efecto para cargar los términos al inicio
   useEffect(() => {
-    const fetchterminos = async () => {
+    const fetchTerminos = async () => {
       try {
-        const response = await clientAxios.get("/terminos"); // Asegúrate de que la URL sea correcta
-        setterminos(response.data || []);
+        const response = await clientAxios.get("/terminos");
+        setTerminos(response.data || []);
+        const vigente = response.data.find((t: Termino) => t.isActive);
+        setSelectedVigente(vigente?._id || null);
       } catch (err) {
-        setError("Error al cargar los terminos");
-        console.error("Error al cargar los terminos:", err); // Detalles del error
+        setError("Error al cargar los términos");
+        console.error(err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchterminos();
+    fetchTerminos();
   }, []);
 
   // Manejar el envío del formulario para agregar o editar
@@ -44,68 +46,71 @@ const terminos: React.FC = () => {
     e.preventDefault();
 
     try {
-      if (selectedterminos) {
-        // Editar terminos existente
+      if (selectedTermino) {
         const response = await clientAxios.put(
-          `/terminos/${selectedterminos._id}`,
-          {
-            title,
-            content,
-          }
+          `/terminos/${selectedTermino._id}`,
+          { title, content }
         );
-        setterminos((prevterminos) =>
-          prevterminos.map((i) =>
-            i._id === selectedterminos._id ? response.data : i
+        setTerminos((prevTerminos) =>
+          prevTerminos.map((t) =>
+            t._id === selectedTermino._id ? response.data : t
           )
         );
-        setSuccessMessage("terminos actualizado correctamente.");
+        setSuccessMessage("Término actualizado correctamente.");
       } else {
-        // Agregar nuevo terminos
         const response = await clientAxios.post("/terminos", {
           title,
           content,
         });
-
-        setterminos((prevterminos) => [...prevterminos, response.data]);
-        setSuccessMessage("terminos agregado correctamente.");
+        setTerminos((prevTerminos) => [...prevTerminos, response.data]);
+        setSuccessMessage("Término agregado correctamente.");
       }
 
-      // Limpiar el formulario
       setTitle("");
       setContent("");
       setShowForm(false);
-      setSelectedterminos(null);
+      setSelectedTermino(null);
 
       setTimeout(() => {
         setSuccessMessage("");
       }, 3000);
     } catch (err) {
-      console.error("Error al guardar el terminos", err);
+      console.error("Error al guardar el término", err);
     }
   };
 
-  // Manejar la eliminación de un terminos
+  // Manejar la eliminación de un término
   const handleDelete = async (id: string) => {
     try {
       await clientAxios.delete(`/terminos/${id}`);
-      setterminos((prevterminos) =>
-        prevterminos.filter((terminos) => terminos._id !== id)
+      setTerminos((prevTerminos) =>
+        prevTerminos.filter((termino) => termino._id !== id)
       );
-      setSuccessMessage("terminos eliminado correctamente.");
+      setSuccessMessage("Término eliminado correctamente.");
       setTimeout(() => {
         setSuccessMessage("");
       }, 3000);
     } catch (err) {
-      console.error("Error al eliminar el terminos", err);
+      console.error("Error al eliminar el término", err);
     }
   };
 
-  // Manejar la edición de un terminos
-  const handleEdit = (terminos: terminos) => {
-    setTitle(terminos.title);
-    setContent(terminos.content);
-    setSelectedterminos(terminos);
+  // Manejar la edición de un término
+  const handleEdit = (termino: Termino) => {
+    setTitle(termino.title);
+    setContent(termino.content);
+    setSelectedTermino(termino);
     setShowForm(true);
+  };
+
+  // Manejar la selección del término vigente
+  const handleSetVigente = async (id: string) => {
+    try {
+      await clientAxios.put(`/terminos/vigente/${id}`);
+      setSelectedVigente(id);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   // Manejar la visualización del contenido completo
@@ -115,26 +120,30 @@ const terminos: React.FC = () => {
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold mb-4">Gestión de terminos</h1>
+      <h1 className="text-3xl font-bold mb-4">
+        Gestión de Términos y Condiciones
+      </h1>
       <p className="text-lg mb-8">
-        Aquí puedes agregar, editar o eliminar los terminos.
+        Aquí puedes agregar, editar o eliminar los términos de servicio.
       </p>
 
-      <div className="flex justify-center terminos-start min-h-screen bg-gray-100">
+      <div className="flex justify-center items-start min-h-screen bg-gray-100">
         <div className="w-full max-w-xl space-y-4 bg-white p-6 shadow rounded-md">
-          <h2 className="text-2xl font-bold mb-4 text-center">terminos</h2>
+          <h2 className="text-2xl font-bold mb-4 text-center">
+            Términos de Servicio
+          </h2>
 
           <div className="text-center">
             <button
               className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200"
               onClick={() => {
                 setShowForm(!showForm);
-                setSelectedterminos(null);
+                setSelectedTermino(null);
                 setTitle("");
                 setContent("");
               }}
             >
-              {showForm ? "Ocultar Formulario" : "Agregar terminos"}
+              {showForm ? "Ocultar Formulario" : "Agregar Término"}
             </button>
           </div>
 
@@ -171,9 +180,7 @@ const terminos: React.FC = () => {
                   type="submit"
                   className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-200"
                 >
-                  {selectedterminos
-                    ? "Actualizar terminos"
-                    : "Guardar terminos"}
+                  {selectedTermino ? "Actualizar Término" : "Guardar Término"}
                 </button>
                 <button
                   type="button"
@@ -187,51 +194,57 @@ const terminos: React.FC = () => {
           )}
 
           <div>
-            <h3 className="text-lg font-bold mb-4">terminos existentes</h3>
+            <h3 className="text-lg font-bold mb-4">Términos existentes</h3>
             {loading ? (
               <p>Cargando...</p>
             ) : error ? (
               <p className="text-red-500">{error}</p>
             ) : (
               <ul className="space-y-2">
-                {terminos.map((terminos) => (
+                {terminos.map((termino) => (
                   <li
-                    key={terminos._id}
-                    className="border p-4 rounded-md flex justify-between terminos-center"
+                    key={termino._id}
+                    className="border p-4 rounded-md flex justify-between items-center"
                   >
                     <div>
-                      <h4 className="font-bold">{terminos.title}</h4>
+                      <h4 className="font-bold">{termino.title}</h4>
                       <p className="text-sm text-gray-600">
                         Versión:{" "}
-                        {
-                          terminos.versions[terminos.versions.length - 1]
-                            .version
-                        }{" "}
+                        {termino.versions[termino.versions.length - 1].version}
                       </p>
-                      {viewContentId === terminos._id && (
-                        <p className="mt-2">{terminos.content}</p>
+                      {viewContentId === termino._id && (
+                        <p className="mt-2">{termino.content}</p>
                       )}
                     </div>
                     <div className="space-x-2">
                       <button
                         className="bg-yellow-500 text-white px-2 py-1 rounded-md hover:bg-yellow-600 transition duration-200"
-                        onClick={() => handleEdit(terminos)}
+                        onClick={() => handleEdit(termino)}
                       >
                         Editar
                       </button>
                       <button
                         className="bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600 transition duration-200"
-                        onClick={() => toggleViewContent(terminos._id)}
+                        onClick={() => toggleViewContent(termino._id)}
                       >
-                        {viewContentId === terminos._id
+                        {viewContentId === termino._id
                           ? "Ocultar Contenido"
                           : "Ver Contenido"}
                       </button>
                       <button
                         className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 transition duration-200"
-                        onClick={() => handleDelete(terminos._id)}
+                        onClick={() => handleDelete(termino._id)}
                       >
                         Eliminar
+                      </button>
+                      <button
+                        className="bg-green-500 text-white px-2 py-1 rounded-md hover:bg-green-600 transition duration-200"
+                        onClick={() => handleSetVigente(termino._id)}
+                        disabled={selectedVigente === termino._id}
+                      >
+                        {selectedVigente === termino._id
+                          ? "Vigente"
+                          : "Hacer Vigente"}
                       </button>
                     </div>
                   </li>
@@ -245,4 +258,4 @@ const terminos: React.FC = () => {
   );
 };
 
-export default terminos;
+export default Terminos;

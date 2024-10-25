@@ -6,21 +6,23 @@ interface Deslinde {
   _id: string;
   title: string;
   content: string;
-  versions: { version: string; createdAt: Date }[]; // Incluir versiones
+  versions: { version: string; createdAt: Date }[];
+  isActive?: boolean; // Añadir la propiedad isActive
 }
 
 const Deslindes: React.FC = () => {
   const [deslindes, setDeslindes] = useState<Deslinde[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [showForm, setShowForm] = useState<boolean>(false);
+  const [showForm, setShowForm] = useState<boolean>(false); // Estado para mostrar/ocultar el formulario
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [selectedDeslinde, setSelectedDeslinde] = useState<Deslinde | null>(
     null
   );
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
-  const [viewContentId, setViewContentId] = useState<string | null>(null); // Estado para manejar el contenido a mostrar
+  const [viewContentId, setViewContentId] = useState<string | null>(null);
+  const [selectedVigente, setSelectedVigente] = useState<string | null>(null); // Estado para el deslinde vigente
 
   // Efecto para cargar los deslindes al iniciar
   useEffect(() => {
@@ -28,6 +30,8 @@ const Deslindes: React.FC = () => {
       try {
         const response = await clientAxios.get("/deslindes");
         setDeslindes(response.data || []);
+        const vigente = response.data.find((d: Deslinde) => d.isActive);
+        setSelectedVigente(vigente?._id || null); // Establecer el deslinde activo
       } catch (err) {
         setError("Error al cargar los deslindes");
         console.error(err);
@@ -45,13 +49,9 @@ const Deslindes: React.FC = () => {
 
     try {
       if (selectedDeslinde) {
-        // Editar deslinde existente
         const response = await clientAxios.put(
           `/deslindes/${selectedDeslinde._id}`,
-          {
-            title,
-            content,
-          }
+          { title, content }
         );
         setDeslindes((prevDeslindes) =>
           prevDeslindes.map((d) =>
@@ -60,20 +60,17 @@ const Deslindes: React.FC = () => {
         );
         setSuccessMessage("Deslinde actualizado correctamente.");
       } else {
-        // Agregar nuevo deslinde
         const response = await clientAxios.post("/deslindes", {
           title,
           content,
         });
-
         setDeslindes((prevDeslindes) => [...prevDeslindes, response.data]);
         setSuccessMessage("Deslinde agregado correctamente.");
       }
 
-      // Limpiar el formulario
       setTitle("");
       setContent("");
-      setShowForm(false);
+      setShowForm(false); // Ocultar el formulario después de agregar/editar
       setSelectedDeslinde(null);
 
       setTimeout(() => {
@@ -105,7 +102,17 @@ const Deslindes: React.FC = () => {
     setTitle(deslinde.title);
     setContent(deslinde.content);
     setSelectedDeslinde(deslinde);
-    setShowForm(true);
+    setShowForm(true); // Mostrar el formulario para editar
+  };
+
+  // Manejar la selección del deslinde vigente
+  const handleSetVigente = async (id: string) => {
+    try {
+      await clientAxios.put(`/deslindes/vigente/${id}`);
+      setSelectedVigente(id);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   // Manejar la visualización del contenido completo
@@ -116,9 +123,6 @@ const Deslindes: React.FC = () => {
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <h1 className="text-3xl font-bold mb-4">Gestión de Deslindes</h1>
-      <p className="text-lg mb-8">
-        Aquí puedes agregar, editar o eliminar los deslindes.
-      </p>
 
       <div className="flex justify-center items-start min-h-screen bg-gray-100">
         <div className="w-full max-w-xl space-y-4 bg-white p-6 shadow rounded-md">
@@ -206,7 +210,7 @@ const Deslindes: React.FC = () => {
                         {
                           deslinde.versions[deslinde.versions.length - 1]
                             .version
-                        }{" "}
+                        }
                       </p>
                       {viewContentId === deslinde._id && (
                         <p className="mt-2">{deslinde.content}</p>
@@ -220,18 +224,30 @@ const Deslindes: React.FC = () => {
                         Editar
                       </button>
                       <button
-                        className="bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600 transition duration-200"
-                        onClick={() => toggleViewContent(deslinde._id)}
-                      >
-                        {viewContentId === deslinde._id
-                          ? "Ocultar Contenido"
-                          : "Ver Contenido"}
-                      </button>
-                      <button
                         className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 transition duration-200"
                         onClick={() => handleDelete(deslinde._id)}
                       >
                         Eliminar
+                      </button>
+                      <button
+                        className={`px-2 py-1 rounded-md ${
+                          selectedVigente === deslinde._id
+                            ? "bg-green-600 text-white"
+                            : "bg-gray-300"
+                        }`}
+                        onClick={() => handleSetVigente(deslinde._id)}
+                      >
+                        {selectedVigente === deslinde._id
+                          ? "Vigente"
+                          : "Marcar como vigente"}
+                      </button>
+                      <button
+                        className="bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600 transition duration-200"
+                        onClick={() => toggleViewContent(deslinde._id)}
+                      >
+                        {viewContentId === deslinde._id
+                          ? "Ocultar"
+                          : "Ver Contenido"}
                       </button>
                     </div>
                   </li>
