@@ -34,7 +34,6 @@ import AdminUsers from "./admin/pages/users/AdminUsers.jsx";
 import AddUser from "./admin/pages/users/AddUser.jsx";
 import About from "./admin/pages/about/About.jsx";
 import Terminos from "./admin/pages/about/Terminos.tsx";
-import Politica from "../../PauloFraireBack/models/Politicas.js";
 import Deslinde from "./admin/pages/about/Deslinde.tsx";
 
 // ContextContemporaneo
