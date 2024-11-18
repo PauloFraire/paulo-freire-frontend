@@ -81,7 +81,7 @@ export default function Registro() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (formData.name.trim() === '' || 
         formData.lastName.trim() === '' || 
         formData.email.trim() === '' || 
@@ -90,12 +90,12 @@ export default function Registro() {
       toast.error('Todos los campos son obligatorios');
       return;
     }
-
+  
     if (formData.password !== formData.confirmPassword) {
       toast.error('Las contraseñas no coinciden');
       return;
     }
-
+  
     if (passwordStrengthText === 'Débil') {
       toast.error('La contraseña es débil. Por favor, elija una más fuerte.', { icon: '⚠️' });
       return;
@@ -103,13 +103,20 @@ export default function Registro() {
       toast('La contraseña es media, Por favor, elija una más fuerte.', { icon: '⚠️' });
       return;
     }
-
+  
+    // Validar si la contraseña ha sido comprometida
+    const isPwned = await checkPasswordPwned(formData.password);
+    if (isPwned) {
+      toast.error('La contraseña ingresada ha sido comprometida en una filtración anterior. Por favor, elija otra.');
+      return;
+    }
+  
     setLoading(true);
     try {
       const response = await clientAxios.post('/token-create', {
         email: formData.email,
       });
-
+  
       if (response.status === 201) {
         toast.success('Se ha enviado un token de verificación a tu correo');
         console.log(response.data.message); // Mensaje de éxito
@@ -122,6 +129,29 @@ export default function Registro() {
       setLoading(false);
     }
   };
+  
+  const checkPasswordPwned = async (password) => {
+    const sha1Hash = await crypto.subtle.digest('SHA-1', new TextEncoder().encode(password));
+    const hashHex = Array.from(new Uint8Array(sha1Hash))
+      .map((b) => b.toString(16).padStart(2, '0'))
+      .join('')
+      .toUpperCase();
+  
+    const prefix = hashHex.slice(0, 5);
+    const suffix = hashHex.slice(5);
+  
+    try {
+      const response = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`);
+      const data = await response.text();
+  
+      // Verificar si el sufijo está en la lista de hashes filtrados
+      return data.split('\n').some((line) => line.split(':')[0] === suffix);
+    } catch (error) {
+      console.error('Error verificando contraseñas comprometidas:', error);
+      toast.error('No se pudo verificar si la contraseña ha sido comprometida.');
+      return false;
+    }
+  };  
 
   const handleTokenSubmit = async (e) => {
     e.preventDefault();
