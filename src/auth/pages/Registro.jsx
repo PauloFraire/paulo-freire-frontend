@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import clientAxios from '../../config/clientAxios';
 import Spinner from '../../components/Spinner';
+import { IoIosEye, IoIosEyeOff } from "react-icons/io";
 
 export default function Registro() {
   const navigate = useNavigate();
@@ -237,7 +238,7 @@ export default function Registro() {
                 className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600"
                 onClick={togglePasswordVisibility}
               >
-                {showPassword ? 'Ocultar' : 'Mostrar'}
+                {showPassword ? <IoIosEyeOff /> : <IoIosEye />}
               </button>
             </div>
             <div className="flex items-center mt-2">
@@ -263,7 +264,7 @@ export default function Registro() {
                 className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600"
                 onClick={toggleConfirmPasswordVisibility}
               >
-                {showConfirmPassword ? 'Ocultar' : 'Mostrar'}
+                {showConfirmPassword ? <IoIosEyeOff /> : <IoIosEye />}
               </button>
             </div>
           </div>
@@ -276,7 +277,7 @@ export default function Registro() {
           }
         </div>
       </form>
-
+  
       {/* Modal para ingresar el token */}
       {showModal && (
         <div className="modal">
@@ -296,5 +297,5 @@ export default function Registro() {
         </div>
       )}
     </div>
-  );
+  );  
 }

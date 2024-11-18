@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IoIosSend } from "react-icons/io";
+import { IoIosSend, IoIosEye, IoIosEyeOff } from "react-icons/io";
 import Spinner from '../../components/Spinner';
 import { toast } from 'react-hot-toast';
 import clientAxios from '../../config/clientAxios';
@@ -129,140 +129,140 @@ const Recuperar = () => {
 
     return (
         <div className="max-w-lg mx-auto bg-white p-8 rounded-xl shadow shadow-slate-300 my-16">
-            <h1 className="text-4xl font-bold text-center text-slate-700">Recuperar Contraseña</h1>
-
-            {step === 1 && (
-                <form onSubmit={handleSubmit} className="my-5">
-                    <div className="flex flex-col space-y-5">
-                        <div>
-                            <label htmlFor="email" className="font-medium text-slate-700 pb-2">Correo:</label>
-                            <input
-                                type="email"
-                                name="email"
-                                id="email"
-                                className='input-auth'
-                                placeholder="Ingrese su Email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
-                        </div>
-                        <div className='flex items-center justify-center'>
-                            <ReCAPTCHA
-                                sitekey="6LeHymIqAAAAAIZGIyMwk1w749yFwuajNcPCUdNq"
-                                onChange={handleCaptchaChange}
-                                ref={captchaRef}
-                            />
-                        </div>
-                        {
-                            !loading ? (
-                                <button className="btn-action">
-                                    <IoIosSend className="w-6 h-6" />
-                                    <span>Enviar</span>
-                                </button>
-                            ) : (
-                                <Spinner />
-                            )
-                        }
-                    </div>
-                </form>
-            )}
-
-            {step === 2 && (
-                <form onSubmit={handleTokenSubmit} className="my-5">
-                    <div className="flex flex-col space-y-5">
-                        <div>
-                            <label htmlFor="token" className="font-medium text-slate-700 pb-2">Token:</label>
-                            <input
-                                type="text"
-                                name="token"
-                                id="token"
-                                className='input-auth'
-                                placeholder="Ingrese el token"
-                                value={token}
-                                onChange={(e) => setToken(e.target.value)}
-                            />
-                        </div>
-                        {
-                            !loadingToken ? (
-                                <button className="btn-action">
-                                    Verificar
-                                </button>
-                            ) : (
-                                <Spinner />
-                            )
-                        }
-                    </div>
-                </form>
-            )}
-
-            {step === 3 && (
-                <form onSubmit={handlePasswordSubmit} className="my-5">
-                    <div className="flex flex-col space-y-5">
-                        <div>
-                            <label htmlFor="password" className="font-medium text-slate-700 pb-2">Nueva Contraseña:</label>
-                            <div className="relative">
-                                <input
-                                    type={showPassword ? 'text' : 'password'}
-                                    name="password"
-                                    id="password"
-                                    className="input-auth"
-                                    placeholder="Ingrese su nueva contraseña"
-                                    value={password}
-                                    onChange={(e) => {
-                                        setPassword(e.target.value);
-                                        evaluatePasswordStrength(e.target.value);
-                                    }}
-                                    required
-                                />
-                                <button 
-                                    type="button" 
-                                    className="absolute right-2 top-1/2 transform -translate-y-1/2 text-slate-500"
-                                    onClick={() => setShowPassword(!showPassword)}
-                                >
-                                    {showPassword ? 'Ocultar' : 'Mostrar'}
-                                </button>
-                            </div>
-                            <div className="flex items-center mt-2">
-                                <div className={`h-2 rounded ${passwordStrength <= 2 ? 'bg-red-500' : passwordStrength <= 4 ? 'bg-yellow-500' : 'bg-green-500'}`} style={{ width: "65%" }}></div>
-                                <span className="ml-2">{`Fortaleza: ${passwordStrengthText}`}</span>
-                            </div>
-                        </div>
-                        <div>
-                            <label htmlFor="confirmPassword" className="font-medium text-slate-700 pb-2">Confirmar Contraseña:</label>
-                            <div className="relative">
-                                <input
-                                    type={showConfirmPassword ? 'text' : 'password'}
-                                    name="confirmPassword"
-                                    id="confirmPassword"
-                                    className="input-auth"
-                                    placeholder="Confirme su contraseña"
-                                    value={confirmPassword}
-                                    onChange={(e) => setConfirmPassword(e.target.value)}
-                                    required
-                                />
-                                <button 
-                                    type="button" 
-                                    className="absolute right-2 top-1/2 transform -translate-y-1/2 text-slate-500"
-                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                >
-                                    {showConfirmPassword ? 'Ocultar' : 'Mostrar'}
-                                </button>
-                            </div>
-                        </div>
-                        {
-                            !loading ? (
-                                <button className="btn-action">
-                                    Actualizar Contraseña
-                                </button>
-                            ) : (
-                                <Spinner />
-                            )
-                        }
-                    </div>
-                </form>
-            )}
+          <h1 className="text-4xl font-bold text-center text-slate-700">Recuperar Contraseña</h1>
+      
+          {step === 1 && (
+            <form onSubmit={handleSubmit} className="my-5">
+              <div className="flex flex-col space-y-5">
+                <div>
+                  <label htmlFor="email" className="font-medium text-slate-700 pb-2">Correo:</label>
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    className='input-auth'
+                    placeholder="Ingrese su Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
+                <div className='flex items-center justify-center'>
+                  <ReCAPTCHA
+                    sitekey="6LeHymIqAAAAAIZGIyMwk1w749yFwuajNcPCUdNq"
+                    onChange={handleCaptchaChange}
+                    ref={captchaRef}
+                  />
+                </div>
+                {
+                  !loading ? (
+                    <button className="btn-action">
+                      <IoIosSend className="w-6 h-6" />
+                      <span>Enviar</span>
+                    </button>
+                  ) : (
+                    <Spinner />
+                  )
+                }
+              </div>
+            </form>
+          )}
+      
+          {step === 2 && (
+            <form onSubmit={handleTokenSubmit} className="my-5">
+              <div className="flex flex-col space-y-5">
+                <div>
+                  <label htmlFor="token" className="font-medium text-slate-700 pb-2">Token:</label>
+                  <input
+                    type="text"
+                    name="token"
+                    id="token"
+                    className='input-auth'
+                    placeholder="Ingrese el token"
+                    value={token}
+                    onChange={(e) => setToken(e.target.value)}
+                  />
+                </div>
+                {
+                  !loadingToken ? (
+                    <button className="btn-action">
+                      Verificar
+                    </button>
+                  ) : (
+                    <Spinner />
+                  )
+                }
+              </div>
+            </form>
+          )}
+      
+          {step === 3 && (
+            <form onSubmit={handlePasswordSubmit} className="my-5">
+              <div className="flex flex-col space-y-5">
+                <div>
+                  <label htmlFor="password" className="font-medium text-slate-700 pb-2">Nueva Contraseña:</label>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      name="password"
+                      id="password"
+                      className="input-auth"
+                      placeholder="Ingrese su nueva contraseña"
+                      value={password}
+                      onChange={(e) => {
+                        setPassword(e.target.value);
+                        evaluatePasswordStrength(e.target.value);
+                      }}
+                      required
+                    />
+                    <button 
+                      type="button" 
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 text-slate-500"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? <IoIosEyeOff /> : <IoIosEye />}
+                    </button>
+                  </div>
+                  <div className="flex items-center mt-2">
+                    <div className={`h-2 rounded ${passwordStrength <= 2 ? 'bg-red-500' : passwordStrength <= 4 ? 'bg-yellow-500' : 'bg-green-500'}`} style={{ width: "65%" }}></div>
+                    <span className="ml-2">{`Fortaleza: ${passwordStrengthText}`}</span>
+                  </div>
+                </div>
+                <div>
+                  <label htmlFor="confirmPassword" className="font-medium text-slate-700 pb-2">Confirmar Contraseña:</label>
+                  <div className="relative">
+                    <input
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      name="confirmPassword"
+                      id="confirmPassword"
+                      className="input-auth"
+                      placeholder="Confirme su contraseña"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      required
+                    />
+                    <button 
+                      type="button" 
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 text-slate-500"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    >
+                      {showConfirmPassword ? <IoIosEyeOff /> : <IoIosEye />}
+                    </button>
+                  </div>
+                </div>
+                {
+                  !loading ? (
+                    <button className="btn-action">
+                      Actualizar Contraseña
+                    </button>
+                  ) : (
+                    <Spinner />
+                  )
+                }
+              </div>
+            </form>
+          )}
         </div>
-    );
+      );      
 };
 
 export default Recuperar;
