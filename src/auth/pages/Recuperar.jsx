@@ -56,32 +56,43 @@ const Recuperar = () => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        
-        if (!captchaValue) {
-            toast.error('Por favor verifica que no eres un robot.');
-            return;
-        }
-
-        if (email.trim() === '') {
-            toast.error('Por favor ingresa tu correo.');
-            return;
-        }
-
-        setLoading(true);
-        try {
-            const response = await clientAxios.post('/token-create', { email });
-            if (response.status === 201) {
-                toast.success('Se ha enviado un token de verificación a tu correo.');
-                setStep(2);
-            }
-        } catch (error) {
-            console.error(error.response?.data || error);
-            toast.error('Hubo un error al enviar el token.');
-        } finally {
-            setLoading(false);
-        }
-    };
+      e.preventDefault();
+      
+      if (!captchaValue) {
+          toast.error('Por favor verifica que no eres un robot.');
+          return;
+      }
+  
+      if (email.trim() === '') {
+          toast.error('Por favor ingresa tu correo.');
+          return;
+      }
+  
+      setLoading(true);
+      try {
+          // Verificar si el email existe
+          const response = await clientAxios.get(`/user/email/${email}`);
+          if (response.status === 404) {
+              toast.error('El correo no está registrado.');
+              return;
+          }
+  
+          // Si el correo existe, continuar con el envío del token
+          const tokenResponse = await clientAxios.post('/token-create', { email });
+          if (tokenResponse.status === 201) {
+              toast.success('Se ha enviado un token de verificación a tu correo.');
+              setStep(2);
+          }
+      } catch (error) {
+          if (error.response && error.response.status === 404) {
+              toast.error('El correo no está registrado.');
+          } else {
+              toast.error('Hubo un error al verificar el correo.');
+          }
+      } finally {
+          setLoading(false);
+      }
+  };  
 
     const handleTokenSubmit = async (e) => {
         e.preventDefault();
@@ -99,33 +110,76 @@ const Recuperar = () => {
         }
     };
 
-    const handlePasswordSubmit = async (e) => {
-        e.preventDefault();
-
-        if (password !== confirmPassword) {
-            toast.error('Las contraseñas no coinciden.');
-            return;
-        }
-
-        if (passwordStrengthText === 'Débil') {
-            toast.error('La contraseña es débil. Por favor, elija una más fuerte.', { icon: '⚠️' });
-            return;
-        }
-
-        setLoading(true);
-        try {
-            const response = await clientAxios.put(`/user/email/${email}`, { password });
-            if (response.status === 200) {
-                toast.success('Contraseña actualizada correctamente.');
-                navigate('/login');
-            }
-        } catch (error) {
-            console.error(error.response?.data || error);
-            toast.error('Error al actualizar la contraseña.');
-        } finally {
-            setLoading(false);
-        }
-    };
+    const checkPasswordPwned = async (password) => {
+      const sha1Hash = await crypto.subtle.digest('SHA-1', new TextEncoder().encode(password));
+      const hashHex = Array.from(new Uint8Array(sha1Hash))
+        .map((b) => b.toString(16).padStart(2, '0'))
+        .join('')
+        .toUpperCase();
+  
+      const prefix = hashHex.slice(0, 5);
+      const suffix = hashHex.slice(5);
+  
+      try {
+          const response = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`);
+          const data = await response.text();
+  
+          // Verificar si el sufijo está en la lista de hashes filtrados
+          return data.split('\n').some((line) => line.split(':')[0] === suffix);
+      } catch (error) {
+          console.error('Error verificando contraseñas comprometidas:', error);
+          toast.error('No se pudo verificar si la contraseña ha sido comprometida.');
+          return false;
+      }
+  };
+  
+  const handlePasswordSubmit = async (e) => {
+      e.preventDefault();
+  
+      if (password !== confirmPassword) {
+          toast.error('Las contraseñas no coinciden.');
+          return;
+      }
+  
+      if (passwordStrengthText === 'Débil') {
+          toast.error('La contraseña es débil. Por favor, elija una más fuerte.', { icon: '⚠️' });
+          return;
+      }
+  
+      // Verificar si la contraseña está comprometida
+      const isCompromised = await checkPasswordPwned(password);
+      if (isCompromised) {
+          toast.error('Esta contraseña está comprometida. Por favor, elija una diferente.');
+          return;
+      }
+  
+      // Verificar si la contraseña está en el historial
+      try {
+          const response = await clientAxios.post('/user/password-history', { email, password });
+          if (response.status === 400) {
+              toast.error(response.data.message); // Mensaje del servidor si la contraseña está en el historial
+              return;
+          }
+      } catch (error) {
+          console.error(error.response?.data || error);
+          toast.error('Esa contraseña ya fue usada anteriormente.');
+          return;
+      }
+  
+      setLoading(true);
+      try {
+          const response = await clientAxios.put(`/user/email/${email}`, { password });
+          if (response.status === 200) {
+              toast.success('Contraseña actualizada correctamente.');
+              navigate('/login');
+          }
+      } catch (error) {
+          console.error(error.response?.data || error);
+          toast.error('Error al actualizar la contraseña.');
+      } finally {
+          setLoading(false);
+      }
+  };  
 
     return (
         <div className="max-w-lg mx-auto bg-white p-8 rounded-xl shadow shadow-slate-300 my-16">
