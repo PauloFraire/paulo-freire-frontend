@@ -8,7 +8,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Layout from "./Layout/Layout.jsx";
 import AuthProvider from "./context/AuthProvider.jsx";
 
-//pages
+// pages
 import Home from "./pages/Home.jsx";
 import Organization from "./pages/Organization.jsx";
 import EducationalOffer from "./pages/EducationalOffer";
@@ -17,12 +17,13 @@ import CallsEducational from "./pages/CallsEducational.jsx";
 import Bibloteca from "./pages/Bibloteca.jsx";
 import Login from "./auth/pages/Login.jsx";
 import Registro from "./auth/pages/Registro.jsx";
+import Recuperar from './auth/pages/Recuperar.jsx'; // Manteniendo Recuperar
 import NewItemPage from "./admin/pages/news/NewItemPage.jsx";
 import HistoryDetail from "./pages/HistoryDetail.jsx";
-import Acercade from "./components/Acercade.jsx";
-import Contacto from "./components/Contacto.jsx";
+import Acercade from "./components/Acercade.jsx"; // Manteniendo Acercade
+import Contacto from "./components/Contacto.jsx"; // Manteniendo Contacto
 
-//admin
+// admin
 import PrivateRoute from "./pages/PrivateRoute.jsx";
 import DashboardLayout from "./admin/DashboardLayout.jsx";
 import Dashboard from "./admin/pages/Dashboard.jsx";
@@ -34,16 +35,15 @@ import AdminUsers from "./admin/pages/users/AdminUsers.jsx";
 import AddUser from "./admin/pages/users/AddUser.jsx";
 import About from "./admin/pages/about/About.jsx";
 import Terminos from "./admin/pages/about/Terminos.tsx";
-import Politica from "../../PauloFraireBack/models/Politicas.js";
 import Deslinde from "./admin/pages/about/Deslinde.tsx";
 
-//configuracion de la empresa
+// configuracion de la empresa
 import Empresa from "./admin/pages/Empresa/Configempresa.jsx";
 
-//ContextContemporaneo
+// ContextContemporaneo
 import ContextContemporaneo from "./contexto-comtemporaneo/ContextContemporaneo.jsx";
 
-//user
+// user
 import UserLayout from "./user/pages/UserLayout.jsx";
 import UserProfile from "./user/pages/UserProfile.jsx";
 import Politicas from "./admin/pages/about/Politicas.tsx";
@@ -68,8 +68,9 @@ const router = createBrowserRouter([
       { path: "/new-item/:id", element: <NewItemPage /> },
       { path: "/contexto-educativo", element: <ContextContemporaneo /> },
       { path: "/historia", element: <HistoryDetail /> },
-      { path: "/acercade", element: <Acercade /> },
-      { path: "/contacto", element: <Contacto /> },
+      { path: "/olvide-password", element: <Recuperar /> }, // Manteniendo Recuperar
+      { path: "/acercade", element: <Acercade /> }, // Manteniendo Acercade
+      { path: "/contacto", element: <Contacto /> }, // Manteniendo Contacto
       { path: "*", element: <div>Not Found</div> },
     ],
   },

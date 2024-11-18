@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { FaNewspaper } from "react-icons/fa";
+import { FaNewspaper, FaCalendarAlt, FaAngleDoubleDown } from "react-icons/fa"; // Asegúrate de que este icono esté importado
 import { TiThMenuOutline } from "react-icons/ti";
-import { BiHomeAlt, BiLogInCircle, BiSelectMultiple } from "react-icons/bi";
+import { BiHomeAlt, BiSelectMultiple } from "react-icons/bi";
 import { SiGoogleclassroom, SiInstructure } from "react-icons/si";
 import { TbLogin } from "react-icons/tb";
 
@@ -34,13 +34,12 @@ const adminNavItems = [
   },
   {
     to: "/admin/about",
-    icon: <SiInstructure className="text-2xl" />,
+    icon: <FaAngleDoubleDown className="text-2xl" />, // Asegúrate de que esto sea un calendario
     label: "Acerca de",
     subItems: [
       { to: "/admin/about/deslinde", label: "Deslinde legal" },
       { to: "/admin/about/terminos", label: "Términos y condiciones" },
-      { to: "/admin/about/politicas", label: "Politicas de privacidad" },
-      // Puedes agregar más subopciones aquí
+      { to: "/admin/about/politicas", label: "Políticas de privacidad" },
     ],
   },
   {
@@ -52,7 +51,7 @@ const adminNavItems = [
 
 const SideBar = () => {
   const [open, setOpen] = useState(true);
-  const [aboutOpen, setAboutOpen] = useState(false); // Estado para manejar subopciones
+  const [aboutOpen, setAboutOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -65,7 +64,7 @@ const SideBar = () => {
     <div
       className={`${
         open ? "w-72 overflow-y-auto" : "w-[90px] overflow-auto"
-      }  p-5 md:block hidden pt-8 relative duration-300 shadow-xl bg-slate-200`}
+      } p-5 md:block hidden pt-8 relative duration-300 shadow-xl bg-slate-200`}
     >
       <div className="flex gap-x-4 items-center">
         <div
@@ -105,10 +104,10 @@ const SideBar = () => {
               to={item.to}
               onClick={() =>
                 item.label === "Acerca de" && setAboutOpen(!aboutOpen)
-              } // Maneja el clic en "Acerca de"
+              }
             >
               {item.icon}
-              <span className={`${!open && "hidden"}  duration-200`}>
+              <span className={`${!open && "hidden"} duration-200`}>
                 {item.label}
               </span>
             </NavLink>
@@ -126,7 +125,7 @@ const SideBar = () => {
                       }
                       to={subItem.to}
                     >
-                      <span className={`${!open && "hidden"}  duration-200`}>
+                      <span className={`${!open && "hidden"} duration-200`}>
                         {subItem.label}
                       </span>
                     </NavLink>

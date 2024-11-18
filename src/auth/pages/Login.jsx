@@ -132,12 +132,12 @@ const Login = () => {
                     </div>
 
                     <div className="flex flex-row justify-between">
-                        <div>
+                        {/* <div>
                             <label htmlFor="remember">
                                 <input type="checkbox" id="remember" className="w-4 h-4 border-slate-200 focus:bg-blue-600" />
                                 Recordar contraseña
                             </label>
-                        </div>
+                        </div> */}
                         <div>
                             <Link to='/olvide-password' className="font-medium text-blue-600">Recuperar Contraseña?</Link>
                         </div>
