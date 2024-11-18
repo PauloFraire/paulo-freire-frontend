@@ -100,32 +100,45 @@ const Recuperar = () => {
     };
 
     const handlePasswordSubmit = async (e) => {
-        e.preventDefault();
-
-        if (password !== confirmPassword) {
-            toast.error('Las contraseñas no coinciden.');
-            return;
-        }
-
-        if (passwordStrengthText === 'Débil') {
-            toast.error('La contraseña es débil. Por favor, elija una más fuerte.', { icon: '⚠️' });
-            return;
-        }
-
-        setLoading(true);
-        try {
-            const response = await clientAxios.put(`/user/email/${email}`, { password });
-            if (response.status === 200) {
-                toast.success('Contraseña actualizada correctamente.');
-                navigate('/login');
-            }
-        } catch (error) {
-            console.error(error.response?.data || error);
-            toast.error('Error al actualizar la contraseña.');
-        } finally {
-            setLoading(false);
-        }
-    };
+      e.preventDefault();
+  
+      if (password !== confirmPassword) {
+          toast.error('Las contraseñas no coinciden.');
+          return;
+      }
+  
+      if (passwordStrengthText === 'Débil') {
+          toast.error('La contraseña es débil. Por favor, elija una más fuerte.', { icon: '⚠️' });
+          return;
+      }
+  
+      // Verificar si la contraseña está en el historial
+      try {
+          const response = await clientAxios.post('/user/password-history', { email, password });
+          if (response.status === 400) {
+              toast.error(response.data.message); // Mensaje del servidor si la contraseña está en el historial
+              return;
+          }
+      } catch (error) {
+          console.error(error.response?.data || error);
+          toast.error('Esa contraseña ya fue usada anteriormente.');
+          return;
+      }
+  
+      setLoading(true);
+      try {
+          const response = await clientAxios.put(`/user/email/${email}`, { password });
+          if (response.status === 200) {
+              toast.success('Contraseña actualizada correctamente.');
+              navigate('/login');
+          }
+      } catch (error) {
+          console.error(error.response?.data || error);
+          toast.error('Error al actualizar la contraseña.');
+      } finally {
+          setLoading(false);
+      }
+  };  
 
     return (
         <div className="max-w-lg mx-auto bg-white p-8 rounded-xl shadow shadow-slate-300 my-16">
