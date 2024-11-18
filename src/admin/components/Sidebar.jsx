@@ -42,6 +42,11 @@ const adminNavItems = [
       { to: "/admin/about/politicas", label: "Políticas de privacidad" },
     ],
   },
+  {
+    to: "/admin/configempresa",
+    icon: <SiInstructure className="text-2xl" />,
+    label: "Configuración datos de la empresa",
+  },
 ];
 
 const SideBar = () => {

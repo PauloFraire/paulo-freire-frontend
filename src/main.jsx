@@ -21,6 +21,7 @@ import Recuperar from './auth/pages/Recuperar.jsx'; // Manteniendo Recuperar
 import NewItemPage from "./admin/pages/news/NewItemPage.jsx";
 import HistoryDetail from "./pages/HistoryDetail.jsx";
 import Acercade from "./components/Acercade.jsx"; // Manteniendo Acercade
+import Contacto from "./components/Contacto.jsx"; // Manteniendo Contacto
 
 // admin
 import PrivateRoute from "./pages/PrivateRoute.jsx";
@@ -35,6 +36,9 @@ import AddUser from "./admin/pages/users/AddUser.jsx";
 import About from "./admin/pages/about/About.jsx";
 import Terminos from "./admin/pages/about/Terminos.tsx";
 import Deslinde from "./admin/pages/about/Deslinde.tsx";
+
+// configuracion de la empresa
+import Empresa from "./admin/pages/Empresa/Configempresa.jsx";
 
 // ContextContemporaneo
 import ContextContemporaneo from "./contexto-comtemporaneo/ContextContemporaneo.jsx";
@@ -66,6 +70,7 @@ const router = createBrowserRouter([
       { path: "/historia", element: <HistoryDetail /> },
       { path: "/olvide-password", element: <Recuperar /> }, // Manteniendo Recuperar
       { path: "/acercade", element: <Acercade /> }, // Manteniendo Acercade
+      { path: "/contacto", element: <Contacto /> }, // Manteniendo Contacto
       { path: "*", element: <div>Not Found</div> },
     ],
   },
@@ -94,6 +99,8 @@ const router = createBrowserRouter([
       { path: "/admin/about/deslinde", element: <Deslinde /> },
       { path: "/admin/about/politicas", element: <Politicas /> },
       { path: "/admin/about/terminos", element: <Terminos /> },
+      { path: "/admin/configempresa", element: <Empresa /> },
+
       { path: "*", element: <div>Not Found</div> },
     ],
   },
