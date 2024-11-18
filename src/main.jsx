@@ -20,6 +20,7 @@ import Registro from "./auth/pages/Registro.jsx";
 import NewItemPage from "./admin/pages/news/NewItemPage.jsx";
 import HistoryDetail from "./pages/HistoryDetail.jsx";
 import Acercade from "./components/Acercade.jsx";
+import Contacto from "./components/Contacto.jsx";
 
 //admin
 import PrivateRoute from "./pages/PrivateRoute.jsx";
@@ -68,6 +69,7 @@ const router = createBrowserRouter([
       { path: "/contexto-educativo", element: <ContextContemporaneo /> },
       { path: "/historia", element: <HistoryDetail /> },
       { path: "/acercade", element: <Acercade /> },
+      { path: "/contacto", element: <Contacto /> },
       { path: "*", element: <div>Not Found</div> },
     ],
   },

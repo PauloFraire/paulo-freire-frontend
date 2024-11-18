@@ -64,6 +64,9 @@ const Footer = () => {
             <Link to="/acercade" className="text-sm hover:underline">
               Acerca de
             </Link>
+            <Link to="/contacto" className="text-sm hover:underline">
+              Contacto
+            </Link>
           </div>
         </div>
 
