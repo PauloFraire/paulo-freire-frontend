@@ -6,15 +6,17 @@ interface Deslinde {
   _id: string;
   title: string;
   content: string;
-  versions: { version: string; createdAt: Date }[];
-  isActive?: boolean; // Añadir la propiedad isActive
+  version: string;
+  isActive?: boolean;
+  baseVersion?: string; // Indicar la versión base del deslinde.
+  createdAt: string;
 }
 
 const Deslindes: React.FC = () => {
   const [deslindes, setDeslindes] = useState<Deslinde[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [showForm, setShowForm] = useState<boolean>(false); // Estado para mostrar/ocultar el formulario
+  const [showForm, setShowForm] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [selectedDeslinde, setSelectedDeslinde] = useState<Deslinde | null>(
     null
@@ -22,7 +24,7 @@ const Deslindes: React.FC = () => {
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [viewContentId, setViewContentId] = useState<string | null>(null);
-  const [selectedVigente, setSelectedVigente] = useState<string | null>(null); // Estado para el deslinde vigente
+  const [selectedVigente, setSelectedVigente] = useState<string | null>(null);
 
   // Efecto para cargar los deslindes al iniciar
   useEffect(() => {
@@ -31,7 +33,7 @@ const Deslindes: React.FC = () => {
         const response = await clientAxios.get("/deslindes");
         setDeslindes(response.data || []);
         const vigente = response.data.find((d: Deslinde) => d.isActive);
-        setSelectedVigente(vigente?._id || null); // Establecer el deslinde activo
+        setSelectedVigente(vigente?._id || null);
       } catch (err) {
         setError("Error al cargar los deslindes");
         console.error(err);
@@ -43,39 +45,45 @@ const Deslindes: React.FC = () => {
     fetchDeslindes();
   }, []);
 
-  // Manejar el envío del formulario para agregar o editar
+  // Manejar el envío del formulario para agregar o actualizar un deslinde
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
+      let response;
       if (selectedDeslinde) {
-        const response = await clientAxios.put(
-          `/deslindes/${selectedDeslinde._id}`,
-          { title, content }
-        );
-        setDeslindes((prevDeslindes) =>
-          prevDeslindes.map((d) =>
-            d._id === selectedDeslinde._id ? response.data : d
-          )
-        );
-        setSuccessMessage("Deslinde actualizado correctamente.");
-      } else {
-        const response = await clientAxios.post("/deslindes", {
+        response = await clientAxios.put(`/deslindes/${selectedDeslinde._id}`, {
           title,
           content,
         });
-        setDeslindes((prevDeslindes) => [...prevDeslindes, response.data]);
-        setSuccessMessage("Deslinde agregado correctamente.");
+      } else {
+        response = await clientAxios.post("/deslindes", { title, content });
       }
+
+      const newDeslinde = response.data;
+
+      // Actualizamos todos los deslindes, asegurándonos de que solo el nuevo tenga `isActive: true`
+      setDeslindes((prevDeslindes) =>
+        prevDeslindes
+          .map((deslinde) =>
+            deslinde._id === newDeslinde._id
+              ? { ...deslinde, isActive: true }
+              : { ...deslinde, isActive: false }
+          )
+          .concat(newDeslinde)
+      );
+
+      setSuccessMessage(
+        selectedDeslinde
+          ? "Nueva versión del deslinde creada."
+          : "Deslinde agregado correctamente."
+      );
 
       setTitle("");
       setContent("");
-      setShowForm(false); // Ocultar el formulario después de agregar/editar
+      setShowForm(false);
       setSelectedDeslinde(null);
-
-      setTimeout(() => {
-        setSuccessMessage("");
-      }, 3000);
+      setTimeout(() => setSuccessMessage(""), 3000);
     } catch (err) {
       console.error("Error al guardar el deslinde", err);
     }
@@ -89,33 +97,41 @@ const Deslindes: React.FC = () => {
         prevDeslindes.filter((deslinde) => deslinde._id !== id)
       );
       setSuccessMessage("Deslinde eliminado correctamente.");
-      setTimeout(() => {
-        setSuccessMessage("");
-      }, 3000);
+      setTimeout(() => setSuccessMessage(""), 3000);
     } catch (err) {
       console.error("Error al eliminar el deslinde", err);
     }
   };
 
-  // Manejar la edición de un deslinde
+  // Manejar la edición de un deslinde (para crear una nueva versión)
   const handleEdit = (deslinde: Deslinde) => {
     setTitle(deslinde.title);
     setContent(deslinde.content);
     setSelectedDeslinde(deslinde);
-    setShowForm(true); // Mostrar el formulario para editar
+    setShowForm(true);
   };
 
   // Manejar la selección del deslinde vigente
   const handleSetVigente = async (id: string) => {
     try {
       await clientAxios.put(`/deslindes/vigente/${id}`);
+
+      // Actualizamos el estado local de los deslindes
+      setDeslindes((prevDeslindes) =>
+        prevDeslindes.map((deslinde) =>
+          deslinde._id === id
+            ? { ...deslinde, isActive: true }
+            : { ...deslinde, isActive: false }
+        )
+      );
+
       setSelectedVigente(id);
     } catch (err) {
-      console.error(err);
+      console.error("Error al establecer como vigente", err);
     }
   };
 
-  // Manejar la visualización del contenido completo
+  // Mostrar/ocultar contenido completo
   const toggleViewContent = (id: string) => {
     setViewContentId(viewContentId === id ? null : id);
   };
@@ -176,13 +192,13 @@ const Deslindes: React.FC = () => {
                   className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-200"
                 >
                   {selectedDeslinde
-                    ? "Actualizar Deslinde"
+                    ? "Crear Nueva Versión"
                     : "Guardar Deslinde"}
                 </button>
                 <button
                   type="button"
-                  className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-200"
                   onClick={() => setShowForm(false)}
+                  className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition duration-200"
                 >
                   Cancelar
                 </button>
@@ -190,64 +206,71 @@ const Deslindes: React.FC = () => {
             </form>
           )}
 
-          <div>
-            <h3 className="text-lg font-bold mb-4">Deslindes existentes</h3>
+          <div className="space-y-4">
             {loading ? (
               <p>Cargando...</p>
             ) : error ? (
-              <p className="text-red-500">{error}</p>
+              <p>{error}</p>
             ) : (
-              <ul className="space-y-2">
+              <ul className="space-y-4">
                 {deslindes.map((deslinde) => (
                   <li
                     key={deslinde._id}
-                    className="border p-4 rounded-md flex justify-between items-center"
+                    className="p-4 border rounded-md shadow-md bg-gray-50"
                   >
-                    <div>
-                      <h4 className="font-bold">{deslinde.title}</h4>
-                      <p className="text-sm text-gray-600">
-                        Versión:{" "}
-                        {
-                          deslinde.versions[deslinde.versions.length - 1]
-                            .version
-                        }
-                      </p>
-                      {viewContentId === deslinde._id && (
-                        <p className="mt-2">{deslinde.content}</p>
-                      )}
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <h3 className="text-xl font-semibold">
+                          {deslinde.title}
+                        </h3>
+                        <p className="text-sm text-gray-600">
+                          Versión: {deslinde.version}{" "}
+                          {deslinde.baseVersion &&
+                            `(Basada en: ${deslinde.baseVersion})`}
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          Creado el:{" "}
+                          {new Date(deslinde.createdAt).toLocaleString()}
+                        </p>
+                      </div>
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => handleEdit(deslinde)}
+                          className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition duration-200"
+                        >
+                          Nueva Versión
+                        </button>
+                        <button
+                          onClick={() => handleDelete(deslinde._id)}
+                          className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-200"
+                        >
+                          Eliminar
+                        </button>
+                        <button
+                          onClick={() => toggleViewContent(deslinde._id)}
+                          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200"
+                        >
+                          Ver {viewContentId === deslinde._id ? "Menos" : "Más"}
+                        </button>
+                      </div>
                     </div>
-                    <div className="space-x-2">
+                    {viewContentId === deslinde._id && (
+                      <div className="mt-4">
+                        <p className="text-gray-700 break-words whitespace-normal">
+                          {deslinde.content}
+                        </p>
+                      </div>
+                    )}
+                    <div className="mt-4 text-center">
                       <button
-                        className="bg-yellow-500 text-white px-2 py-1 rounded-md hover:bg-yellow-600 transition duration-200"
-                        onClick={() => handleEdit(deslinde)}
-                      >
-                        Editar
-                      </button>
-                      <button
-                        className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 transition duration-200"
-                        onClick={() => handleDelete(deslinde._id)}
-                      >
-                        Eliminar
-                      </button>
-                      <button
-                        className={`px-2 py-1 rounded-md ${
-                          selectedVigente === deslinde._id
-                            ? "bg-green-600 text-white"
-                            : "bg-gray-300"
-                        }`}
                         onClick={() => handleSetVigente(deslinde._id)}
+                        className={`${
+                          deslinde.isActive ? "bg-green-500" : "bg-blue-500"
+                        } text-white px-4 py-2 rounded-md`}
                       >
-                        {selectedVigente === deslinde._id
+                        {deslinde.isActive
                           ? "Vigente"
-                          : "Marcar como vigente"}
-                      </button>
-                      <button
-                        className="bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600 transition duration-200"
-                        onClick={() => toggleViewContent(deslinde._id)}
-                      >
-                        {viewContentId === deslinde._id
-                          ? "Ocultar"
-                          : "Ver Contenido"}
+                          : "Establecer como Vigente"}
                       </button>
                     </div>
                   </li>

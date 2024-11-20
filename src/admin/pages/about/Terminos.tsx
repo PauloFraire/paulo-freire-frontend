@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
 import clientAxios from "../../../config/clientAxios";
 
-// Definir el tipo para un término
+// Definir el tipo para un Termino
 interface Termino {
   _id: string;
   title: string;
   content: string;
-  versions: { version: string; createdAt: Date }[];
+  version: string;
   isActive?: boolean;
+  baseVersion?: string; // Indicar la versión base del Termino.
+  createdAt: string;
 }
 
 const Terminos: React.FC = () => {
-  const [terminos, setTerminos] = useState<Termino[]>([]);
+  const [Terminos, setTerminos] = useState<Termino[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [showForm, setShowForm] = useState<boolean>(false);
@@ -22,7 +24,7 @@ const Terminos: React.FC = () => {
   const [viewContentId, setViewContentId] = useState<string | null>(null);
   const [selectedVigente, setSelectedVigente] = useState<string | null>(null);
 
-  // Efecto para cargar los términos al inicio
+  // Efecto para cargar los Terminos al iniciar
   useEffect(() => {
     const fetchTerminos = async () => {
       try {
@@ -31,7 +33,7 @@ const Terminos: React.FC = () => {
         const vigente = response.data.find((t: Termino) => t.isActive);
         setSelectedVigente(vigente?._id || null);
       } catch (err) {
-        setError("Error al cargar los términos");
+        setError("Error al cargar los Terminos");
         console.error(err);
       } finally {
         setLoading(false);
@@ -41,61 +43,65 @@ const Terminos: React.FC = () => {
     fetchTerminos();
   }, []);
 
-  // Manejar el envío del formulario para agregar o editar
+  // Manejar el envío del formulario para agregar o actualizar un Termino
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
+      let response;
       if (selectedTermino) {
-        const response = await clientAxios.put(
-          `/terminos/${selectedTermino._id}`,
-          { title, content }
-        );
-        setTerminos((prevTerminos) =>
-          prevTerminos.map((t) =>
-            t._id === selectedTermino._id ? response.data : t
-          )
-        );
-        setSuccessMessage("Término actualizado correctamente.");
-      } else {
-        const response = await clientAxios.post("/terminos", {
+        response = await clientAxios.put(`/terminos/${selectedTermino._id}`, {
           title,
           content,
         });
-        setTerminos((prevTerminos) => [...prevTerminos, response.data]);
-        setSuccessMessage("Término agregado correctamente.");
+      } else {
+        response = await clientAxios.post("/terminos", { title, content });
       }
+
+      const newTermino = response.data;
+
+      // Actualizamos todos los Terminos, asegurándonos de que solo el nuevo tenga `isActive: true`
+      setTerminos((prevTerminos) =>
+        prevTerminos
+          .map((termino) =>
+            termino._id === newTermino._id
+              ? { ...termino, isActive: true }
+              : { ...termino, isActive: false }
+          )
+          .concat(newTermino)
+      );
+
+      setSuccessMessage(
+        selectedTermino
+          ? "Nueva versión del Termino creada."
+          : "Termino agregado correctamente."
+      );
 
       setTitle("");
       setContent("");
       setShowForm(false);
       setSelectedTermino(null);
-
-      setTimeout(() => {
-        setSuccessMessage("");
-      }, 3000);
+      setTimeout(() => setSuccessMessage(""), 3000);
     } catch (err) {
-      console.error("Error al guardar el término", err);
+      console.error("Error al guardar el Termino", err);
     }
   };
 
-  // Manejar la eliminación de un término
+  // Manejar la eliminación de un Termino
   const handleDelete = async (id: string) => {
     try {
       await clientAxios.delete(`/terminos/${id}`);
       setTerminos((prevTerminos) =>
         prevTerminos.filter((termino) => termino._id !== id)
       );
-      setSuccessMessage("Término eliminado correctamente.");
-      setTimeout(() => {
-        setSuccessMessage("");
-      }, 3000);
+      setSuccessMessage("Termino eliminado correctamente.");
+      setTimeout(() => setSuccessMessage(""), 3000);
     } catch (err) {
-      console.error("Error al eliminar el término", err);
+      console.error("Error al eliminar el Termino", err);
     }
   };
 
-  // Manejar la edición de un término
+  // Manejar la edición de un Termino (para crear una nueva versión)
   const handleEdit = (termino: Termino) => {
     setTitle(termino.title);
     setContent(termino.content);
@@ -103,35 +109,38 @@ const Terminos: React.FC = () => {
     setShowForm(true);
   };
 
-  // Manejar la selección del término vigente
+  // Manejar la selección del Termino vigente
   const handleSetVigente = async (id: string) => {
     try {
       await clientAxios.put(`/terminos/vigente/${id}`);
+
+      // Actualizamos el estado local de los Terminos
+      setTerminos((prevTerminos) =>
+        prevTerminos.map((termino) =>
+          termino._id === id
+            ? { ...termino, isActive: true }
+            : { ...termino, isActive: false }
+        )
+      );
+
       setSelectedVigente(id);
     } catch (err) {
-      console.error(err);
+      console.error("Error al establecer como vigente", err);
     }
   };
 
-  // Manejar la visualización del contenido completo
+  // Mostrar/ocultar contenido completo
   const toggleViewContent = (id: string) => {
     setViewContentId(viewContentId === id ? null : id);
   };
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold mb-4">
-        Gestión de Términos y Condiciones
-      </h1>
-      <p className="text-lg mb-8">
-        Aquí puedes agregar, editar o eliminar los términos de servicio.
-      </p>
+      <h1 className="text-3xl font-bold mb-4">Gestión de Terminos</h1>
 
       <div className="flex justify-center items-start min-h-screen bg-gray-100">
         <div className="w-full max-w-xl space-y-4 bg-white p-6 shadow rounded-md">
-          <h2 className="text-2xl font-bold mb-4 text-center">
-            Términos de Servicio
-          </h2>
+          <h2 className="text-2xl font-bold mb-4 text-center">Terminos</h2>
 
           <div className="text-center">
             <button
@@ -143,7 +152,7 @@ const Terminos: React.FC = () => {
                 setContent("");
               }}
             >
-              {showForm ? "Ocultar Formulario" : "Agregar Término"}
+              {showForm ? "Ocultar Formulario" : "Agregar Termino"}
             </button>
           </div>
 
@@ -180,12 +189,12 @@ const Terminos: React.FC = () => {
                   type="submit"
                   className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-200"
                 >
-                  {selectedTermino ? "Actualizar Término" : "Guardar Término"}
+                  {selectedTermino ? "Crear Nueva Versión" : "Guardar Termino"}
                 </button>
                 <button
                   type="button"
-                  className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-200"
                   onClick={() => setShowForm(false)}
+                  className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition duration-200"
                 >
                   Cancelar
                 </button>
@@ -193,58 +202,71 @@ const Terminos: React.FC = () => {
             </form>
           )}
 
-          <div>
-            <h3 className="text-lg font-bold mb-4">Términos existentes</h3>
+          <div className="space-y-4">
             {loading ? (
               <p>Cargando...</p>
             ) : error ? (
-              <p className="text-red-500">{error}</p>
+              <p>{error}</p>
             ) : (
-              <ul className="space-y-2">
-                {terminos.map((termino) => (
+              <ul className="space-y-4">
+                {Terminos.map((Termino) => (
                   <li
-                    key={termino._id}
-                    className="border p-4 rounded-md flex justify-between items-center"
+                    key={Termino._id}
+                    className="p-4 border rounded-md shadow-md bg-gray-50"
                   >
-                    <div>
-                      <h4 className="font-bold">{termino.title}</h4>
-                      <p className="text-sm text-gray-600">
-                        Versión:{" "}
-                        {termino.versions[termino.versions.length - 1].version}
-                      </p>
-                      {viewContentId === termino._id && (
-                        <p className="mt-2">{termino.content}</p>
-                      )}
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <h3 className="text-xl font-semibold">
+                          {Termino.title}
+                        </h3>
+                        <p className="text-sm text-gray-600">
+                          Versión: {Termino.version}{" "}
+                          {Termino.baseVersion &&
+                            `(Basada en: ${Termino.baseVersion})`}
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          Creado el:{" "}
+                          {new Date(Termino.createdAt).toLocaleString()}
+                        </p>
+                      </div>
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => handleEdit(Termino)}
+                          className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition duration-200"
+                        >
+                          Nueva Versión
+                        </button>
+                        <button
+                          onClick={() => handleDelete(Termino._id)}
+                          className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-200"
+                        >
+                          Eliminar
+                        </button>
+                        <button
+                          onClick={() => toggleViewContent(Termino._id)}
+                          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200"
+                        >
+                          Ver {viewContentId === Termino._id ? "Menos" : "Más"}
+                        </button>
+                      </div>
                     </div>
-                    <div className="space-x-2">
+                    {viewContentId === Termino._id && (
+                      <div className="mt-4">
+                        <p className="text-gray-700 break-words whitespace-normal">
+                          {Termino.content}
+                        </p>
+                      </div>
+                    )}
+                    <div className="mt-4 text-center">
                       <button
-                        className="bg-yellow-500 text-white px-2 py-1 rounded-md hover:bg-yellow-600 transition duration-200"
-                        onClick={() => handleEdit(termino)}
+                        onClick={() => handleSetVigente(Termino._id)}
+                        className={`${
+                          Termino.isActive ? "bg-green-500" : "bg-blue-500"
+                        } text-white px-4 py-2 rounded-md`}
                       >
-                        Editar
-                      </button>
-                      <button
-                        className="bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600 transition duration-200"
-                        onClick={() => toggleViewContent(termino._id)}
-                      >
-                        {viewContentId === termino._id
-                          ? "Ocultar Contenido"
-                          : "Ver Contenido"}
-                      </button>
-                      <button
-                        className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 transition duration-200"
-                        onClick={() => handleDelete(termino._id)}
-                      >
-                        Eliminar
-                      </button>
-                      <button
-                        className="bg-green-500 text-white px-2 py-1 rounded-md hover:bg-green-600 transition duration-200"
-                        onClick={() => handleSetVigente(termino._id)}
-                        disabled={selectedVigente === termino._id}
-                      >
-                        {selectedVigente === termino._id
+                        {Termino.isActive
                           ? "Vigente"
-                          : "Hacer Vigente"}
+                          : "Establecer como Vigente"}
                       </button>
                     </div>
                   </li>

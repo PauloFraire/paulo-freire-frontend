@@ -1,4 +1,3 @@
-// src/pages/TarjetaDeslinde.jsx
 import React, { useEffect, useState } from "react";
 import clientAxios from "../config/clientAxios";
 
@@ -8,12 +7,26 @@ const TarjetaDeslinde = () => {
   const [error, setError] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
 
-  // Efecto para cargar los deslindes vigentes
+  // Función para formatear la fecha
+  const formatDate = (dateString) => {
+    const options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    return new Date(dateString).toLocaleDateString("es-ES", options);
+  };
+
+  // Efecto para cargar los deslindes periódicamente
   useEffect(() => {
     const fetchDeslindes = async () => {
       try {
-        const response = await clientAxios.get("/deslindes/vigente"); // Cambiar el endpoint a deslindes
-        setDeslindes([response.data]); // Cargar los datos de deslindes
+        const response = await clientAxios.get("/deslindes/vigente");
+        if (response.data) {
+          setDeslindes([response.data]);
+        } else {
+          setDeslindes([]); // No hay deslinde vigente
+        }
       } catch (err) {
         setError("Error al cargar los deslindes");
       } finally {
@@ -22,6 +35,12 @@ const TarjetaDeslinde = () => {
     };
 
     fetchDeslindes();
+
+    const interval = setInterval(() => {
+      fetchDeslindes();
+    }, 5000); // Consulta cada 5 segundos
+
+    return () => clearInterval(interval);
   }, []);
 
   if (loading) {
@@ -32,12 +51,27 @@ const TarjetaDeslinde = () => {
     return <p>{error}</p>;
   }
 
+  // Mostrar mensaje si no hay deslindes o si el deslinde no está activo
+  if (
+    deslindes.length === 0 ||
+    !deslindes.some((deslinde) => deslinde.isActive)
+  ) {
+    return (
+      <p className="text-center text-xl text-gray-500">
+        Pronto subiremos el deslinde!
+      </p>
+    );
+  }
+
   if (selectedItem) {
     return (
       <div className="p-6 bg-white shadow-lg rounded-lg transition duration-200 transform hover:scale-105 overflow-hidden">
         <h2 className="text-2xl font-semibold mb-2">{selectedItem.title}</h2>
         <p className="text-gray-700 mb-4 break-words overflow-auto max-h-60">
           {selectedItem.content}
+        </p>
+        <p className="text-gray-500 text-sm">
+          {formatDate(selectedItem.createdAt)}
         </p>
         <button
           onClick={() => setSelectedItem(null)}
@@ -59,8 +93,11 @@ const TarjetaDeslinde = () => {
           <h3 className="text-lg font-bold text-blue-600 mb-2">
             {deslinde.title}
           </h3>
-          <p className="text-gray-600 mb-4 break-words">
+          <p className="text-gray-600 mb-2 break-words">
             {deslinde.content.substring(0, 100)}... {/* Mostrar un resumen */}
+          </p>
+          <p className="text-gray-500 text-sm">
+            {formatDate(deslinde.createdAt)}
           </p>
           <button
             onClick={() => setSelectedItem(deslinde)}

@@ -1,37 +1,41 @@
 import React, { useEffect, useState } from "react";
 import clientAxios from "../../../config/clientAxios";
 
-// Definir el tipo para una política
-interface Politica {
+// Definir el tipo para un deslinde
+interface Deslinde {
   _id: string;
   title: string;
   content: string;
-  versions: { version: string; createdAt: Date }[]; // Cambiado para incluir versiones
+  version: string;
   isActive?: boolean;
+  baseVersion?: string; // Indicar la versión base del deslinde.
+  createdAt: string;
 }
 
 const Politicas: React.FC = () => {
-  const [politicas, setPoliticas] = useState<Politica[]>([]);
+  const [Politicas, setPoliticas] = useState<Deslinde[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [showForm, setShowForm] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState<string>("");
-  const [selectedPolitica, setSelectedPolitica] = useState<Politica | null>(
+  const [selectedDeslinde, setSelectedDeslinde] = useState<Deslinde | null>(
     null
   );
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
-  const [viewContentId, setViewContentId] = useState<string | null>(null); // Nuevo estado para manejar el contenido a mostrar
+  const [viewContentId, setViewContentId] = useState<string | null>(null);
   const [selectedVigente, setSelectedVigente] = useState<string | null>(null);
 
-  // Efecto para cargar las políticas al iniciar
+  // Efecto para cargar los Politicas al iniciar
   useEffect(() => {
     const fetchPoliticas = async () => {
       try {
-        const response = await clientAxios.get("/politicas");
+        const response = await clientAxios.get("/Politicas");
         setPoliticas(response.data || []);
+        const vigente = response.data.find((d: Deslinde) => d.isActive);
+        setSelectedVigente(vigente?._id || null);
       } catch (err) {
-        setError("Error al cargar las políticas");
+        setError("Error al cargar los Politicas");
         console.error(err);
       } finally {
         setLoading(false);
@@ -41,114 +45,116 @@ const Politicas: React.FC = () => {
     fetchPoliticas();
   }, []);
 
-  // Manejar el envío del formulario para agregar o editar
+  // Manejar el envío del formulario para agregar o actualizar un deslinde
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      if (selectedPolitica) {
-        // Editar política existente
-        const response = await clientAxios.put(
-          `/politicas/${selectedPolitica._id}`,
-          {
-            title,
-            content,
-          }
-        );
-        setPoliticas((prevPoliticas) =>
-          prevPoliticas.map((p) =>
-            p._id === selectedPolitica._id ? response.data : p
-          )
-        );
-        setSuccessMessage("Política actualizada correctamente.");
-      } else {
-        // Agregar nueva política
-        const response = await clientAxios.post("/politicas", {
+      let response;
+      if (selectedDeslinde) {
+        response = await clientAxios.put(`/Politicas/${selectedDeslinde._id}`, {
           title,
           content,
-          // No se necesita la versión, ya se gestiona en el backend
         });
-
-        setPoliticas((prevPoliticas) => [...prevPoliticas, response.data]);
-        setSuccessMessage("Política agregada correctamente.");
+      } else {
+        response = await clientAxios.post("/Politicas", { title, content });
       }
 
-      // Limpiar el formulario
+      const newDeslinde = response.data;
+
+      // Actualizamos todos los Politicas, asegurándonos de que solo el nuevo tenga `isActive: true`
+      setPoliticas((prevPoliticas) =>
+        prevPoliticas
+          .map((deslinde) =>
+            deslinde._id === newDeslinde._id
+              ? { ...deslinde, isActive: true }
+              : { ...deslinde, isActive: false }
+          )
+          .concat(newDeslinde)
+      );
+
+      setSuccessMessage(
+        selectedDeslinde
+          ? "Nueva versión del deslinde creada."
+          : "Deslinde agregado correctamente."
+      );
+
       setTitle("");
       setContent("");
       setShowForm(false);
-      setSelectedPolitica(null);
-
-      setTimeout(() => {
-        setSuccessMessage("");
-      }, 3000);
+      setSelectedDeslinde(null);
+      setTimeout(() => setSuccessMessage(""), 3000);
     } catch (err) {
-      console.error("Error al guardar la política", err);
+      console.error("Error al guardar el deslinde", err);
     }
   };
 
-  // Manejar la eliminación de una política
+  // Manejar la eliminación de un deslinde
   const handleDelete = async (id: string) => {
     try {
-      await clientAxios.delete(`/politicas/${id}`);
+      await clientAxios.delete(`/Politicas/${id}`);
       setPoliticas((prevPoliticas) =>
-        prevPoliticas.filter((politica) => politica._id !== id)
+        prevPoliticas.filter((deslinde) => deslinde._id !== id)
       );
-      setSuccessMessage("Política eliminada correctamente.");
-      setTimeout(() => {
-        setSuccessMessage("");
-      }, 3000);
+      setSuccessMessage("Deslinde eliminado correctamente.");
+      setTimeout(() => setSuccessMessage(""), 3000);
     } catch (err) {
-      console.error("Error al eliminar la política", err);
+      console.error("Error al eliminar el deslinde", err);
     }
   };
 
-  // Manejar la edición de una política
-  const handleEdit = (politica: Politica) => {
-    setTitle(politica.title);
-    setContent(politica.content);
-    setSelectedPolitica(politica);
+  // Manejar la edición de un deslinde (para crear una nueva versión)
+  const handleEdit = (deslinde: Deslinde) => {
+    setTitle(deslinde.title);
+    setContent(deslinde.content);
+    setSelectedDeslinde(deslinde);
     setShowForm(true);
   };
-  // Manejar la selección del término vigente
+
+  // Manejar la selección del deslinde vigente
   const handleSetVigente = async (id: string) => {
     try {
-      await clientAxios.put(`/politicas/vigente/${id}`);
+      await clientAxios.put(`/Politicas/vigente/${id}`);
+
+      // Actualizamos el estado local de los Politicas
+      setPoliticas((prevPoliticas) =>
+        prevPoliticas.map((deslinde) =>
+          deslinde._id === id
+            ? { ...deslinde, isActive: true }
+            : { ...deslinde, isActive: false }
+        )
+      );
+
       setSelectedVigente(id);
     } catch (err) {
-      console.error(err);
+      console.error("Error al establecer como vigente", err);
     }
   };
 
-  // Manejar la visualización del contenido completo
+  // Mostrar/ocultar contenido completo
   const toggleViewContent = (id: string) => {
     setViewContentId(viewContentId === id ? null : id);
   };
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold mb-4">Gestión de Políticas</h1>
-      <p className="text-lg mb-8">
-        Aquí puedes agregar, editar o eliminar las políticas de privacidad.
-      </p>
+      <h1 className="text-3xl font-bold mb-4">Gestión de Politicas</h1>
 
       <div className="flex justify-center items-start min-h-screen bg-gray-100">
         <div className="w-full max-w-xl space-y-4 bg-white p-6 shadow rounded-md">
-          <h2 className="text-2xl font-bold mb-4 text-center">
-            Políticas y Privacidad
-          </h2>
+          <h2 className="text-2xl font-bold mb-4 text-center">Politicas</h2>
 
           <div className="text-center">
             <button
-              className="bg-blue-500 text-white px-4 py-2 rounded-md"
+              className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200"
               onClick={() => {
                 setShowForm(!showForm);
-                setSelectedPolitica(null);
+                setSelectedDeslinde(null);
                 setTitle("");
                 setContent("");
               }}
             >
-              {showForm ? "Ocultar Formulario" : "Agregar Política"}
+              {showForm ? "Ocultar Formulario" : "Agregar Deslinde"}
             </button>
           </div>
 
@@ -167,7 +173,7 @@ const Politicas: React.FC = () => {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   required
-                  className="border p-2 w-full rounded-md"
+                  className="border p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <div>
@@ -177,22 +183,22 @@ const Politicas: React.FC = () => {
                   onChange={(e) => setContent(e.target.value)}
                   rows={4}
                   required
-                  className="border p-2 w-full rounded-md"
+                  className="border p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <div className="flex justify-between">
                 <button
                   type="submit"
-                  className="bg-green-500 text-white px-4 py-2 rounded-md"
+                  className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-200"
                 >
-                  {selectedPolitica
-                    ? "Actualizar Política"
-                    : "Guardar Política"}
+                  {selectedDeslinde
+                    ? "Crear Nueva Versión"
+                    : "Guardar Deslinde"}
                 </button>
                 <button
                   type="button"
-                  className="bg-red-500 text-white px-4 py-2 rounded-md"
                   onClick={() => setShowForm(false)}
+                  className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition duration-200"
                 >
                   Cancelar
                 </button>
@@ -200,62 +206,71 @@ const Politicas: React.FC = () => {
             </form>
           )}
 
-          <div>
-            <h3 className="text-lg font-bold mb-4">Políticas existentes</h3>
+          <div className="space-y-4">
             {loading ? (
               <p>Cargando...</p>
             ) : error ? (
-              <p className="text-red-500">{error}</p>
+              <p>{error}</p>
             ) : (
-              <ul className="space-y-2">
-                {politicas.map((politica) => (
+              <ul className="space-y-4">
+                {Politicas.map((deslinde) => (
                   <li
-                    key={politica._id}
-                    className="border p-4 rounded-md flex justify-between items-center"
+                    key={deslinde._id}
+                    className="p-4 border rounded-md shadow-md bg-gray-50"
                   >
-                    <div>
-                      <h4 className="font-bold">{politica.title}</h4>
-                      <p className="text-sm text-gray-600">
-                        Versión:{" "}
-                        {
-                          politica.versions[politica.versions.length - 1]
-                            .version
-                        }{" "}
-                        {/* Mostrando la última versión */}
-                      </p>
-                      {viewContentId === politica._id && (
-                        <p className="mt-2">{politica.content}</p> // Mostrar contenido completo
-                      )}
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <h3 className="text-xl font-semibold">
+                          {deslinde.title}
+                        </h3>
+                        <p className="text-sm text-gray-600">
+                          Versión: {deslinde.version}{" "}
+                          {deslinde.baseVersion &&
+                            `(Basada en: ${deslinde.baseVersion})`}
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          Creado el:{" "}
+                          {new Date(deslinde.createdAt).toLocaleString()}
+                        </p>
+                      </div>
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => handleEdit(deslinde)}
+                          className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition duration-200"
+                        >
+                          Nueva Versión
+                        </button>
+                        <button
+                          onClick={() => handleDelete(deslinde._id)}
+                          className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-200"
+                        >
+                          Eliminar
+                        </button>
+                        <button
+                          onClick={() => toggleViewContent(deslinde._id)}
+                          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200"
+                        >
+                          Ver {viewContentId === deslinde._id ? "Menos" : "Más"}
+                        </button>
+                      </div>
                     </div>
-                    <div className="space-x-2">
+                    {viewContentId === deslinde._id && (
+                      <div className="mt-4">
+                        <p className="text-gray-700 break-words whitespace-normal">
+                          {deslinde.content}
+                        </p>
+                      </div>
+                    )}
+                    <div className="mt-4 text-center">
                       <button
-                        className="bg-yellow-500 text-white px-2 py-1 rounded-md"
-                        onClick={() => handleEdit(politica)}
+                        onClick={() => handleSetVigente(deslinde._id)}
+                        className={`${
+                          deslinde.isActive ? "bg-green-500" : "bg-blue-500"
+                        } text-white px-4 py-2 rounded-md`}
                       >
-                        Editar
-                      </button>
-                      <button
-                        className="bg-blue-500 text-white px-2 py-1 rounded-md"
-                        onClick={() => toggleViewContent(politica._id)}
-                      >
-                        {viewContentId === politica._id
-                          ? "Ocultar Contenido"
-                          : "Ver Contenido"}
-                      </button>
-                      <button
-                        className="bg-red-500 text-white px-2 py-1 rounded-md"
-                        onClick={() => handleDelete(politica._id)}
-                      >
-                        Eliminar
-                      </button>
-                      <button
-                        className="bg-green-500 text-white px-2 py-1 rounded-md hover:bg-green-600 transition duration-200"
-                        onClick={() => handleSetVigente(politica._id)}
-                        disabled={selectedVigente === politica._id}
-                      >
-                        {selectedVigente === politica._id
+                        {deslinde.isActive
                           ? "Vigente"
-                          : "Hacer Vigente"}
+                          : "Establecer como Vigente"}
                       </button>
                     </div>
                   </li>

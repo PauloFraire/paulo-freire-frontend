@@ -8,12 +8,26 @@ const TarjetaPolitica = () => {
   const [error, setError] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
 
+  // Función para formatear la fecha
+  const formatDate = (dateString) => {
+    const options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    return new Date(dateString).toLocaleDateString("es-ES", options);
+  };
+
   // Efecto para cargar las políticas
   useEffect(() => {
     const fetchPoliticas = async () => {
       try {
         const response = await clientAxios.get("/politicas/vigente");
-        setPoliticas([response.data]); // Aquí podrías agregar más datos si es necesario
+        if (response.data) {
+          setPoliticas([response.data]);
+        } else {
+          setPoliticas([]);
+        }
       } catch (err) {
         setError("Error al cargar las políticas");
       } finally {
@@ -22,6 +36,12 @@ const TarjetaPolitica = () => {
     };
 
     fetchPoliticas();
+
+    const interval = setInterval(() => {
+      fetchPoliticas();
+    }, 5000); // Consulta cada 5 segundos
+
+    return () => clearInterval(interval);
   }, []);
 
   if (loading) {
@@ -31,6 +51,17 @@ const TarjetaPolitica = () => {
   if (error) {
     return <p>{error}</p>;
   }
+  // Mostrar mensaje si no hay deslindes o si el deslinde no está activo
+  if (
+    politicas.length === 0 ||
+    !politicas.some((politica) => politica.isActive)
+  ) {
+    return (
+      <p className="text-center text-xl text-gray-500">
+        Pronto subiremos las politica!
+      </p>
+    );
+  }
 
   if (selectedItem) {
     return (
@@ -38,6 +69,9 @@ const TarjetaPolitica = () => {
         <h2 className="text-2xl font-semibold mb-2">{selectedItem.title}</h2>
         <p className="text-gray-700 mb-4 break-words overflow-auto max-h-60">
           {selectedItem.content}
+        </p>
+        <p className="text-gray-500 text-sm">
+          {formatDate(selectedItem.createdAt)}
         </p>
         <button
           onClick={() => setSelectedItem(null)}
@@ -61,6 +95,9 @@ const TarjetaPolitica = () => {
           </h3>
           <p className="text-gray-600 mb-4 break-words">
             {politica.content.substring(0, 100)}... {/* Mostrar un resumen */}
+          </p>
+          <p className="text-gray-500 text-sm">
+            {formatDate(politica.createdAt)}
           </p>
           <button
             onClick={() => setSelectedItem(politica)}

@@ -1,11 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BsFacebook, BsTwitter } from "react-icons/bs";
 import { motion } from "framer-motion";
 import logo from "../assets/logo.png";
 import { logos } from "../data/Data";
 import { Link } from "react-router-dom";
+import clientAxios from "../config/clientAxios"; // Asegúrate de que esta ruta es correcta
 
 const Footer = () => {
+  const [socialLinks, setSocialLinks] = useState({
+    facebook: "",
+    twitter: "",
+  });
+  useEffect(() => {
+    const fetchSocialLinks = async () => {
+      try {
+        const response = await clientAxios.get("/social-links");
+        if (response.data) {
+          setSocialLinks(response.data);
+        }
+      } catch (error) {
+        console.error("Error al obtener los enlaces de redes sociales:", error);
+      }
+    };
+
+    fetchSocialLinks();
+  }, []);
   return (
     <motion.div
       initial={{ height: 0 }}
@@ -45,6 +64,9 @@ const Footer = () => {
             <Link to="/acercade" className="text-sm hover:underline">
               Acerca de
             </Link>
+            <Link to="/contacto" className="text-sm hover:underline">
+              Contacto
+            </Link>
           </div>
         </div>
 
@@ -76,28 +98,28 @@ const Footer = () => {
             centrodeeducacionsuperiorpaulo@gmail.com
           </div>
           <div className="flex gap-4 mt-4">
-            <a
-              href="https://www.facebook.com/PauloFreirePosgradosCRESPF?mibextid=ZbWKwL"
-              className="hover:scale-110 text-xl"
-              target="_blank"
-            >
-              <BsFacebook className="text-blue-500 h-6 w-6" />
-            </a>
-            <a
-              href="https://www.facebook.com/profile.php?id=100002763439288&mibextid=ZbWKwL"
-              className="hover:scale-110 text-xl"
-              target="_blank"
-            >
-              <BsFacebook className="text-blue-500 h-6 w-6" />
-            </a>
-
-            <a
-              href="https://x.com/centropaulofrei"
-              className="hover:scale-110 text-xl"
-              target="_blank"
-            >
-              <BsTwitter className="text-blue-400 h-6 w-6" />
-            </a>
+            {socialLinks.facebook && (
+              <a
+                href={socialLinks.facebook}
+                className="hover:scale-110 text-xl"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Facebook"
+              >
+                <BsFacebook className="text-blue-500 h-6 w-6" />
+              </a>
+            )}
+            {socialLinks.twitter && (
+              <a
+                href={socialLinks.twitter}
+                className="hover:scale-110 text-xl"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="X"
+              >
+                <BsTwitter className="text-blue-400 h-6 w-6" />
+              </a>
+            )}
           </div>
         </div>
       </div>
