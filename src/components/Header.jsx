@@ -63,7 +63,7 @@ const Header = () => {
               </div>
 
             </div>
-            |
+            
             {toggle && (
               <motion.div
                 initial={{ x: -500, opacity: 0 }}
