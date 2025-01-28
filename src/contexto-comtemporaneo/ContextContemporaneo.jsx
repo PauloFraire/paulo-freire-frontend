@@ -28,6 +28,26 @@ const ContextContemporaneo = () => {
             </div>
 
             <hr />
+            
+            <div className="flex justify-center my-10">
+                <div className="p-6 rounded-lg bg-gradient-to-tr from-green-300 to-red-300 via-yellow-300 shadow-lg w-full max-w-4xl h-34">
+                    <h1 className="text-black text-3xl font-bold">
+                        LA JORNADA - VERACRUZ
+                    </h1>
+                    <br></br>
+                    <p>
+                        Aprender y enseñar en entornos ubicuos es una obra de tres distinguidos doctores cubanos: Diosvany Ortega González, Celio L. Acosta Álvarez y Fernando Eugenio Ortega Cabrera.
+                    </p>
+                    <br></br>
+                    <a href="https://www.facebook.com/share/YneEHajcYFg2ymLx/?mibextid=WC7FNe" className="inline-flex items-center justify-center text-base font-medium text-black gap-2">
+                        <CiLink className="h-6 w-6 text-black" />
+                        <span className="w-full">Artículo escrito por el Dr. Marcelo Ramírez Ramírez</span>
+                        <FaExternalLinkSquareAlt className="h-6 w-6" />
+                    </a>
+                </div>
+            </div>
+
+            <hr />
 
             <div className='flex container mx-auto justify-center my-10 '>
                 <div className='grid md:grid-cols-2 max-w-5xl gap-2'>
