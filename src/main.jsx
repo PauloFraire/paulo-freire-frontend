@@ -6,6 +6,8 @@ import "./index.css";
 
 import Layout from "./Layout/Layout.jsx";
 import AuthProvider from "./context/AuthProvider.jsx";
+import ErrorHandler from "./components/ErrorHandler.jsx"; // Importamos el ErrorHandler
+import { ErrorProvider } from "./components/ErrorContext.jsx"; // Importa el ErrorProvider
 
 // Pages
 import Home from "./pages/Home.jsx";
@@ -19,7 +21,7 @@ import Registro from "./auth/pages/Registro.jsx";
 import Recuperar from './auth/pages/Recuperar.jsx';
 import NewItemPage from "./admin/pages/news/NewItemPage.jsx";
 import HistoryDetail from "./pages/HistoryDetail.jsx";
-import Acercade from "./components/Acercade.jsx"
+import Acercade from "./components/Acercade.jsx";
 import Contacto from "./components/Contacto.jsx";
 
 // Admin
@@ -48,7 +50,9 @@ import UserProfile from "./user/pages/UserProfile.jsx";
 import Politicas from "./admin/pages/about/Politicas.tsx";
 
 // ErrorPage
-import ErrorPage from "./pages/ErrorPage.jsx";  // Nueva página para mostrar errores 404
+import ErrorPage404 from "./pages/error/ERROR404page.jsx";  // Página para errores 404
+import ErrorPage400 from "./pages/error/ERROR400page.jsx";  // Página para errores 400
+import ErrorPage500 from "./pages/error/ERROR500page.jsx";  // Página para errores 500
 
 const router = createBrowserRouter([
   {
@@ -58,6 +62,7 @@ const router = createBrowserRouter([
         <Layout />
       </AuthProvider>
     ),
+    errorElement: <ErrorHandler />, // Usamos ErrorHandler para capturar errores
     children: [
       { index: true, element: <Home /> },
       { path: "/organization", element: <Organization /> },
@@ -73,10 +78,11 @@ const router = createBrowserRouter([
       { path: "/olvide-password", element: <Recuperar /> },
       { path: "/acercade", element: <Acercade /> },
       { path: "/contacto", element: <Contacto /> },
-      { path: "*", element: <ErrorPage /> }, // Ruta de error 404
+      { path: "/error-500", element: <ErrorPage500 /> },
+      { path: "/error-400", element: <ErrorPage400 /> },
+      { path: "*", element: <ErrorPage404 /> }, // Ruta explícita para errores 404
     ],
   },
-
   {
     path: "/admin",
     element: (
@@ -86,12 +92,10 @@ const router = createBrowserRouter([
         </PrivateRoute>
       </AuthProvider>
     ),
+    errorElement: <ErrorHandler />, // Manejo de errores para rutas de admin
     children: [
       { path: "/admin/home", element: <Dashboard /> },
-      {
-        path: "/admin/academy-activities",
-        element: <AcademyActivitiesAdmin />,
-      },
+      { path: "/admin/academy-activities", element: <AcademyActivitiesAdmin /> },
       { path: "/admin/news", element: <AdminNews /> },
       { path: "/admin/add-news", element: <AddNews /> },
       { path: "/admin/edit-news/:id", element: <EditNews /> },
@@ -102,10 +106,9 @@ const router = createBrowserRouter([
       { path: "/admin/about/politicas", element: <Politicas /> },
       { path: "/admin/about/terminos", element: <Terminos /> },
       { path: "/admin/configempresa", element: <Empresa /> },
-      { path: "*", element: <ErrorPage /> }, // Ruta de error 404
+      { path: "*", element: <ErrorPage404 /> }, // Ruta explícita para errores 404
     ],
   },
-
   {
     path: "/user",
     element: (
@@ -115,15 +118,18 @@ const router = createBrowserRouter([
         </PrivateRoute>
       </AuthProvider>
     ),
+    errorElement: <ErrorHandler />, // Manejo de errores para rutas de usuario
     children: [
       { path: "/user/profile", element: <UserProfile /> },
-      { path: "*", element: <ErrorPage /> }, // Ruta de error 404
+      { path: "*", element: <ErrorPage404 /> }, // Ruta explícita para errores 404
     ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ErrorProvider> {/* Envuelve la aplicación con el ErrorProvider */}
+      <RouterProvider router={router} />
+    </ErrorProvider>
   </React.StrictMode>
 );

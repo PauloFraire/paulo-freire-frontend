@@ -13,8 +13,9 @@ const ErrorPage = () => {
     <div style={styles.container}>
       <div style={styles.content}>
         <div style={styles.iconContainer}>
-          <FaExclamationTriangle size={80} color="#e74c3c" />
+          <FaExclamationTriangle size={80} color="#F9D813" />
         </div>
+        <h1 style={styles.alerta}>404</h1>
         <h1 style={styles.title}>¡Vaya! Página no encontrada</h1>
         <p style={styles.message}>La página que buscas no existe o ha sido movida.</p>
         <button onClick={handleRedirect} style={styles.button}>
@@ -61,7 +62,7 @@ const styles = {
   },
   button: {
     padding: "15px 30px",
-    backgroundColor: "#3498db",
+    backgroundColor: "#159648",
     color: "#fff",
     border: "none",
     borderRadius: "5px",
@@ -69,6 +70,12 @@ const styles = {
     cursor: "pointer",
     transition: "background-color 0.3s",
   },
+  alerta:{
+    fontSize: "26px",
+    fontWeight: "bold",
+    margin: "20px 0",
+    color: "#333",
+  }
 };
 
 export default ErrorPage;

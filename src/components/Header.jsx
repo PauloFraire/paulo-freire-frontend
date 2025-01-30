@@ -38,7 +38,7 @@ const Header = () => {
       }
     };
     fetchLogo();
-    const intervalId = setInterval(fetchLogo, 5000); // Llamar a fetchLogo cada 5 segundos
+    const intervalId = setInterval(fetchLogo, 10000); // Llamar a fetchLogo cada 5 segundos
     return () => clearInterval(intervalId);
   }, []);
 
@@ -55,7 +55,7 @@ const Header = () => {
     };
 
     fetchTitle();
-    const intervalId = setInterval(fetchTitle, 5000); // Llamar a fetchTitle cada 5 segundos
+    const intervalId = setInterval(fetchTitle, 10000); // Llamar a fetchTitle cada 5 segundos
     return () => clearInterval(intervalId);
   }, []);
 
@@ -103,7 +103,7 @@ const Header = () => {
                 })}
               </div>
             </div>
-            |
+            
             {toggle && (
               <motion.div
                 initial={{ x: -500, opacity: 0 }}

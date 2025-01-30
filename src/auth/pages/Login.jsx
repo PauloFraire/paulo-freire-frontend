@@ -6,6 +6,7 @@ import Spinner from '../../components/Spinner';
 import { toast } from 'react-hot-toast';
 import clientAxios from '../../config/clientAxios';
 import ReCAPTCHA from 'react-google-recaptcha';
+import ErrorHandler from '../../components/ErrorHandler'; // Importa el ErrorHandler
 
 const Login = () => {
     const navigate = useNavigate();
@@ -16,6 +17,7 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [captchaValue, setCaptchaValue] = useState(null);
+    const [error, setError] = useState(null); // Estado para manejar errores
     const captchaRef = useRef(null); // Crea una referencia para el captcha
 
     const togglePassword = () => {
@@ -48,6 +50,7 @@ const Login = () => {
     
             if (response.status === 200) {
                 const userResponse = await clientAxios.get(`/user/email/${user.email}`);
+                // const userResponse = await clientAxios.get('/error500'); // Prueba para error
                 const userData = userResponse.data;
 
                 localStorage.setItem('token', JSON.stringify(response.data.user));
@@ -59,17 +62,11 @@ const Login = () => {
                 } else {
                     toast.error('Rol desconocido. Contacta al administrador.');
                 }
-            } else {
-                toast.error(response.data.message);
             }
-    
         } catch (error) {
+            setError(error); // Establece el error para que el ErrorHandler lo maneje
             console.log(error);
-            if (error.response) {
-                toast.error(error.response.data.message);
-            } else {
-                toast.error('Hubo un error');
-            }
+            toast.error(error.response.data);
         } finally {
             setLoading(false);
             setCaptchaValue(null); // Reinicia el valor del captcha
@@ -132,12 +129,6 @@ const Login = () => {
                     </div>
 
                     <div className="flex flex-row justify-between">
-                        {/* <div>
-                            <label htmlFor="remember">
-                                <input type="checkbox" id="remember" className="w-4 h-4 border-slate-200 focus:bg-blue-600" />
-                                Recordar contraseña
-                            </label>
-                        </div> */}
                         <div>
                             <Link to='/olvide-password' className="font-medium text-blue-600">Recuperar Contraseña?</Link>
                         </div>
@@ -150,9 +141,11 @@ const Login = () => {
                             </button> :
                             <Spinner />
                     }
-
                 </div>
             </form>
+
+            {/* Integra el ErrorHandler para manejar errores */}
+            <ErrorHandler error={error} />
         </div>
     );
 };

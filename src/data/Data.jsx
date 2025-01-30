@@ -111,8 +111,13 @@ export const navLinks = [
     },
     {
         id: 6,
-        link: "Análisis del contexto educativo contamporáneo",
+        link: "Análisis contexto educativo",
         path: "/contexto-educativo"
+    },
+    {
+        id: 7,
+        link: "Iniciar Sesión",
+        path: "/login"
     }
 ];
 

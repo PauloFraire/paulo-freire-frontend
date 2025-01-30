@@ -32,7 +32,7 @@ const ContextContemporaneo = () => {
             <div className="flex justify-center my-10">
                 <div className="p-6 rounded-lg bg-gradient-to-tr from-green-300 to-red-300 via-yellow-300 shadow-lg w-full max-w-4xl h-34">
                     <h1 className="text-black text-3xl font-bold">
-                        LA ESCUELA INFINITA
+                        LA JORNADA - VERACRUZ
                     </h1>
                     <br></br>
                     <p>
