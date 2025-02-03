@@ -1,22 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { logos } from "../../data/Data";
 import clientAxios from '../../config/clientAxios';
+import inscripciones2025 from "../../assets/img/inscripciones2025.jpeg";
 
 const Hero = () => {
-
   const [images, setImages] = useState([]);
-  const [currentImage, setCurrentImage] = useState(null); // Inicia sin imagen
+  const [currentImage, setCurrentImage] = useState(inscripciones2025); // Inicia con la imagen local
+  const [isFirstImage, setIsFirstImage] = useState(true); // Controla si se está mostrando la imagen local
 
-  // Fetch a las imágenes
   useEffect(() => {
     const getHero = async () => {
       try {
         const response = await clientAxios.get('/customsize');
-        const imagenes = response.data.map(item => item.slideImg); // Extraemos solo los URLs de las imágenes
+        const imagenes = response.data.map(item => item.slideImg);
         setImages(imagenes);
-        if (imagenes.length > 0) {
-          setCurrentImage(imagenes[0]); // Iniciar con la primera imagen
-        }
       } catch (error) {
         console.log(error);
       }
@@ -26,16 +23,17 @@ const Hero = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const index = images.indexOf(currentImage);
-      if (index === images.length - 1) {
-        setCurrentImage(images[0]);
+      if (isFirstImage && images.length > 0) {
+        setCurrentImage(images[0]); // Cambia a la primera imagen de la consulta
+        setIsFirstImage(false);
       } else {
-        setCurrentImage(images[index + 1]);
+        const index = images.indexOf(currentImage);
+        setCurrentImage(images[(index + 1) % images.length]);
       }
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [currentImage, images]);
+  }, [currentImage, images, isFirstImage]);
 
   return (
     <div className="w-full mx-auto home bg-gradient-to-t from-green-100 to-lime-100 py-16">
@@ -79,9 +77,7 @@ const Hero = () => {
           </div>
         </div>
         <div className="flex flex-1 basis-[20rem] justify-center items-center mt-2 animate-fade lg:mx-4 sm:mx-8">
-          {
-            currentImage && <img src={currentImage} alt="imagen hero" className='w-[800px] h-[500px] object-cover object-top shadow-sm rounded-sm' />
-          }
+          {currentImage && <img src={currentImage} alt="imagen hero" className='w-[800px] h-[500px] sm:w-[600px] sm:h-[400px] xs:w-[400px] xs:h-[300px] object-cover object-top shadow-sm rounded-sm' />}
         </div>
       </div>
     </div>
