@@ -4,32 +4,27 @@ import imgPromocion1 from '../../assets/img/promocion 1.jpeg';
 import imgPromocion2 from '../../assets/img/promocion 2.jpeg';
 import imgPromocion3 from '../../assets/img/promocion 3.jpeg';
 import videoInscripcionesAbiertas from '../../assets/img/Inscripciones-abiertas.mp4'
-
-
+import CongresoLaHabana2025 from '../../assets/img/CongresoLaHabana2025.png'
 
 const Inscripciones = () => {
-
-    //typewritter  text animation "¡Estudia tu posgrado con nosotros y únete a la familia CRESPF!"
-
     const text = "¡Estudia tu posgrado con nosotros y únete a la familia CRESPF!";
     const [index, setIndex] = React.useState(0);
 
-    // React.useEffect(() => {
-    //     const intervalId = setInterval(() => {
-    //         setIndex((prev) => (prev === text.length ? 0 : prev + 1));
-    //     }, 150);
-
-    //     return () => clearInterval(intervalId);
-
-    // }, []);
-
-
-
     return (
         <section className='max-w-[1300px] py-16 mx-auto my-20'>
+            {/* Imagen CongresoLaHabana2025 */}
+            <div className='flex justify-center mt-10 mb-20'>
+                <img 
+                    src={CongresoLaHabana2025} 
+                    alt="Congreso La Habana 2025" 
+                    className='w-full rounded-[20px]'
+                />
+            </div>
+
             <h4 className='bg-gradient-to-tr from-green-600 to-indigo-600 text-transparent bg-clip-text font-black text-center text-7xl'>
                 {text}
             </h4>
+            
             <div className='mt-20 grid md:grid-cols-2 shadow rounded-lg grid-cols-1'>
                 <div className='bg-gradient-to-br from-indigo-600 to-fuchsia-200 px-4 py-2 flex items-center flex-col justify-center'>
                     <p className='text-gray-200 font-bold text-4xl uppercase'>Beneficios:</p>
@@ -58,7 +53,6 @@ const Inscripciones = () => {
                             <HiOutlineCheckCircle className='text-green-500 h-6 w-6 font-bold' />
                             <span className='text-gray-600 font-semibold'>Formación ideal para aprender y enseñar a través de las tecnologías</span>
                         </li>
-
                     </ul>
                 </div>
                 <div className='flex justify-center items-center'>
@@ -89,11 +83,9 @@ const Inscripciones = () => {
                 <div className='flex justify-center items-center'>
                     <img src={imgPromocion3} alt="Imagen Promocion 3" />
                 </div>
-
             </div>
         </section>
-
     )
 }
 
-export default Inscripciones
+export default Inscripciones;
