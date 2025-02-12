@@ -121,7 +121,7 @@ const importedImages = [imagen1, imagen2, imagen3, imagen4, imagen5, imagen6, im
       <div className="w-full flex justify-center">
         <div className="mt-8 w-11/12">
         <h1 className="text-center mt-8 mb-3 font-bold text-6xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent animate-gradient-x">
-          !CONGRESO INTERNACIONAL DE PEDAGOGÍA 2025!
+          Congreso Internacional de Pedagogía 2025
         </h1>
           <Slider {...carouselSettings}>
             {importedImages.map((image, index) => (
