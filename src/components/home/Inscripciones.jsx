@@ -4,7 +4,6 @@ import imgPromocion1 from '../../assets/img/promocion 1.jpeg';
 import imgPromocion2 from '../../assets/img/promocion 2.jpeg';
 import imgPromocion3 from '../../assets/img/promocion 3.jpeg';
 import videoInscripcionesAbiertas from '../../assets/img/Inscripciones-abiertas.mp4'
-import CongresoLaHabana2025 from '../../assets/img/CongresoLaHabana2025.png'
 
 const Inscripciones = () => {
     const text = "¡Estudia tu posgrado con nosotros y únete a la familia CRESPF!";
@@ -12,14 +11,6 @@ const Inscripciones = () => {
 
     return (
         <section className='max-w-[1300px] py-16 mx-auto my-20'>
-            {/* Imagen CongresoLaHabana2025 */}
-            <div className='flex justify-center mt-10 mb-20'>
-                <img 
-                    src={CongresoLaHabana2025} 
-                    alt="Congreso La Habana 2025" 
-                    className='w-full rounded-[20px]'
-                />
-            </div>
 
             <h4 className='bg-gradient-to-tr from-green-600 to-indigo-600 text-transparent bg-clip-text font-black text-center text-7xl'>
                 {text}
