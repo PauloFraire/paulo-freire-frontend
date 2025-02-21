@@ -24,17 +24,6 @@ const Inscripciones = () => {
     }, 5000);
     return () => clearInterval(intervalId);
   }, []);
-  //const text = "¡Estudia tu posgrado con nosotros y únete a la familia CRESPF!";
-  //const [index, setIndex] = React.useState(0);
-
-  // React.useEffect(() => {
-  //     const intervalId = setInterval(() => {
-  //         setIndex((prev) => (prev === text.length ? 0 : prev + 1));
-  //     }, 150);
-
-  //     return () => clearInterval(intervalId);
-
-  // }, []);
 
   return (
     <section className="max-w-[1300px] py-16 mx-auto my-20">

@@ -36,17 +36,17 @@ import img18 from "../assets/img/img18.jpeg";
 import img23 from "../assets/img/img23.jpeg";
 
 
-import pdfFichaMaestria from "../assets/pdf/FICHA DE INSCRIPCION MAESTRÍA 2024.pdf";
+import pdfFichaMaestria from "../assets/pdf/FICHA DE INSCRIPCION MAESTRÍA OK.pdf";
 
-import pdfFichaDoctorado from "../assets/pdf/FICHA DE INSCRIPCION DOCTORADO 2024.pdf";
+import pdfFichaDoctorado from "../assets/pdf/FICHA DE INSCRIPCION DOCTORADO_OK.pdf";
 
 import pdfFichaMaestriaAmbiental from "../assets/pdf/FICHA DE INSCRIPCION MAESTRÍA EDUCACIÓN AMBIENTAL.pdf";
 import pdfCartaMaestriaAmbiental from "../assets/pdf/CARTA COMPROMISO MAESTRÍA EDUCACIÓN AMBIENTAL.pdf";
 import pdfPlanEstudios from "../assets/pdf/PLAN DE ESTUDIOS, INSCRIPCIONES Y REQUISITOS.pdf";
 
 import pdfCartaCompromisoD from "../assets/pdf/CARTA COMPROMISO DOCTORADO_OK.pdf";
-import pdfCartaCompromisoMEA from "../assets/pdf/CARTA COMPROMISO MAESTRÍA EDUCACIÓN AMBIENTAL.pdf";
-import pdfCartaCompromisoMT from "../assets/pdf/CARTA COMPROMISO MAESTRÍA SEP2024-MARZO2025.pdf";
+// import pdfCartaCompromisoMEA from "../assets/pdf/CARTA COMPROMISO MAESTRÍA EDUCACIÓN AMBIENTAL.pdf";
+import pdfCartaCompromisoMT from "../assets/pdf/CARTA COMPROMISO MAESTRÍA OK.pdf";
 
 export const logos = [logo1, logo2, logo4, logo5, logo6, logosep, logousi, logosev];
 
@@ -111,14 +111,14 @@ export const navLinks = [
     },
     {
         id: 6,
-        link: "Análisis contexto educativo",
+        link: "Análisis educativo contamporáneo",
         path: "/contexto-educativo"
-    },
+    },    
     {
         id: 7,
         link: "Iniciar Sesión",
         path: "/login"
-    }
+    },
 ];
 
 //autoridadeS
