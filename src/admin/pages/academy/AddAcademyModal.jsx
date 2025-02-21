@@ -10,16 +10,13 @@ import useAuth from '../../../hooks/useAuth';
 const AddAcademyModal = ({ open, setOpen }) => {
 
     const navigate = useNavigate();
-
-    const { token } = useAuth();
+    const { token, user } = useAuth(); // Obtener usuario autenticado
 
     const [academyActivity, setAcademyActivity] = useState({
         title: '',
         description: ''
     });
     const [loading, setLoading] = useState(false);
-
-    console.log(academyActivity)
 
     const handleChangeState = (e) => {
         setAcademyActivity({ ...academyActivity, [e.target.name]: e.target.value });
@@ -37,39 +34,41 @@ const AddAcademyModal = ({ open, setOpen }) => {
         }
 
         if (academyActivity.title.trim() === '' || academyActivity.description.trim() === '') {
-            toast.error('No puede haber campos vacios');
+            toast.error('No puede haber campos vacíos');
             setLoading(false);
             return;
         }
+
         try {
             const response = await clientAxios.post(`/academy-activities`, academyActivity, config);
-            console.log(response);
-            setLoading(false);
-            if (response.status === 200) {
-                toast.success('Agregado Correctamente');
+            
+            if (response.status === 200 || response.status === 201) {
+                toast.success('Actividad agregada correctamente');
                 setAcademyActivity({
                     title: '',
                     description: ''
                 });
                 setTimeout(() => {
-                    setOpen(!open);
-                    navigate('/admin/home')
+                    setOpen(false);
+                    window.location.reload();
                 }, 2000);
             }
         } catch (error) {
+            console.error("Error al crear la actividad académica:", error.response?.data || error.message);
+            toast.error(error.response?.data?.msg || 'Ocurrió un error');
+        } finally {
             setLoading(false);
-            console.log(error);
         }
     }
 
     return (
-        <div className={`${open ? '' : 'hidden'} fixed top-0 left-0 z-30 w-full h-full bg-black  bg-opacity-85`}>
-            <div className={`${open ? '' : 'hidden'} fixed inset-0 m-4  flex items-center z-30 justify-center `}>
-                <div className='relative bg-white w-12/12 md:w-3/6 shadow-lg flex flex-col items-center space-y-4  overflow-y-auto px-4 py-4 md:px-8 '>
-                    <div className='flex items-center justify-between w-full pt-4' action="">
-                        <h3 className='font-bold'>Agregar una Actividad Academica</h3>
+        <div className={`${open ? '' : 'hidden'} fixed top-0 left-0 z-30 w-full h-full bg-black bg-opacity-85`}>
+            <div className="fixed inset-0 m-4 flex items-center z-30 justify-center">
+                <div className='relative bg-white w-12/12 md:w-3/6 shadow-lg flex flex-col items-center space-y-4 overflow-y-auto px-4 py-4 md:px-8'>
+                    <div className='flex items-center justify-between w-full pt-4'>
+                        <h3 className='font-bold'>Agregar una Actividad Académica</h3>
                         <div
-                            onClick={() => setOpen(!open)}
+                            onClick={() => setOpen(false)}
                             className='cursor-pointer text-gray-100 py-2 px-2 rounded-full'
                         >
                             <IoMdCloseCircle className='w-8 h-8 text-red-500 cursor-pointer hover:scale-110 transition-all duration-300 ease-in-out' />
@@ -77,40 +76,33 @@ const AddAcademyModal = ({ open, setOpen }) => {
                     </div>
                     <form className='w-full bg-white' onSubmit={handleSubmit}>
                         <div className='flex flex-col space-y-4'>
-                            <div >
-                                <label htmlFor="title" className="font-bold text-slate-700 mb-2">
-                                    Titulo:
-                                </label>
+                            <div>
+                                <label htmlFor="title" className="font-bold text-slate-700 mb-2">Título:</label>
                                 <input
                                     type="text"
                                     name="title"
                                     id="title"
                                     className='input-auth'
-                                    placeholder="EJ. Diplomado en Herramientas"
+                                    placeholder="Ej. Diplomado en Herramientas"
                                     value={academyActivity.title}
                                     onChange={handleChangeState}
                                 />
                             </div>
-                            <div >
-                                <label htmlFor="description" className="font-bold text-slate-700 mb-2">
-                                    Descripción:
-                                </label>
+                            <div>
+                                <label htmlFor="description" className="font-bold text-slate-700 mb-2">Descripción:</label>
                                 <textarea
-                                    type="text"
                                     name="description"
                                     id="description"
                                     className='input-auth'
-                                    placeholder="Ej. Imagenes de la actividad"
+                                    placeholder="Ej. Imágenes de la actividad"
                                     value={academyActivity.description}
                                     onChange={handleChangeState}
                                 />
                             </div>
                         </div>
-
-
                         {
                             !loading ?
-                                <button className="btn-action">
+                                <button type="submit" className="btn-action">
                                     <FaSave className="w-6 h-6" />
                                     <span>Agregar</span>
                                 </button> :
@@ -118,10 +110,9 @@ const AddAcademyModal = ({ open, setOpen }) => {
                         }
                     </form>
                 </div>
-
             </div>
         </div>
     )
 }
 
-export default AddAcademyModal
+export default AddAcademyModal;

@@ -37,12 +37,6 @@ const AcademyActivitiesAdmin = () => {
         getAcademyActivities();
     }, [])
 
-    const handleAddActivity = async (e) => {
-        e.preventDefault();
-    }
-
-
-
     return (
         <>
             <section className="container mx-auto max-w-full ">
@@ -64,8 +58,6 @@ const AcademyActivitiesAdmin = () => {
                     open={open}
                     setOpen={setOpen}
                 />
-
-
 
                 {
                     academyActivities.length > 0 ? academyActivities.map((activity, index) => (
