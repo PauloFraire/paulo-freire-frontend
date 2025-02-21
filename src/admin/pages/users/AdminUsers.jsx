@@ -26,11 +26,11 @@ const AdminUsers = () => {
     const roleDefault = (role) => {
         switch (role) {
             case 1:
-                return 'Editor';
-            case 2:
-                return 'Bibloteca';
-            default:
                 return 'Administrador';
+            case 2:
+                return 'Editor';
+            default:
+                return 'Usuario basico';
         }
     }
 
