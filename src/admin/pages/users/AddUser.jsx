@@ -118,10 +118,10 @@ const AddUser = () => {
             if (response.status === 200) {
                 setLoading(false);
                 toast.success(userId ? 'Usuario actualizado correctamente' : 'Usuario agregado correctamente');
-
-                setTimeout(() => {
-                    navigate('/admin/users');
-                }, 1500);
+                navigate('/admin/users');
+                // setTimeout(() => {
+                //     navigate('/admin/users');
+                // }, 1500);
             }
 
         } catch (error) {

@@ -4,21 +4,33 @@ import { Link } from 'react-router-dom';
 import { TiEdit } from 'react-icons/ti';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { IoIosAddCircle } from 'react-icons/io';
-
+import { toast } from 'react-hot-toast';
+import DeleteConfirmationModal from '../../components/DeleteConfirmationModal';
 
 const AdminUsers = () => {
-
     const [users, setUsers] = useState([]);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [userToDelete, setUserToDelete] = useState(null);
 
-    const handleDelete = async (id) => {
+    const handleDeleteClick = (userId) => {
+        setUserToDelete(userId);
+        setIsDeleteModalOpen(true);
+    };
+
+    const handleDelete = async () => {
         try {
-            await clientAxios.delete(`/user/${id}`);
-            const updatedUsers = users.filter(user => user._id !== id);
+            await clientAxios.delete(`/user/${userToDelete}`);
+            const updatedUsers = users.filter(user => user._id !== userToDelete);
             setUsers(updatedUsers);
+            toast.success('Usuario eliminado correctamente');
         } catch (error) {
             console.log(error);
+            toast.error('Error al eliminar el usuario');
+        } finally {
+            setIsDeleteModalOpen(false);
+            setUserToDelete(null);
         }
-    }
+    };
 
     useEffect(() => {
         const getUsers = async () => {
@@ -27,11 +39,11 @@ const AdminUsers = () => {
                 setUsers(response.data);
             } catch (error) {
                 console.log(error);
+                toast.error('Error al cargar los usuarios');
             }
         }
         getUsers();
     }, [])
-
 
     const roleDefault = (role) => {
         switch (parseInt(role)) {
@@ -49,8 +61,6 @@ const AdminUsers = () => {
     return (
         <section className="container mx-auto bg-slate-50">
             <h1 className="text-center text-3xl font-bold text-slate-600 mt-10">Administra Los Usuarios</h1>
-
-            {/* Link agregar nueva imagen */}
 
             <p className="text-center  my-4 mx-2">
                 Aqui podras administrar los usuarios de la pagina web
@@ -78,7 +88,6 @@ const AdminUsers = () => {
                             </tr>
                         </thead>
                         <tbody>
-
                             {
                                 users.length === 0 ? (
                                     <tr>
@@ -107,7 +116,7 @@ const AdminUsers = () => {
                                                         <TiEdit className="text-2xl text-blue-600" />
                                                     </Link>
                                                     <button
-                                                        onClick={() => handleDelete(user._id)}
+                                                        onClick={() => handleDeleteClick(user._id)}
                                                         className="hover:scale-105 transition-all ease-in-out duration-300"
                                                     >
                                                         <RiDeleteBin6Line className="text-2xl text-red-600" />
@@ -119,12 +128,14 @@ const AdminUsers = () => {
                             }
                         </tbody>
                     </table>
-                    <div className="text-sm text-gray-600 mt-2">
-
-                    </div>
                 </div>
             </div>
 
+            <DeleteConfirmationModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={handleDelete}
+            />
         </section>
     )
 }
