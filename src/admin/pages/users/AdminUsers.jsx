@@ -24,13 +24,15 @@ const AdminUsers = () => {
 
 
     const roleDefault = (role) => {
-        switch (role) {
+        switch (parseInt(role)) {
+            case 0:
+                return 'Estudiante';
             case 1:
                 return 'Administrador';
             case 2:
                 return 'Editor';
             default:
-                return 'Usuario basico';
+                return 'Usuario básico';
         }
     }
 

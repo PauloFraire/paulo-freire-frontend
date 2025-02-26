@@ -122,7 +122,6 @@ const AddUser = () => {
                                 />
                             </div>
                             <div className='w-full'>
-                                {/* select con el rol de editor=1 o bibloteca=2 */}
                                 <label htmlFor="rol" className="font-semibold text-slate-700 pb-2">
                                     Rol:
                                 </label>
@@ -134,8 +133,9 @@ const AddUser = () => {
                                     onChange={e => setUser({ ...user, role: e.target.value })}
                                 >
                                     <option value="">--Seleccione un Rol</option>
+                                    <option value="0">Estudiante</option>
+                                    <option value="1">Administrador</option>
                                     <option value="2">Editor</option>
-                                    <option value="3">Biblioteca</option>
                                 </select>
                             </div>
                         </div>
