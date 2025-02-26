@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import clientAxios from '../../../config/clientAxios';
 import Spinner from '../../../components/Spinner';
 import { toast } from 'react-hot-toast'
 import { IoIosEyeOff } from 'react-icons/io';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const AddUser = () => {
 
@@ -23,38 +23,70 @@ const AddUser = () => {
 
     const togglePassword = () => setShowPassword(!showPassword);
 
-    const addUser = async (e) => {
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const userId = searchParams.get('id');
+
+    useEffect(() => {
+        if (userId) {
+            const getUser = async () => {
+                try {
+                    const response = await clientAxios.get(`/user/${userId}`);
+                    const userData = response.data;
+                    setUser({
+                        name: userData.name,
+                        lastName: userData.lastName,
+                        email: userData.email,
+                        password: '',
+                        role: userData.role
+                    });
+                } catch (error) {
+                    console.log(error);
+                    toast.error('Error al cargar los datos del usuario');
+                }
+            };
+            getUser();
+        }
+    }, [userId]);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
 
         try {
 
-            //validar campos
+            // Validar campos requeridos
+            const requiredFields = userId 
+                ? [user.name, user.lastName, user.email, user.role]
+                : [user.name, user.lastName, user.email, user.password, user.role, password2];
 
-            if (user.name.trim() === '' || user.lastName.trim() === '' || user.email.trim() === '' || user.password.trim() === '' || user.role.trim() === '' || password2.trim() === '') {
+            if (requiredFields.some(field => !field?.trim())) {
                 toast.error('Todos los campos son obligatorios');
                 setLoading(false);
                 return;
             }
 
-            if (user.password !== password2) {
-                toast.error('Las contraseñas no coinciden');
-                setLoading(false);
-                return;
+            if (!userId) {
+                if (user.password !== password2) {
+                    toast.error('Las contraseñas no coinciden');
+                    setLoading(false);
+                    return;
+                }
+
+                if (user.password.length < 8) {
+                    toast.error('La contraseña debe tener al menos 8 caracteres');
+                    setLoading(false);
+                    return;
+                }
             }
 
-            //contraseña minimo 6 caracteres
-            if (user.password.length < 6) {
-                toast.error('La contraseña debe tener al menos 6 caracteres');
-                setLoading(false);
-                return;
-            }
-
-            const response = await clientAxios.post('/user', user);
+            const response = userId
+                ? await clientAxios.put(`/user/${userId}`, user)
+                : await clientAxios.post('/user', user);
 
             if (response.status === 200) {
                 setLoading(false);
-                toast.success('Usuario agregado correctamente');
+                toast.success(userId ? 'Usuario actualizado correctamente' : 'Usuario agregado correctamente');
 
                 setTimeout(() => {
                     navigate('/admin/users');
@@ -71,10 +103,12 @@ const AddUser = () => {
     return (
         <section className="container mx-auto">
 
-            <h1 className="text-center text-3xl font-bold text-slate-600 mt-10">Agrega una Usuario</h1>
+            <h1 className="text-center text-3xl font-bold text-slate-600 mt-10">
+                {userId ? 'Editar Usuario' : 'Agregar Usuario'}
+            </h1>
 
             <div className=' max-w-5xl mx-auto p-4 mt-10 shadow-lg'>
-                <form className='flex flex-col gap-4' onSubmit={addUser}>
+                <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
                     <div className='flex flex-col gap-4 justify-between'>
                         <div className='flex gap-2'>
                             <div className='w-full'>
@@ -190,7 +224,7 @@ const AddUser = () => {
                                     type="submit"
                                     className="btn-action"
                                 >
-                                    Agregar Usuario
+                                    {userId ? 'Actualizar Usuario' : 'Agregar Usuario'}
                                 </button>
                             )
                         }

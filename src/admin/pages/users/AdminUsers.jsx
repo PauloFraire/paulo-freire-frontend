@@ -10,6 +10,16 @@ const AdminUsers = () => {
 
     const [users, setUsers] = useState([]);
 
+    const handleDelete = async (id) => {
+        try {
+            await clientAxios.delete(`/user/${id}`);
+            const updatedUsers = users.filter(user => user._id !== id);
+            setUsers(updatedUsers);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         const getUsers = async () => {
             try {
@@ -93,7 +103,7 @@ const AdminUsers = () => {
                                             </td>
                                             <td className="px-2 py-2 border">
                                                 <div className="flex items-center justify-center gap-2">
-                                                    <Link to={`/admin/edit-news/${user._id}`} className="">
+                                                    <Link to={`/admin/add-user?id=${user._id}`} className="">
                                                         <TiEdit className="text-2xl text-blue-600" />
                                                     </Link>
                                                     <button
