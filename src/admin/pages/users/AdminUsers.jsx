@@ -5,30 +5,30 @@ import { TiEdit } from 'react-icons/ti';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { IoIosAddCircle } from 'react-icons/io';
 import { toast } from 'react-hot-toast';
-import DeleteConfirmationModal from '../../components/DeleteConfirmationModal';
+import Swal from 'sweetalert2';
 
 const AdminUsers = () => {
     const [users, setUsers] = useState([]);
-    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-    const [userToDelete, setUserToDelete] = useState(null);
+    const handleDeleteClick = async (userId) => {
+        const result = await Swal.fire({
+            title: '¿Estas seguro?',
+            text: "Una vez eliminado, no podrás recuperar el usuario",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, Eliminar'
+        });
 
-    const handleDeleteClick = (userId) => {
-        setUserToDelete(userId);
-        setIsDeleteModalOpen(true);
-    };
-
-    const handleDelete = async () => {
-        try {
-            await clientAxios.delete(`/user/${userToDelete}`);
-            const updatedUsers = users.filter(user => user._id !== userToDelete);
-            setUsers(updatedUsers);
-            toast.success('Usuario eliminado correctamente');
-        } catch (error) {
-            console.log(error);
-            toast.error('Error al eliminar el usuario');
-        } finally {
-            setIsDeleteModalOpen(false);
-            setUserToDelete(null);
+        if (result.isConfirmed) {
+            try {
+                await clientAxios.delete(`/user/${userId}`);
+                setUsers(users.filter(user => user._id !== userId));
+                toast.success('Usuario eliminado correctamente');
+            } catch (error) {
+                console.log(error);
+                toast.error('Error al eliminar el usuario');
+            }
         }
     };
 
@@ -131,11 +131,7 @@ const AdminUsers = () => {
                 </div>
             </div>
 
-            <DeleteConfirmationModal
-                isOpen={isDeleteModalOpen}
-                onClose={() => setIsDeleteModalOpen(false)}
-                onConfirm={handleDelete}
-            />
+
         </section>
     )
 }

@@ -87,9 +87,7 @@ const AddNews = () => {
 
             if (response.status === 200) {
                 toast.success('Noticia Agregada');
-                setTimeout(() => {
-                    naviagte('/admin/news');
-                }, 2000);
+                naviagte('/admin/news');
             }
 
         } catch (error) {

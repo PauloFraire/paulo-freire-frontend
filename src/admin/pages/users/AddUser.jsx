@@ -75,14 +75,32 @@ const AddUser = () => {
             }
 
             if (!userId) {
-                if (user.password !== password2) {
-                    toast.error('Las contraseñas no coinciden');
+                // Check if email already exists
+                try {
+                    const emailCheck = await clientAxios.get(`/user/email/${user.email}`);
+                    if (emailCheck.data) {
+                        toast.error('Ya existe un usuario con este correo electrónico');
+                        setLoading(false);
+                        return;
+                    }
+                } catch (error) {
+                    if (error.response && error.response.status !== 404) {
+                        toast.error('Error al verificar el correo electrónico');
+                        setLoading(false);
+                        return;
+                    }
+                }
+
+                // Password validation
+                const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$/;
+                if (!passwordRegex.test(user.password)) {
+                    toast.error('La contraseña debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial');
                     setLoading(false);
                     return;
                 }
 
-                if (user.password.length < 8) {
-                    toast.error('La contraseña debe tener al menos 8 caracteres');
+                if (user.password !== password2) {
+                    toast.error('Las contraseñas no coinciden');
                     setLoading(false);
                     return;
                 }
@@ -119,9 +137,6 @@ const AddUser = () => {
                 setLoading(false);
                 toast.success(userId ? 'Usuario actualizado correctamente' : 'Usuario agregado correctamente');
                 navigate('/admin/users');
-                // setTimeout(() => {
-                //     navigate('/admin/users');
-                // }, 1500);
             }
 
         } catch (error) {
