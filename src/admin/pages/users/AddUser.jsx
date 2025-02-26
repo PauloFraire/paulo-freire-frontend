@@ -138,6 +138,18 @@ const AddUser = () => {
                 {userId ? 'Editar Usuario' : 'Agregar Usuario'}
             </h1>
 
+            <div className="flex justify-center w-full">
+                <div className="mb-4 flex w-1/4 justify-center">
+                    <button
+                        type="button"
+                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold rounded mt-5 w-full h-full"
+                        onClick={() => navigate('/admin/users')}
+                    >
+                        Volver
+                    </button>
+                </div>
+            </div>
+
             <div className=' max-w-5xl mx-auto p-4 mt-10 shadow-lg'>
                 <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
                     <div className='flex flex-col gap-4 justify-between'>

@@ -18,7 +18,7 @@ const AllImagesCustomsize = ({ loading }) => {
     useEffect(() => {
         const getImages = async () => {
             try {
-                const response = await clientAxios.get(`/customsize`);
+                const response = await clientAxios.get(`/customsize`, config);
                 console.log(response);
                 setImages(response.data);
             } catch (error) {
@@ -26,7 +26,7 @@ const AllImagesCustomsize = ({ loading }) => {
             }
         }
         getImages();
-    }, []);
+    }, [token]);
 
     const deleteImageReq = async (id) => {
         try {
