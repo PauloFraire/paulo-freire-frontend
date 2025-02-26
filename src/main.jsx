@@ -26,7 +26,7 @@ import Contacto from "./components/Contacto.jsx";
 
 // Admin
 import PrivateRoute from "./pages/PrivateRoute.jsx";
-import DashboardLayout from "./admin/DashboardLayout.jsx";
+import DashboardLayout from "./admin/pages/DashboardLayout.jsx";
 import Dashboard from "./admin/pages/Dashboard.jsx";
 import AcademyActivitiesAdmin from "./admin/pages/academy/AcademyActivitiesAdmin.jsx";
 import AdminNews from "./admin/pages/news/AdminNews.jsx";
