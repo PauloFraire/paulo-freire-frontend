@@ -64,8 +64,7 @@ const AdminUsers = () => {
                                 <th className="px-2 py-2 border text-gray-600">Nombre</th>
                                 <th scope="col" className="px-2 py-2 border text-gray-600">Correo</th>
                                 <th className="px-2 py-2 border text-gray-600">Rol</th>
-                                {/* <th className="px-2 py-2 border text-gray-600">Acciones</th>
-                                <th scope="col" className="px-2 py-2 border text-gray-600">Ver</th> */}
+                                <th className="px-2 py-2 border text-gray-600">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -92,7 +91,7 @@ const AdminUsers = () => {
                                                     roleDefault(user.role)
                                                 }
                                             </td>
-                                            {/* <td className="px-2 py-2 border">
+                                            <td className="px-2 py-2 border">
                                                 <div className="flex items-center justify-center gap-2">
                                                     <Link to={`/admin/edit-news/${user._id}`} className="">
                                                         <TiEdit className="text-2xl text-blue-600" />
@@ -105,14 +104,8 @@ const AdminUsers = () => {
                                                     </button>
                                                 </div>
                                             </td>
-                                            <td className="px-2 py-2 border text-center">
-                                                <Link to={`/new-item/${user._id}`} className="btn-action p-2">
-                                                    Ver
-                                                </Link>
-                                            </td> */}
                                         </tr>
                                     )))
-
                             }
                         </tbody>
                     </table>
