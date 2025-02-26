@@ -7,14 +7,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 const AddUser = () => {
 
-    const [user, setUser] = useState({
-        name: '',
-        lastName: '',
-        email: '',
-        password: '',
-        role: ''
-    });
-
+    const [user, setUser] = useState({});
+    const [originalUser, setOriginalUser] = useState({});
     const navigate = useNavigate();
 
     const [password2, setPassword2] = useState('');
@@ -33,13 +27,15 @@ const AddUser = () => {
                 try {
                     const response = await clientAxios.get(`/user/${userId}`);
                     const userData = response.data;
-                    setUser({
+                    const userState = {
                         name: userData.name,
                         lastName: userData.lastName,
                         email: userData.email,
                         password: '',
                         role: userData.role
-                    });
+                    };
+                    setUser(userState);
+                    setOriginalUser(userState);
                 } catch (error) {
                     console.log(error);
                     toast.error('Error al cargar los datos del usuario');
@@ -54,14 +50,26 @@ const AddUser = () => {
         setLoading(true);
 
         try {
-
             // Validar campos requeridos
             const requiredFields = userId 
-                ? [user.name, user.lastName, user.email, user.role]
-                : [user.name, user.lastName, user.email, user.password, user.role, password2];
+                ? ['name', 'lastName', 'email', 'role']
+                : ['name', 'lastName', 'email', 'password', 'role'];
 
-            if (requiredFields.some(field => !field?.trim())) {
+            const missingFields = requiredFields.filter(field => {
+                const value = user[field];
+                if (value === undefined || value === null || value === '') return true;
+                if (typeof value === 'string') return !value.trim();
+                return false;
+            });
+
+            if (missingFields.length > 0) {
                 toast.error('Todos los campos son obligatorios');
+                setLoading(false);
+                return;
+            }
+
+            if (!userId && !password2) {
+                toast.error('Debe confirmar la contraseña');
                 setLoading(false);
                 return;
             }
@@ -80,9 +88,32 @@ const AddUser = () => {
                 }
             }
 
-            const response = userId
-                ? await clientAxios.put(`/user/${userId}`, user)
-                : await clientAxios.post('/user', user);
+            let response;
+            if (userId) {
+                // Get only modified fields for update
+                const modifiedFields = {};
+                Object.keys(user).forEach(key => {
+                    if (user[key] !== originalUser[key] && user[key] !== '') {
+                        modifiedFields[key] = user[key];
+                    }
+                });
+                
+                // Ensure role is sent as a number
+                if ('role' in modifiedFields) {
+                    modifiedFields.role = parseInt(modifiedFields.role, 10);
+                }
+
+                // Only send request if there are changes
+                if (Object.keys(modifiedFields).length > 0) {
+                    response = await clientAxios.put(`/user/${userId}`, modifiedFields);
+                } else {
+                    toast.info('No hay cambios para guardar');
+                    setLoading(false);
+                    return;
+                }
+            } else {
+                response = await clientAxios.post('/user', user);
+            }
 
             if (response.status === 200) {
                 setLoading(false);
