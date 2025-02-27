@@ -18,7 +18,7 @@ import CallsEducational from "./pages/CallsEducational.jsx";
 import Bibloteca from "./pages/Bibloteca.jsx";
 import Login from "./auth/pages/Login.jsx";
 import Registro from "./auth/pages/Registro.jsx";
-import Recuperar from './auth/pages/Recuperar.jsx';
+import Recuperar from "./auth/pages/Recuperar.jsx";
 import NewItemPage from "./admin/pages/news/NewItemPage.jsx";
 import HistoryDetail from "./pages/HistoryDetail.jsx";
 import Acercade from "./components/Acercade.jsx";
@@ -37,6 +37,7 @@ import AddUser from "./admin/pages/users/AddUser.jsx";
 import About from "./admin/pages/about/About.jsx";
 import Terminos from "./admin/pages/about/Terminos.tsx";
 import Deslinde from "./admin/pages/about/Deslinde.tsx";
+import OfertaEducativa from "./admin/pages/ofertaseducativas/OfertaEdtucativa.jsx";
 
 // Configuración de la empresa
 import Empresa from "./admin/pages/Empresa/Configempresa.jsx";
@@ -50,9 +51,9 @@ import UserProfile from "./user/pages/UserProfile.jsx";
 import Politicas from "./admin/pages/about/Politicas.tsx";
 
 // ErrorPage
-import ErrorPage404 from "./pages/error/ERROR404page.jsx";  // Página para errores 404
-import ErrorPage400 from "./pages/error/ERROR400page.jsx";  // Página para errores 400
-import ErrorPage500 from "./pages/error/ERROR500page.jsx";  // Página para errores 500
+import ErrorPage404 from "./pages/error/ERROR404page.jsx"; // Página para errores 404
+import ErrorPage400 from "./pages/error/ERROR400page.jsx"; // Página para errores 400
+import ErrorPage500 from "./pages/error/ERROR500page.jsx"; // Página para errores 500
 
 const router = createBrowserRouter([
   {
@@ -95,7 +96,10 @@ const router = createBrowserRouter([
     errorElement: <ErrorHandler />, // Manejo de errores para rutas de admin
     children: [
       { path: "/admin/home", element: <Dashboard /> },
-      { path: "/admin/academy-activities", element: <AcademyActivitiesAdmin /> },
+      {
+        path: "/admin/academy-activities",
+        element: <AcademyActivitiesAdmin />,
+      },
       { path: "/admin/news", element: <AdminNews /> },
       { path: "/admin/add-news", element: <AddNews /> },
       { path: "/admin/edit-news/:id", element: <EditNews /> },
@@ -106,6 +110,8 @@ const router = createBrowserRouter([
       { path: "/admin/about/politicas", element: <Politicas /> },
       { path: "/admin/about/terminos", element: <Terminos /> },
       { path: "/admin/configempresa", element: <Empresa /> },
+      { path: "/admin/ofertaeducativa", element: <OfertaEducativa /> },
+
       { path: "*", element: <ErrorPage404 /> }, // Ruta explícita para errores 404
     ],
   },
@@ -128,7 +134,9 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <ErrorProvider> {/* Envuelve la aplicación con el ErrorProvider */}
+    <ErrorProvider>
+      {" "}
+      {/* Envuelve la aplicación con el ErrorProvider */}
       <RouterProvider router={router} />
     </ErrorProvider>
   </React.StrictMode>

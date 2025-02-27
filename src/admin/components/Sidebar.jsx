@@ -28,10 +28,13 @@ const adminNavItems = [
     label: "Usuarios",
   },
   {
-    to: "/admin/admin-",
+    //-----------------------------------------------------------------------------------------------------
+    //to: "/admin/admin-",
+    to: "/admin/ofertaeducativa",
     icon: <SiInstructure className="text-2xl" />,
     label: "Oferta Educativa",
   },
+
   {
     to: "/admin/about",
     icon: <FaBook className="text-2xl" />,
@@ -68,20 +71,28 @@ const SideBar = () => {
       <div className="flex gap-x-4 items-center">
         <div
           onClick={() => setOpen(!open)}
-          className={`cursor-pointer h-6 w-6 duration-500 ${open && "rotate-[360deg]"}`}
+          className={`cursor-pointer h-6 w-6 duration-500 ${
+            open && "rotate-[360deg]"
+          }`}
         >
           <TiThMenuOutline className="h-6 w-6" />
         </div>
         <h1
           onClick={() => setOpen(!open)}
-          className={`text-slate-700 cursor-pointer font-bold origin-left duration-200 ${!open && "scale-0"}`}
+          className={`text-slate-700 cursor-pointer font-bold origin-left duration-200 ${
+            !open && "scale-0"
+          }`}
         >
           Administrador
         </h1>
       </div>
 
       <ul className="pt-6">
-        <p className={`text-gray-600 ${!open && "hidden"} text-sm text-center mb-2`}>
+        <p
+          className={`text-gray-600 ${
+            !open && "hidden"
+          } text-sm text-center mb-2`}
+        >
           Menu
         </p>
         {adminNavItems.map((item, index) => (
@@ -97,7 +108,11 @@ const SideBar = () => {
                   to={item.to}
                 >
                   {item.icon}
-                  <span className={`${!open ? "hidden" : "block"} duration-200 flex-1`}>
+                  <span
+                    className={`${
+                      !open ? "hidden" : "block"
+                    } duration-200 flex-1`}
+                  >
                     {item.label}
                   </span>
                   {open && (
@@ -109,7 +124,9 @@ const SideBar = () => {
                       className="p-2 focus:outline-none"
                     >
                       <FaAngleDoubleDown
-                        className={`text-2xl transition-transform ${aboutOpen ? "rotate-180" : ""}`}
+                        className={`text-2xl transition-transform ${
+                          aboutOpen ? "rotate-180" : ""
+                        }`}
                       />
                     </button>
                   )}
@@ -144,7 +161,9 @@ const SideBar = () => {
                       }
                       to={subItem.to}
                     >
-                      <span className={`${!open ? "hidden" : "block"} duration-200`}>
+                      <span
+                        className={`${!open ? "hidden" : "block"} duration-200`}
+                      >
                         {subItem.label}
                       </span>
                     </NavLink>
