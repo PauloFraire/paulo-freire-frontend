@@ -213,7 +213,7 @@ export default function ContextoContemporaneoAdmin() {
           />
         </div>
 
-        <div>
+        <div className="bg-gray-300 p-4 rounded-lg shadow-lg">
           <label className="block mb-2 text-xl font-medium text-gray-700">Enlaces Secundarios:</label>
           {formData.secondaryLinks.map((link, index) => (
             <div key={index} className="flex gap-2 mb-2">
