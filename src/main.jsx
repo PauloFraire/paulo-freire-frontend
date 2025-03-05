@@ -37,6 +37,7 @@ import AddUser from "./admin/pages/users/AddUser.jsx";
 import About from "./admin/pages/about/About.jsx";
 import Terminos from "./admin/pages/about/Terminos.tsx";
 import Deslinde from "./admin/pages/about/Deslinde.tsx";
+import ContextContemporaneoAdmin from "./admin/pages/contextoContemporaneo/ContextoContemporaneoAdmin.jsx";
 
 // Configuración de la empresa
 import Empresa from "./admin/pages/Empresa/Configempresa.jsx";
@@ -73,7 +74,7 @@ const router = createBrowserRouter([
       { path: "/login", element: <Login /> },
       { path: "/registro", element: <Registro /> },
       { path: "/new-item/:id", element: <NewItemPage /> },
-      { path: "/contexto-educativo", element: <ContextContemporaneo /> },
+      { path: "/contexto-contemporaneo", element: <ContextContemporaneo /> },
       { path: "/historia", element: <HistoryDetail /> },
       { path: "/olvide-password", element: <Recuperar /> },
       { path: "/acercade", element: <Acercade /> },
@@ -106,6 +107,7 @@ const router = createBrowserRouter([
       { path: "/admin/about/politicas", element: <Politicas /> },
       { path: "/admin/about/terminos", element: <Terminos /> },
       { path: "/admin/configempresa", element: <Empresa /> },
+      { path: "/admin/contexto-contemporaneo-admin", element: <ContextContemporaneoAdmin /> },
       { path: "*", element: <ErrorPage404 /> }, // Ruta explícita para errores 404
     ],
   },

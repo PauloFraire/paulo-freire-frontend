@@ -4,6 +4,7 @@ import { FaNewspaper, FaAngleDoubleDown, FaCog, FaBook } from "react-icons/fa";
 import { TiThMenuOutline } from "react-icons/ti";
 import { BiHomeAlt, BiSelectMultiple } from "react-icons/bi";
 import { SiGoogleclassroom, SiInstructure } from "react-icons/si";
+import { GiThink } from "react-icons/gi";
 import { TbLogin } from "react-icons/tb";
 
 const adminNavItems = [
@@ -21,6 +22,11 @@ const adminNavItems = [
     to: "/admin/academy-activities",
     icon: <BiSelectMultiple className="text-2xl" />,
     label: "Actividades Académicas",
+  },
+  {
+    to: "/admin/contexto-contemporaneo-admin",
+    icon: <GiThink className="text-2xl" />,
+    label: "Contexto Contemporáneo",
   },
   {
     to: "/admin/users",
