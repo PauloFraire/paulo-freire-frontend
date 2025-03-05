@@ -1,20 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import clientAxios from '../../../config/clientAxios';
 import Spinner from '../../../components/Spinner';
 import { toast } from 'react-hot-toast'
 import { IoIosEyeOff } from 'react-icons/io';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const AddUser = () => {
 
-    const [user, setUser] = useState({
-        name: '',
-        lastName: '',
-        email: '',
-        password: '',
-        role: ''
-    });
-
+    const [user, setUser] = useState({});
+    const [originalUser, setOriginalUser] = useState({});
     const navigate = useNavigate();
 
     const [password2, setPassword2] = useState('');
@@ -23,42 +17,126 @@ const AddUser = () => {
 
     const togglePassword = () => setShowPassword(!showPassword);
 
-    const addUser = async (e) => {
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const userId = searchParams.get('id');
+
+    useEffect(() => {
+        if (userId) {
+            const getUser = async () => {
+                try {
+                    const response = await clientAxios.get(`/user/${userId}`);
+                    const userData = response.data;
+                    const userState = {
+                        name: userData.name,
+                        lastName: userData.lastName,
+                        email: userData.email,
+                        password: '',
+                        role: userData.role
+                    };
+                    setUser(userState);
+                    setOriginalUser(userState);
+                } catch (error) {
+                    console.log(error);
+                    toast.error('Error al cargar los datos del usuario');
+                }
+            };
+            getUser();
+        }
+    }, [userId]);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
 
         try {
+            // Validar campos requeridos
+            const requiredFields = userId 
+                ? ['name', 'lastName', 'email', 'role']
+                : ['name', 'lastName', 'email', 'password', 'role'];
 
-            //validar campos
+            const missingFields = requiredFields.filter(field => {
+                const value = user[field];
+                if (value === undefined || value === null || value === '') return true;
+                if (typeof value === 'string') return !value.trim();
+                return false;
+            });
 
-            if (user.name.trim() === '' || user.lastName.trim() === '' || user.email.trim() === '' || user.password.trim() === '' || user.role.trim() === '' || password2.trim() === '') {
+            if (missingFields.length > 0) {
                 toast.error('Todos los campos son obligatorios');
                 setLoading(false);
                 return;
             }
 
-            if (user.password !== password2) {
-                toast.error('Las contraseñas no coinciden');
+            if (!userId && !password2) {
+                toast.error('Debe confirmar la contraseña');
                 setLoading(false);
                 return;
             }
 
-            //contraseña minimo 6 caracteres
-            if (user.password.length < 6) {
-                toast.error('La contraseña debe tener al menos 6 caracteres');
-                setLoading(false);
-                return;
+            if (!userId) {
+                // Check if email already exists
+                try {
+                    const emailCheck = await clientAxios.get(`/user/email/${user.email}`);
+                    if (emailCheck.data) {
+                        toast.error('Ya existe un usuario con este correo electrónico');
+                        setLoading(false);
+                        return;
+                    }
+                } catch (error) {
+                    if (error.response && error.response.status !== 404) {
+                        toast.error('Error al verificar el correo electrónico');
+                        setLoading(false);
+                        return;
+                    }
+                }
+
+                // Password validation
+                const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$/;
+                if (!passwordRegex.test(user.password)) {
+                    toast.error('La contraseña debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial');
+                    setLoading(false);
+                    return;
+                }
+
+                if (user.password !== password2) {
+                    toast.error('Las contraseñas no coinciden');
+                    setLoading(false);
+                    return;
+                }
             }
 
-            const response = await clientAxios.post('/user', user);
+            let response;
+            if (userId) {
+                // Get only modified fields for update
+                const modifiedFields = {};
+                Object.keys(user).forEach(key => {
+                    if (user[key] !== originalUser[key] && user[key] !== '') {
+                        modifiedFields[key] = user[key];
+                    }
+                });
+                
+                // Ensure role is sent as a number
+                if ('role' in modifiedFields) {
+                    modifiedFields.role = parseInt(modifiedFields.role, 10);
+                }
+
+                // Only send request if there are changes
+                if (Object.keys(modifiedFields).length > 0) {
+                    response = await clientAxios.put(`/user/${userId}`, modifiedFields);
+                } else {
+                    toast.info('No hay cambios para guardar');
+                    setLoading(false);
+                    return;
+                }
+            } else {
+                response = await clientAxios.post('/user', user);
+            }
 
             if (response.status === 200) {
                 setLoading(false);
-                toast.success('Usuario agregado correctamente');
-
-                setTimeout(() => {
-                    navigate('/admin/users');
-                }, 1500);
+                toast.success(userId ? 'Usuario actualizado correctamente' : 'Usuario agregado correctamente');
+                navigate('/admin/users');
             }
 
         } catch (error) {
@@ -71,10 +149,24 @@ const AddUser = () => {
     return (
         <section className="container mx-auto">
 
-            <h1 className="text-center text-3xl font-bold text-slate-600 mt-10">Agrega una Usuario</h1>
+            <h1 className="text-center text-3xl font-bold text-slate-600 mt-10">
+                {userId ? 'Editar Usuario' : 'Agregar Usuario'}
+            </h1>
+
+            <div className="flex justify-center w-full">
+                <div className="mb-4 flex w-1/4 justify-center">
+                    <button
+                        type="button"
+                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold rounded mt-5 w-full h-full"
+                        onClick={() => navigate('/admin/users')}
+                    >
+                        Volver
+                    </button>
+                </div>
+            </div>
 
             <div className=' max-w-5xl mx-auto p-4 mt-10 shadow-lg'>
-                <form className='flex flex-col gap-4' onSubmit={addUser}>
+                <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
                     <div className='flex flex-col gap-4 justify-between'>
                         <div className='flex gap-2'>
                             <div className='w-full'>
@@ -122,7 +214,6 @@ const AddUser = () => {
                                 />
                             </div>
                             <div className='w-full'>
-                                {/* select con el rol de editor=1 o bibloteca=2 */}
                                 <label htmlFor="rol" className="font-semibold text-slate-700 pb-2">
                                     Rol:
                                 </label>
@@ -134,8 +225,9 @@ const AddUser = () => {
                                     onChange={e => setUser({ ...user, role: e.target.value })}
                                 >
                                     <option value="">--Seleccione un Rol</option>
+                                    <option value="0">Estudiante</option>
+                                    <option value="1">Administrador</option>
                                     <option value="2">Editor</option>
-                                    <option value="3">Biblioteca</option>
                                 </select>
                             </div>
                         </div>
@@ -190,7 +282,7 @@ const AddUser = () => {
                                     type="submit"
                                     className="btn-action"
                                 >
-                                    Agregar Usuario
+                                    {userId ? 'Actualizar Usuario' : 'Agregar Usuario'}
                                 </button>
                             )
                         }

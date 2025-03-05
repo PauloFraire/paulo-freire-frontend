@@ -26,7 +26,7 @@ import Contacto from "./components/Contacto.jsx";
 
 // Admin
 import PrivateRoute from "./pages/PrivateRoute.jsx";
-import DashboardLayout from "./admin/DashboardLayout.jsx";
+import DashboardLayout from "./admin/pages/DashboardLayout.jsx";
 import Dashboard from "./admin/pages/Dashboard.jsx";
 import AcademyActivitiesAdmin from "./admin/pages/academy/AcademyActivitiesAdmin.jsx";
 import AdminNews from "./admin/pages/news/AdminNews.jsx";
@@ -37,6 +37,7 @@ import AddUser from "./admin/pages/users/AddUser.jsx";
 import About from "./admin/pages/about/About.jsx";
 import Terminos from "./admin/pages/about/Terminos.tsx";
 import Deslinde from "./admin/pages/about/Deslinde.tsx";
+import ContextContemporaneoAdmin from "./admin/pages/contextoContemporaneo/ContextoContemporaneoAdmin.jsx";
 import OfertaEducativa from "./admin/pages/ofertaseducativas/OfertaEdtucativa.jsx";
 import AddOfertaEducativa from "./admin/pages/ofertaseducativas/AddOfertaEducativa.jsx";
 import EditOfertaEducativa from "./admin/pages/ofertaseducativas/EditOfertaEducativa.jsx";
@@ -76,7 +77,7 @@ const router = createBrowserRouter([
       { path: "/login", element: <Login /> },
       { path: "/registro", element: <Registro /> },
       { path: "/new-item/:id", element: <NewItemPage /> },
-      { path: "/contexto-educativo", element: <ContextContemporaneo /> },
+      { path: "/contexto-contemporaneo", element: <ContextContemporaneo /> },
       { path: "/historia", element: <HistoryDetail /> },
       { path: "/olvide-password", element: <Recuperar /> },
       { path: "/acercade", element: <Acercade /> },
@@ -115,7 +116,10 @@ const router = createBrowserRouter([
       { path: "/admin/ofertaeducativa", element: <OfertaEducativa /> },
       { path: "/admin/add-oferta", element: <AddOfertaEducativa /> },
       { path: "/admin/edit-oferta/:id", element: <EditOfertaEducativa /> },
-
+      {
+        path: "/admin/contexto-contemporaneo-admin",
+        element: <ContextContemporaneoAdmin />,
+      },
       { path: "*", element: <ErrorPage404 /> }, // Ruta explícita para errores 404
     ],
   },

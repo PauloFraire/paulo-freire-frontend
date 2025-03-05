@@ -100,9 +100,7 @@ const EditNews = () => {
 
             if (response.status === 200) {
                 toast.success('Noticia actualizada correctamente');
-                setTimeout(() => {
-                    navigate('/admin/news');
-                }, 2000);
+                navigate('/admin/news');
             }
 
         } catch (error) {

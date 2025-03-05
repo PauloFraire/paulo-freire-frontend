@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import clientAxios from '../../config/clientAxios'
 import Spinner from '../../components/Spinner'
 import useAuth from '../../hooks/useAuth'
+import toast from 'react-hot-toast'
+import Swal from 'sweetalert2'
 
 const AllImagesCustomsize = ({ loading }) => {
 
@@ -18,24 +20,36 @@ const AllImagesCustomsize = ({ loading }) => {
     useEffect(() => {
         const getImages = async () => {
             try {
-                const response = await clientAxios.get(`/customsize`);
-                console.log(response);
+                const response = await clientAxios.get(`/customsize`, config);
                 setImages(response.data);
             } catch (error) {
                 console.log(error);
+                toast.error('Error al cargar las imágenes');
             }
         }
         getImages();
-    }, []);
+    }, [token]);
 
     const deleteImageReq = async (id) => {
-        try {
-            const response = await clientAxios.delete(`/customsize/${id}`, config);
-    
-            setImages(images.filter(image => image._id !== id));
+        const result = await Swal.fire({
+            title: '¿Estas seguro?',
+            text: "Una vez eliminada, no podrás recuperar la imagen",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, Eliminar'
+        });
 
-        } catch (error) {
-            console.log(error);
+        if (result.isConfirmed) {
+            try {
+                await clientAxios.delete(`/customsize/${id}`, config);
+                setImages(images.filter(image => image._id !== id));
+                toast.success('Imagen eliminada correctamente');
+            } catch (error) {
+                console.log(error);
+                toast.error('Error al eliminar la imagen');
+            }
         }
     }
 

@@ -11,14 +11,12 @@ import EditAcademyActivityModal from "./EditAcademyActivityModal";
 const AcademyActivitiesAdmin = () => {
 
     const [academyActivities, setAcademyActivities] = useState([]);
-
     const [open, setOpen] = useState(false);
-
+    const [refreshKey, setRefreshKey] = useState(0);
     const { token } = useAuth();
 
     useEffect(() => {
         const getAcademyActivities = async () => {
-
             const config = {
                 headers: {
                     "Content-Type": "application/json",
@@ -29,13 +27,13 @@ const AcademyActivitiesAdmin = () => {
             try {
                 const response = await clientAxios.get(`/academy-activities`, config);
                 setAcademyActivities(response.data);
-                console.log(response);
             } catch (error) {
                 console.log(error);
+                toast.error('Error al cargar las actividades');
             }
         }
         getAcademyActivities();
-    }, [])
+    }, [refreshKey, token])
 
     return (
         <>
@@ -64,6 +62,7 @@ const AcademyActivitiesAdmin = () => {
                         <AcademyActivityCard
                             key={index}
                             activity={activity}
+                            setRefreshKey={setRefreshKey}
                         />
                     )) : <Spinner />
                 }
