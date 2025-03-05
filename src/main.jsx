@@ -38,6 +38,8 @@ import About from "./admin/pages/about/About.jsx";
 import Terminos from "./admin/pages/about/Terminos.tsx";
 import Deslinde from "./admin/pages/about/Deslinde.tsx";
 import OfertaEducativa from "./admin/pages/ofertaseducativas/OfertaEdtucativa.jsx";
+import AddOfertaEducativa from "./admin/pages/ofertaseducativas/AddOfertaEducativa.jsx";
+import EditOfertaEducativa from "./admin/pages/ofertaseducativas/EditOfertaEducativa.jsx";
 
 // Configuración de la empresa
 import Empresa from "./admin/pages/Empresa/Configempresa.jsx";
@@ -111,6 +113,8 @@ const router = createBrowserRouter([
       { path: "/admin/about/terminos", element: <Terminos /> },
       { path: "/admin/configempresa", element: <Empresa /> },
       { path: "/admin/ofertaeducativa", element: <OfertaEducativa /> },
+      { path: "/admin/add-oferta", element: <AddOfertaEducativa /> },
+      { path: "/admin/edit-oferta/:id", element: <EditOfertaEducativa /> },
 
       { path: "*", element: <ErrorPage404 /> }, // Ruta explícita para errores 404
     ],
