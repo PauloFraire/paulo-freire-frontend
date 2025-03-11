@@ -103,6 +103,9 @@ const ContextContemporaneo = () => {
                 <h5 className="mb-2 text-2xl font-bold tracking-tight">
                   {pdf.nombre}
                 </h5>
+                <p>
+                    {pdf.descripcion}
+                </p>
               </div>
             ))}
           </div>
@@ -161,9 +164,9 @@ const ContextContemporaneo = () => {
                     <h5 className="mb-2 text-2xl font-bold tracking-tight">
                       {pdf.nombre}
                     </h5>
-                    {/* <p className="font-normal">
-                      Archivo PDF (tipo 0)
-                    </p> */}
+                    <p className="font-normal">
+                        {pdf.descripcion}
+                    </p>
                   </a>
                 </div>
               );

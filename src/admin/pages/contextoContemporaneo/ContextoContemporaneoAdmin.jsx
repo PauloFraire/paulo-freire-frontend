@@ -23,8 +23,8 @@ export default function ContextoContemporaneoAdmin() {
   });
 
   const [pdfData, setPdfData] = useState({
-    pdfs: [{ nombre: '', archivo: null, tipo: 0 }],
-    Ppdfs: [{ nombre: '', archivo: null, imagen: null, tipo: 1 }]
+    pdfs: [{ nombre: '', descripcion:'', archivo: null, tipo: 0 }],
+    Ppdfs: [{ nombre: '', descripcion:'', archivo: null, imagen: null, tipo: 1 }]
   });
 
   const [editingId, setEditingId] = useState(null);
@@ -107,12 +107,12 @@ export default function ContextoContemporaneoAdmin() {
     } else if (field === 'pdfs') {
       setPdfData(prev => ({
         ...prev,
-        [field]: [...prev[field], { nombre: '', archivo: null, tipo: 0 }]
+        [field]: [...prev[field], { nombre: '', descripcion:'', archivo: null, tipo: 0 }]
       }));
     } else if (field === 'Ppdfs') {
       setPdfData(prev => ({
         ...prev,
-        [field]: [...prev[field], { nombre: '', archivo: null, imagen: null, tipo: 1 }]
+        [field]: [...prev[field], { nombre: '', descripcion:'', archivo: null, imagen: null, tipo: 1 }]
       }));
     }
   };
@@ -224,6 +224,7 @@ export default function ContextoContemporaneoAdmin() {
       // Función para validar que los campos requeridos estén presentes
       const validatePdfFields = (pdf) => {
         if (!pdf.nombre?.trim()) throw new Error('El nombre del PDF es requerido');
+        if (!pdf.descripcion) throw new Error('La descripcion del PDF es requerido');
         if (!pdf.archivo) throw new Error('El archivo PDF es requerido');
         if (pdf.tipo === undefined) throw new Error('El tipo de PDF es requerido');
       };
@@ -258,6 +259,7 @@ export default function ContextoContemporaneoAdmin() {
 
             const formData = new FormData();
             formData.append('nombre', pdf.nombre.trim());
+            formData.append('descripcion', pdf.descripcion);
             formData.append('archivo', pdf.archivo);
             formData.append('tipo', isPremium ? '1' : '0');
 
@@ -304,8 +306,8 @@ export default function ContextoContemporaneoAdmin() {
 
       // Reiniciar el estado de los PDFs después de una subida exitosa
       setPdfData({
-        pdfs: [{ nombre: '', archivo: null, tipo: 0 }],
-        Ppdfs: [{ nombre: '', archivo: null, imagen: null, tipo: 1 }],
+        pdfs: [{ nombre: '', descripcion:'', archivo: null, tipo: 0 }],
+        Ppdfs: [{ nombre: '', descripcion:'', archivo: null, imagen: null, tipo: 1 }],
       });
     } catch (error) {
       const errorMessage =
@@ -456,6 +458,13 @@ export default function ContextoContemporaneoAdmin() {
                 value={pdf.nombre}
                 onChange={(e) => handleArrayInputChange(index, 'pdfs', { nombre: e.target.value })}
                 className="flex-1 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />              
+              <input
+                type="text"
+                placeholder="Descripcion del PDF"
+                value={pdf.descripcion}
+                onChange={(e) => handleArrayInputChange(index, 'pdfs', { descripcion: e.target.value })}
+                className="flex-1 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
               <input
                 type="file"
@@ -492,6 +501,17 @@ export default function ContextoContemporaneoAdmin() {
                   placeholder="Nombre del PDF"
                   value={pdf.nombre}
                   onChange={(e) => handleArrayInputChange(index, 'Ppdfs', { nombre: e.target.value })}
+                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+
+              <div className="w-full">
+                <label className="block mb-2">Descripcion del PDF:</label>
+                <input
+                  type="text"
+                  placeholder="Nombre del PDF"
+                  value={pdf.descripcion}
+                  onChange={(e) => handleArrayInputChange(index, 'Ppdfs', { descripcion: e.target.value })}
                   className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
@@ -534,6 +554,27 @@ export default function ContextoContemporaneoAdmin() {
           </button>
         </div>
 
+        {!loading ? (
+          <div className="flex gap-4">
+            <button
+              type="button"
+              onClick={handleContextSubmit}
+              className="flex-1 px-6 py-3 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors duration-200 font-medium flex items-center justify-center gap-2"
+            >
+              <FaEdit /> Actualizar Contexto
+            </button>
+            <button
+              type="button"
+              onClick={handlePdfSubmit}
+              className="flex-1 px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-200 font-medium flex items-center justify-center gap-2"
+            >
+              <FaPlus /> Subir PDFs
+            </button>
+          </div>
+        ) : (
+          <Spinner />
+        )}
+
         <div className="mt-8">
           <h3 className="text-2xl font-bold mb-4">Lista de PDFs Enviados</h3>
           {pdfList.length === 0 ? (
@@ -546,7 +587,6 @@ export default function ContextoContemporaneoAdmin() {
                   {pdf.imagen && (
                     <img src={pdf.imagen} alt={pdf.nombre} className="w-16 h-16 object-cover mr-4" />
                   )}
-                  {/* Sustituir el span por un enlace que abra el PDF en otra pestaña */}
                   <a
                     href={pdf.archivo}
                     target="_blank"
@@ -568,27 +608,7 @@ export default function ContextoContemporaneoAdmin() {
           </ul>          
           )}
         </div>
-
-        {!loading ? (
-          <div className="flex gap-4">
-            <button
-              type="button"
-              onClick={handleContextSubmit}
-              className="flex-1 px-6 py-3 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors duration-200 font-medium flex items-center justify-center gap-2"
-            >
-              <FaEdit /> Actualizar Contexto
-            </button>
-            <button
-              type="button"
-              onClick={handlePdfSubmit}
-              className="flex-1 px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-200 font-medium flex items-center justify-center gap-2"
-            >
-              <FaPlus /> Subir PDFs
-            </button>
-          </div>
-        ) : (
-          <Spinner />
-        )}
+        
       </form>
     </div>
   );
