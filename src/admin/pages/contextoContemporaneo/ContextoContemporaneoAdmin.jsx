@@ -179,7 +179,7 @@ export default function ContextoContemporaneoAdmin() {
       let contextResponse;
       if (editingId) {
         // DEBUG:
-        console.log("Actualizando contexto con ID:", editingId, formData);
+        // console.log("Actualizando contexto con ID:", editingId, formData);
         contextResponse = await clientAxios.put(
           `/contexto-contemporaneo/${editingId}`,
           formData,
@@ -187,7 +187,7 @@ export default function ContextoContemporaneoAdmin() {
         );
       } else {
         // DEBUG:
-        console.log("Creando nuevo contexto:", formData);
+        // console.log("Creando nuevo contexto:", formData);
         contextResponse = await clientAxios.post(
           '/contexto-contemporaneo',
           formData,
@@ -195,7 +195,7 @@ export default function ContextoContemporaneoAdmin() {
         );
       }
       // DEBUG:
-      console.log("Respuesta del servidor al guardar contexto:", contextResponse.data);
+      // console.log("Respuesta del servidor al guardar contexto:", contextResponse.data);
 
       toast.success(editingId ? 'Contenido actualizado exitosamente' : 'Contenido creado exitosamente');
       await fetchContextos();
@@ -217,8 +217,8 @@ export default function ContextoContemporaneoAdmin() {
     setLoading(true);
 
     // DEBUG:
-    console.log("Iniciando subida de PDFs...");
-    console.log("pdfData actual:", pdfData);
+    // console.log("Iniciando subida de PDFs...");
+    // console.log("pdfData actual:", pdfData);
 
     try {
       // Función para validar que los campos requeridos estén presentes
@@ -244,11 +244,11 @@ export default function ContextoContemporaneoAdmin() {
       const uploadPdfs = async (pdfs, isPremium = false) => {
         for (const pdf of pdfs) {
           // DEBUG:
-          console.log("Procesando PDF:", pdf);
+          // console.log("Procesando PDF:", pdf);
 
           if (!pdf.nombre?.trim() || !pdf.archivo) {
             // DEBUG:
-            console.log("Saltando PDF vacío o sin archivo:", pdf);
+            // console.log("Saltando PDF vacío o sin archivo:", pdf);
             continue;
           }
 
@@ -262,7 +262,7 @@ export default function ContextoContemporaneoAdmin() {
             formData.append('tipo', isPremium ? '1' : '0');
 
             // DEBUG:
-            console.log("Creando FormData para el PDF:", pdf.nombre);
+            // console.log("Creando FormData para el PDF:", pdf.nombre);
             if (isPremium && pdf.imagen instanceof File) {
               if (!pdf.imagen.type.startsWith('image/')) {
                 throw new Error('El archivo de imagen debe ser una imagen válida');
@@ -272,7 +272,7 @@ export default function ContextoContemporaneoAdmin() {
 
             // DEBUG: ver qué contiene el FormData
             for (let pair of formData.entries()) {
-              console.log('FormData entry:', pair[0], pair[1]);
+              // console.log('FormData entry:', pair[0], pair[1]);
             }
 
             const pdfConfig = {
@@ -283,10 +283,10 @@ export default function ContextoContemporaneoAdmin() {
             };
 
             // DEBUG:
-            console.log("Enviando PDF al backend (POST /pdfs-cc)...");
+            // console.log("Enviando PDF al backend (POST /pdfs-cc)...");
 
             const response = await clientAxios.post('/pdfs-cc', formData, pdfConfig);
-            console.log('PDF uploaded successfully:', response.data);
+            // console.log('PDF uploaded successfully:', response.data);
           } catch (error) {
             console.error('PDF upload failed:', error.response?.data || error.message);
             throw error;
@@ -295,9 +295,9 @@ export default function ContextoContemporaneoAdmin() {
       };
 
       // Subir PDFs básicos y premium secuencialmente
-      console.log("Subiendo PDFs básicos...");
+      // console.log("Subiendo PDFs básicos...");
       await uploadPdfs(pdfData.pdfs.filter(pdf => pdf.nombre && pdf.archivo));
-      console.log("Subiendo PDFs premium...");
+      // console.log("Subiendo PDFs premium...");
       await uploadPdfs(pdfData.Ppdfs.filter(pdf => pdf.nombre && pdf.archivo), true);
 
       toast.success('PDFs subidos exitosamente');

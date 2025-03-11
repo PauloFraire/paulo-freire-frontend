@@ -50,7 +50,7 @@ const Header = () => {
           data.title || "Centro Regional de Educación Superior Paulo Freire"
         ); // Fallback en caso de no haber título
       } catch (error) {
-        console.error("Error al obtener el título:", error);
+        // console.error("Error al obtener el título:", error);
       }
     };
 
