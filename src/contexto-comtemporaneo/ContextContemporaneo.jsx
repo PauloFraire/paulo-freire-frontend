@@ -87,10 +87,13 @@ const ContextContemporaneo = () => {
         <div className='container mx-auto max-w-5xl my-10'>
           <div className='grid md:grid-cols-2 xl:grid-cols-3 gap-2 grid-cols-1'>
             {pdfsTipo1.map(pdf => (
-              <div
+              <a
+                href={pdf.archivo}
                 key={pdf._id}
                 className="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-lg
                            hover:bg-gray-300 hover:scale-105 transition-all duration-300 ease-in-out"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 {/* Muestra la imagen si existe */}
                 {pdf.imagen && (
@@ -106,7 +109,7 @@ const ContextContemporaneo = () => {
                 <p>
                     {pdf.descripcion}
                 </p>
-              </div>
+              </a>
             ))}
           </div>
         </div>
