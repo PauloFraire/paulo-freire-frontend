@@ -575,6 +575,8 @@ export default function ContextoContemporaneoAdmin() {
           <Spinner />
         )}
 
+        <br></br>
+        <hr></hr>
         <div className="mt-8">
           <h3 className="text-2xl font-bold mb-4">Lista de PDFs Enviados</h3>
           {pdfList.length === 0 ? (
@@ -608,7 +610,7 @@ export default function ContextoContemporaneoAdmin() {
           </ul>          
           )}
         </div>
-        
+
       </form>
     </div>
   );
