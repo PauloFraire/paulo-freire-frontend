@@ -444,6 +444,8 @@ export default function ContextoContemporaneoAdmin() {
           </button>
         </div>
 
+        <hr></hr>
+
         <div className="bg-gray-300 p-4 rounded-lg shadow-lg mt-4">
           <label className="block mb-2 text-xl font-medium text-gray-700">PDFs Básicos:</label>
           {pdfData.pdfs.map((pdf, index) => (
