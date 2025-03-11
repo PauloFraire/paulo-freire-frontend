@@ -7,20 +7,26 @@ import Spinner from '../../../components/Spinner';
 
 export default function ContextoContemporaneoAdmin() {
   const { token } = useAuth();
+  const [pdfList, setPdfList] = useState([]);
   const [contextos, setContextos] = useState([]);
   const [loading, setLoading] = useState(false);
+
   const [formData, setFormData] = useState({
     title: '',
     mainSection: '',
     author: '',
     article: '',
     articleDescription: '',
-
     mainLinkAutor: '',
     mainLink: '',
-    secondaryLinks: [{ name: '', url: '' }],
-    pdfs: ['']
+    secondaryLinks: [{ name: '', url: '' }]
   });
+
+  const [pdfData, setPdfData] = useState({
+    pdfs: [{ nombre: '', archivo: null, tipo: 0 }],
+    Ppdfs: [{ nombre: '', archivo: null, imagen: null, tipo: 1 }]
+  });
+
   const [editingId, setEditingId] = useState(null);
 
   useEffect(() => {
@@ -38,7 +44,7 @@ export default function ContextoContemporaneoAdmin() {
       const response = await clientAxios.get('/contexto-contemporaneo', config);
       const contextosData = Array.isArray(response.data) ? response.data : [];
       setContextos(contextosData);
-      
+
       if (contextosData.length > 0) {
         const firstContext = contextosData[0];
         setFormData({
@@ -47,11 +53,11 @@ export default function ContextoContemporaneoAdmin() {
           author: firstContext.author || '',
           article: firstContext.article || '',
           articleDescription: firstContext.articleDescription || '',
-
           mainLinkAutor: firstContext.mainLinkAutor || '',
           mainLink: firstContext.mainLink || '',
-          secondaryLinks: firstContext.secondaryLinks?.length ? firstContext.secondaryLinks : [{ name: '', url: '' }],
-          pdfs: firstContext.pdfs?.length ? firstContext.pdfs : ['']
+          secondaryLinks: firstContext.secondaryLinks?.length
+            ? firstContext.secondaryLinks
+            : [{ name: '', url: '' }]
         });
         setEditingId(firstContext._id);
       }
@@ -71,60 +77,245 @@ export default function ContextoContemporaneoAdmin() {
   };
 
   const handleArrayInputChange = (index, field, value) => {
-    setFormData(prev => {
-      const newArray = [...prev[field]];
-      newArray[index] = value;
-      return {
-        ...prev,
-        [field]: newArray
-      };
-    });
+    if (field === 'secondaryLinks') {
+      setFormData(prev => {
+        const newArray = [...prev[field]];
+        newArray[index] = value;
+        return {
+          ...prev,
+          [field]: newArray
+        };
+      });
+    } else if (field === 'pdfs' || field === 'Ppdfs') {
+      setPdfData(prev => {
+        const newArray = [...prev[field]];
+        newArray[index] = { ...newArray[index], ...value };
+        return {
+          ...prev,
+          [field]: newArray
+        };
+      });
+    }
   };
 
   const addArrayField = (field) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: field === 'secondaryLinks' ? [...prev[field], { name: '', url: '' }] : [...prev[field], '']
-    }));
+    if (field === 'secondaryLinks') {
+      setFormData(prev => ({
+        ...prev,
+        [field]: [...prev[field], { name: '', url: '' }]
+      }));
+    } else if (field === 'pdfs') {
+      setPdfData(prev => ({
+        ...prev,
+        [field]: [...prev[field], { nombre: '', archivo: null, tipo: 0 }]
+      }));
+    } else if (field === 'Ppdfs') {
+      setPdfData(prev => ({
+        ...prev,
+        [field]: [...prev[field], { nombre: '', archivo: null, imagen: null, tipo: 1 }]
+      }));
+    }
   };
 
   const removeArrayField = (field, index) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: prev[field].filter((_, i) => i !== index)
-    }));
+    if (field === 'secondaryLinks') {
+      setFormData(prev => ({
+        ...prev,
+        [field]: prev[field].filter((_, i) => i !== index)
+      }));
+    } else {
+      setPdfData(prev => ({
+        ...prev,
+        [field]: prev[field].filter((_, i) => i !== index)
+      }));
+    }
   };
 
-  const handleSubmit = async (e) => {
+  const fetchPdfs = async () => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+      const response = await clientAxios.get('/pdfs-cc', config);
+      setPdfList(response.data);
+    } catch (error) {
+      console.error("Error fetching PDFs:", error);
+      toast.error("Error al cargar los PDFs");
+    }
+  };
+  
+  const handleDeletePdf = async (id) => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+      await clientAxios.delete(`/pdfs-cc/${id}`, config);
+      toast.success("PDF eliminado exitosamente");
+      fetchPdfs();
+    } catch (error) {
+      console.error("Error deleting PDF:", error);
+      toast.error("Error al eliminar el PDF");
+    }
+  };
+  
+  useEffect(() => {
+    fetchPdfs();
+  }, []);
+
+  const handleContextSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const contextConfig = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        }
+      };
+      let contextResponse;
+      if (editingId) {
+        // DEBUG:
+        console.log("Actualizando contexto con ID:", editingId, formData);
+        contextResponse = await clientAxios.put(
+          `/contexto-contemporaneo/${editingId}`,
+          formData,
+          contextConfig
+        );
+      } else {
+        // DEBUG:
+        console.log("Creando nuevo contexto:", formData);
+        contextResponse = await clientAxios.post(
+          '/contexto-contemporaneo',
+          formData,
+          contextConfig
+        );
+      }
+      // DEBUG:
+      console.log("Respuesta del servidor al guardar contexto:", contextResponse.data);
+
+      toast.success(editingId ? 'Contenido actualizado exitosamente' : 'Contenido creado exitosamente');
+      await fetchContextos();
+    } catch (error) {
+      const errorMessage = error.response?.data?.message ||
+        error.response?.data?.msg ||
+        error.message ||
+        'Error desconocido al procesar la solicitud';
+
+      toast.error(`Error al ${editingId ? 'actualizar' : 'crear'} el contenido: ${errorMessage}`);
+      console.error("Error al enviar contexto:", error); // DEBUG
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handlePdfSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      }
-    };
+    // DEBUG:
+    console.log("Iniciando subida de PDFs...");
+    console.log("pdfData actual:", pdfData);
 
     try {
-      let response;
-      if (editingId) {
-        response = await clientAxios.put(`/contexto-contemporaneo/${editingId}`, formData, config);
-      } else {
-        response = await clientAxios.post('/contexto-contemporaneo', formData, config);
-      }
-      
-      if (response.status === 200 || response.status === 201) {
-        toast.success(editingId ? 'Contexto actualizado exitosamente' : 'Contexto creado exitosamente');
-        await fetchContextos();
-      }
-    } catch (error) {
-      const errorMessage = error.response?.data?.message || 
-                          error.response?.data?.msg || 
-                          error.message || 
-                          'Error desconocido al procesar la solicitud';
+      // Función para validar que los campos requeridos estén presentes
+      const validatePdfFields = (pdf) => {
+        if (!pdf.nombre?.trim()) throw new Error('El nombre del PDF es requerido');
+        if (!pdf.archivo) throw new Error('El archivo PDF es requerido');
+        if (pdf.tipo === undefined) throw new Error('El tipo de PDF es requerido');
+      };
 
-      toast.error(`Error al ${editingId ? 'actualizar' : 'crear'} el contexto: ${errorMessage}`);
+      // Función para validar que el archivo sea un PDF válido y no exceda el tamaño máximo
+      const validatePdfFile = (file) => {
+        if (!file) return true;
+        if (file.type !== 'application/pdf') {
+          throw new Error('El archivo debe ser un PDF');
+        }
+        if (file.size > 10 * 1024 * 1024) {
+          throw new Error('El archivo no debe superar los 10MB');
+        }
+        return true;
+      };
+
+      // Función para subir los PDFs
+      const uploadPdfs = async (pdfs, isPremium = false) => {
+        for (const pdf of pdfs) {
+          // DEBUG:
+          console.log("Procesando PDF:", pdf);
+
+          if (!pdf.nombre?.trim() || !pdf.archivo) {
+            // DEBUG:
+            console.log("Saltando PDF vacío o sin archivo:", pdf);
+            continue;
+          }
+
+          try {
+            validatePdfFields(pdf);
+            validatePdfFile(pdf.archivo);
+
+            const formData = new FormData();
+            formData.append('nombre', pdf.nombre.trim());
+            formData.append('archivo', pdf.archivo);
+            formData.append('tipo', isPremium ? '1' : '0');
+
+            // DEBUG:
+            console.log("Creando FormData para el PDF:", pdf.nombre);
+            if (isPremium && pdf.imagen instanceof File) {
+              if (!pdf.imagen.type.startsWith('image/')) {
+                throw new Error('El archivo de imagen debe ser una imagen válida');
+              }
+              formData.append('imagen', pdf.imagen);
+            }
+
+            // DEBUG: ver qué contiene el FormData
+            for (let pair of formData.entries()) {
+              console.log('FormData entry:', pair[0], pair[1]);
+            }
+
+            const pdfConfig = {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data',
+              },
+            };
+
+            // DEBUG:
+            console.log("Enviando PDF al backend (POST /pdfs-cc)...");
+
+            const response = await clientAxios.post('/pdfs-cc', formData, pdfConfig);
+            console.log('PDF uploaded successfully:', response.data);
+          } catch (error) {
+            console.error('PDF upload failed:', error.response?.data || error.message);
+            throw error;
+          }
+        }
+      };
+
+      // Subir PDFs básicos y premium secuencialmente
+      console.log("Subiendo PDFs básicos...");
+      await uploadPdfs(pdfData.pdfs.filter(pdf => pdf.nombre && pdf.archivo));
+      console.log("Subiendo PDFs premium...");
+      await uploadPdfs(pdfData.Ppdfs.filter(pdf => pdf.nombre && pdf.archivo), true);
+
+      toast.success('PDFs subidos exitosamente');
+
+      // Reiniciar el estado de los PDFs después de una subida exitosa
+      setPdfData({
+        pdfs: [{ nombre: '', archivo: null, tipo: 0 }],
+        Ppdfs: [{ nombre: '', archivo: null, imagen: null, tipo: 1 }],
+      });
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message ||
+        error.response?.data?.msg ||
+        error.message ||
+        'Error desconocido al procesar la solicitud';
+
+      toast.error(`Error al subir los PDFs: ${errorMessage}`);
+      console.error("Error al subir PDFs:", error); // DEBUG
     } finally {
       setLoading(false);
     }
@@ -132,9 +323,11 @@ export default function ContextoContemporaneoAdmin() {
 
   return (
     <div className="container p-4 -ml-1 bg-gray-50 mt-5">
-      <h2 className="text-center text-3xl font-bold text-slate-600">Análisis Educativo Contemporáneo</h2>
-      
-      <form onSubmit={handleSubmit} className="mb-8 space-y-6 bg-white p-6 rounded-lg shadow-md">
+      <h2 className="text-center text-3xl font-bold text-slate-600">
+        Análisis Educativo Contemporáneo
+      </h2>
+
+      <form onSubmit={handleContextSubmit} className="mb-8 space-y-6 bg-white p-6 rounded-lg shadow-md">
         <div>
           <label className="block mb-2 text-xl font-medium text-gray-700">Título:</label>
           <input
@@ -146,7 +339,6 @@ export default function ContextoContemporaneoAdmin() {
             required
           />
         </div>
-
         <div>
           <label className="block mb-2 text-xl font-medium text-gray-700">Sección Principal:</label>
           <input
@@ -158,7 +350,6 @@ export default function ContextoContemporaneoAdmin() {
             required
           />
         </div>
-
         <div>
           <label className="block mb-2 text-xl font-medium text-gray-700">Autor:</label>
           <input
@@ -170,9 +361,8 @@ export default function ContextoContemporaneoAdmin() {
             required
           />
         </div>
-
         <div className="p-6 rounded-lg bg-gradient-to-tr from-green-300 to-red-300 via-yellow-300 shadow-lg w-full h-34">
-        <label className="block mb-2 text-xl font-medium text-gray-700">Titulo del Articulo:</label>
+          <label className="block mb-2 text-xl font-medium text-gray-700">Título del Artículo:</label>
           <input
             name="article"
             value={formData.article}
@@ -180,7 +370,6 @@ export default function ContextoContemporaneoAdmin() {
             className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             required
           />
-
           <label className="block mb-2 text-xl font-medium text-gray-700 mt-5">Descripción del Artículo:</label>
           <input
             type="text"
@@ -190,8 +379,6 @@ export default function ContextoContemporaneoAdmin() {
             className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             required
           />
-
-
           <label className="block mb-2 text-xl font-medium text-gray-700 mt-5">Créditos para el Autor:</label>
           <input
             type="text"
@@ -201,7 +388,6 @@ export default function ContextoContemporaneoAdmin() {
             className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             required
           />
-
           <label className="block mb-2 text-xl font-medium text-gray-700 mt-5">Enlace Principal:</label>
           <input
             type="url"
@@ -212,7 +398,6 @@ export default function ContextoContemporaneoAdmin() {
             required
           />
         </div>
-
         <div className="bg-gray-300 p-4 rounded-lg shadow-lg">
           <label className="block mb-2 text-xl font-medium text-gray-700">Enlaces Secundarios:</label>
           {formData.secondaryLinks.map((link, index) => (
@@ -221,14 +406,24 @@ export default function ContextoContemporaneoAdmin() {
                 type="text"
                 placeholder="Nombre del enlace"
                 value={link.name}
-                onChange={(e) => handleArrayInputChange(index, 'secondaryLinks', { ...formData.secondaryLinks[index], name: e.target.value })}
+                onChange={(e) =>
+                  handleArrayInputChange(index, 'secondaryLinks', {
+                    ...formData.secondaryLinks[index],
+                    name: e.target.value
+                  })
+                }
                 className="flex-1 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
               <input
                 type="url"
                 placeholder="URL del enlace"
                 value={link.url}
-                onChange={(e) => handleArrayInputChange(index, 'secondaryLinks', { ...formData.secondaryLinks[index], url: e.target.value })}
+                onChange={(e) =>
+                  handleArrayInputChange(index, 'secondaryLinks', {
+                    ...formData.secondaryLinks[index],
+                    url: e.target.value
+                  })
+                }
                 className="flex-1 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
               <button
@@ -249,14 +444,21 @@ export default function ContextoContemporaneoAdmin() {
           </button>
         </div>
 
-        <div>
-          <label className="block mb-2 text-xl font-medium text-gray-700">PDFs:</label>
-          {formData.pdfs.map((pdf, index) => (
+        <div className="bg-gray-300 p-4 rounded-lg shadow-lg mt-4">
+          <label className="block mb-2 text-xl font-medium text-gray-700">PDFs Básicos:</label>
+          {pdfData.pdfs.map((pdf, index) => (
             <div key={index} className="flex gap-2 mb-2">
               <input
                 type="text"
-                value={pdf}
-                onChange={(e) => handleArrayInputChange(index, 'pdfs', e.target.value)}
+                placeholder="Nombre del PDF"
+                value={pdf.nombre}
+                onChange={(e) => handleArrayInputChange(index, 'pdfs', { nombre: e.target.value })}
+                className="flex-1 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+              <input
+                type="file"
+                accept=".pdf"
+                onChange={(e) => handleArrayInputChange(index, 'pdfs', { archivo: e.target.files[0] })}
                 className="flex-1 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
               <button
@@ -273,17 +475,115 @@ export default function ContextoContemporaneoAdmin() {
             onClick={() => addArrayField('pdfs')}
             className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-200 flex items-center gap-2"
           >
-            <FaPlus /> Agregar PDF
+            <FaPlus /> Agregar PDF Básico
           </button>
         </div>
 
-        {!loading ? (
+        <div className="bg-gray-300 p-4 rounded-lg shadow-lg mt-4">
+          <label className="block mb-2 text-xl font-medium text-gray-700">PDFs Con Imagen:</label>
+          {pdfData.Ppdfs.map((pdf, index) => (
+            <div key={index} className="flex flex-col gap-4 mb-4 w-full">
+              <div className="w-full">
+                <label className="block mb-2">Nombre del PDF:</label>
+                <input
+                  type="text"
+                  placeholder="Nombre del PDF"
+                  value={pdf.nombre}
+                  onChange={(e) => handleArrayInputChange(index, 'Ppdfs', { nombre: e.target.value })}
+                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+
+              <div className="w-full">
+                <label className="block mb-2">PDF:</label>
+                <input
+                  type="file"
+                  accept=".pdf"
+                  onChange={(e) => handleArrayInputChange(index, 'Ppdfs', { archivo: e.target.files[0] })}
+                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+
+              <div className="w-full">
+                <label className="block mb-2">Imagen:</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleArrayInputChange(index, 'Ppdfs', { imagen: e.target.files[0] })}
+                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+
+              <button
+                type="button"
+                onClick={() => removeArrayField('Ppdfs', index)}
+                className="w-full px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors duration-200 flex items-center justify-center"
+              >
+                <FaTrash className="mr-2" /> Eliminar
+              </button>
+            </div>
+          ))}
           <button
-            type="submit"
-            className="w-full px-6 py-3 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors duration-200 font-medium flex items-center justify-center gap-2"
+            type="button"
+            onClick={() => addArrayField('Ppdfs')}
+            className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-200 flex items-center gap-2"
           >
-            <FaEdit /> Actualizar Contexto
+            <FaPlus /> Agregar PDF Premium
           </button>
+        </div>
+
+        <div className="mt-8">
+          <h3 className="text-2xl font-bold mb-4">Lista de PDFs Enviados</h3>
+          {pdfList.length === 0 ? (
+            <p>No hay PDFs subidos.</p>
+          ) : (
+          <ul className="space-y-4">
+            {pdfList.map((pdf) => (
+              <li key={pdf._id} className="flex items-center justify-between border p-4 rounded">
+                <div className="flex items-center">
+                  {pdf.imagen && (
+                    <img src={pdf.imagen} alt={pdf.nombre} className="w-16 h-16 object-cover mr-4" />
+                  )}
+                  {/* Sustituir el span por un enlace que abra el PDF en otra pestaña */}
+                  <a
+                    href={pdf.archivo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-lg font-medium text-blue-600 hover:underline"
+                  >
+                    {pdf.nombre}
+                  </a>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleDeletePdf(pdf._id)}
+                  className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                >
+                  <FaTrash />
+                </button>
+              </li>
+            ))}
+          </ul>          
+          )}
+        </div>
+
+        {!loading ? (
+          <div className="flex gap-4">
+            <button
+              type="button"
+              onClick={handleContextSubmit}
+              className="flex-1 px-6 py-3 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors duration-200 font-medium flex items-center justify-center gap-2"
+            >
+              <FaEdit /> Actualizar Contexto
+            </button>
+            <button
+              type="button"
+              onClick={handlePdfSubmit}
+              className="flex-1 px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-200 font-medium flex items-center justify-center gap-2"
+            >
+              <FaPlus /> Subir PDFs
+            </button>
+          </div>
         ) : (
           <Spinner />
         )}
