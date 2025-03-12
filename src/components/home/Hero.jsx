@@ -67,20 +67,26 @@ const importedImages = [imagen1, imagen2, imagen3, imagen4, imagen5, imagen6, im
     <div className="w-full mx-auto home bg-gradient-to-t to-green-100 from-white py-16 -mb-32">
       <div className="md:flex items-center justify-center">
         <div className='flex-1 basis-[20rem]'>
-          <div className="my-5 flex justify-center space-y-5 flex-col items-center sm:flex-row mx-auto p-4 item gap-4">
-            <img src={logos[0]} className='w-32' loading='lazy' />
-            <img src={logos[5]} className='w-36' loading='lazy' />
-            <img src={logos[7]} className='w-36' loading='lazy' />
-            <img src={logos[6]} className='w-36' loading='lazy' />
+          <div className="flex justify-center space-y-5 flex-col items-center sm:flex-row mx-auto p-4 item gap-4">
+            <img src={logos[0]} className='w-40' loading='lazy' />
           </div>
-          <div className="my-5"></div>
           <div className="text-center">
-            <p className='uppercase text-5xl font-black text-gray-600'>Posgrados Validados <span className='text-teal-700'>ante la usicamm</span></p>
-            <p className="text-lg text-gray font-bold mt-5 mx-4 text-center uppercase text-orange-600">
-              "En esta vida no solo los talentos son los que triunfan, también las voluntades".
-            </p>
-
-            <div className='mt-4 mx-4 text-slate-600 space-y-3'>
+            <div className="text-center">
+              <div className="flex items-center justify-center"> {/* Reducido el espacio entre elementos */}
+                <p className="uppercase text-3xl font-black text-gray-600">
+                  Posgrados Validados <span className="text-teal-700">ante la usicamm</span>
+                </p>
+              </div>
+              <img src={logos[6]} className="w-32 inline-block" loading="lazy" />
+            </div>
+            <div className='justify-center flex sm:flex-row'>
+              <p className='uppercase text-3xl font-black text-gray-600'>RVOE de la SEP y SEV</p>
+            </div>
+            <div className='flex justify-center'>
+              <img src={logos[5]} className='w-32' loading='lazy' />
+              <img src={logos[7]} className='w-32' loading='lazy' />
+            </div>
+            <div className='mt-5 mx-4 text-slate-600 space-y-3'>
               <p className='sm:text-xl text-xl font-semibold leading-relaxed'>
                 CLAVE DEL CENTRO DE TRABAJO:
                 <span className='font-normal'> 30PSU0029L</span>
@@ -93,13 +99,16 @@ const importedImages = [imagen1, imagen2, imagen3, imagen4, imagen5, imagen6, im
                 Acuerdo NO.
                 <span className='font-normal'> ES139/2005</span>
               </p>
-              <p className='sm:text-xl text-2xl font-semibold leading-snug'>
+              {/* <p className='sm:text-xl text-2xl font-semibold leading-snug'>
                 Clave de la Carrera:
                 <span className='font-normal'>7EA12135</span>
-              </p>
+              </p> */}
               <p className='sm:text-xl text-2xl font-semibold leading-snug'>
                 Modalidad:
                 <span className='font-normal'>No Escolarizada</span>
+              </p>
+              <p className="text-lg text-gray font-bold mt-5 mx-4 text-center uppercase text-orange-600">
+                "En esta vida no solo los talentos son los que triunfan, también las voluntades".
               </p>
             </div>
           </div>
