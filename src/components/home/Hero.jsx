@@ -1,67 +1,84 @@
 import React, { useEffect, useState } from 'react';
+import Slider from 'react-slick';
 import { logos } from "../../data/Data";
-import hero6 from "../../assets/img24.jpeg";
 import clientAxios from '../../config/clientAxios';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import inscripciones2025 from '../../assets/img/inscripciones2025.jpeg';
+import CongresoLaHabana2025 from '../../assets/img/CongresoLaHabana2025.png'
+
+// Importa las imágenes de la carpeta
+import imagen1 from '../../assets/img/pedagogia2025/1.jpg';
+import imagen2 from '../../assets/img/pedagogia2025/2.jpg';
+import imagen3 from '../../assets/img/pedagogia2025/3.jpg';
+import imagen4 from '../../assets/img/pedagogia2025/4.jpg';
+import imagen5 from '../../assets/img/pedagogia2025/5.jpg';
+import imagen6 from '../../assets/img/pedagogia2025/6.jpg';
+import imagen7 from '../../assets/img/pedagogia2025/7.jpg';
+import imagen8 from '../../assets/img/pedagogia2025/8.jpg';
+import imagen9 from '../../assets/img/pedagogia2025/9.jpg';
 
 const Hero = () => {
+  const [images, setImages] = useState([]);
+  const [currentImage, setCurrentImage] = useState(inscripciones2025); // Inicia con la primera imagen local
+  const [isFirstImage, setIsFirstImage] = useState(true); // Controla si se está mostrando la imagen local
 
-  const [images, setImages] = useState([])
-  const [currentImage, setCurrentImage] = useState(hero6);
-
-  //fetch a las imagenes
+// Array de imágenes importadas
+const importedImages = [imagen1, imagen2, imagen3, imagen4, imagen5, imagen6, imagen7, imagen8, imagen9];
 
   useEffect(() => {
     const getHero = async () => {
       try {
-        const response = await clientAxios.get('/customsize')
-        const imagenes = response.data.map(item => item.slideImg); // Extraemos solo los URLs de las imágenes
+        const response = await clientAxios.get('/customsize');
+        const imagenes = response.data.map(item => item.slideImg);
         setImages(imagenes);
-        setCurrentImage(imagenes[0]); // Iniciar con la primera imagen
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-    }
-    getHero()
-  }, [])
+    };
+    getHero();
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const index = images.indexOf(currentImage);
-      if (index === images.length - 1) {
-        setCurrentImage(images[0]);
+      if (isFirstImage && images.length > 0) {
+        setCurrentImage(images[0]); // Cambia a la primera imagen de la consulta
+        setIsFirstImage(false);
       } else {
-        setCurrentImage(images[index + 1]);
+        const index = images.indexOf(currentImage);
+        setCurrentImage(images[(index + 1) % images.length]);
       }
-    }, 8000);
+    }, 5000);
 
     return () => clearInterval(interval);
-  }, [currentImage]);
+  }, [currentImage, images, isFirstImage]);
 
-
-
+  const carouselSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+  };
 
   return (
-    <div className="w-full  mx-auto home bg-gradient-to-t from-green-100 to-lime-100 py-16" >
+    <div className="w-full mx-auto home bg-gradient-to-t to-green-100 from-white py-16 -mb-32">
       <div className="md:flex items-center justify-center">
-        <div className='flex-1 basis-[20rem] '>
-          <div className="my-5 flex justify-center  space-y-5 flex-col  items-center sm:flex-row mx-auto p-4 item gap-4">
+        <div className='flex-1 basis-[20rem]'>
+          <div className="my-5 flex justify-center space-y-5 flex-col items-center sm:flex-row mx-auto p-4 item gap-4">
             <img src={logos[0]} className='w-32' loading='lazy' />
             <img src={logos[5]} className='w-36' loading='lazy' />
             <img src={logos[7]} className='w-36' loading='lazy' />
             <img src={logos[6]} className='w-36' loading='lazy' />
           </div>
-          <div className="my-5">
-
-          </div>
+          <div className="my-5"></div>
           <div className="text-center">
             <p className='uppercase text-5xl font-black text-gray-600'>Posgrados Validados <span className='text-teal-700'>ante la usicamm</span></p>
             <p className="text-lg text-gray font-bold mt-5 mx-4 text-center uppercase text-orange-600">
               "En esta vida no solo los talentos son los que triunfan, también las voluntades".
             </p>
-
-            {/* <p>
-              Tel. 52(228)8113228
-            </p> */}
 
             <div className='mt-4 mx-4 text-slate-600 space-y-3'>
               <p className='sm:text-xl text-xl font-semibold leading-relaxed'>
@@ -80,7 +97,7 @@ const Hero = () => {
                 Clave de la Carrera:
                 <span className='font-normal'>7EA12135</span>
               </p>
-              <p className='sm:text-xl text-2xl font-semibold  leading-snug'>
+              <p className='sm:text-xl text-2xl font-semibold leading-snug'>
                 Modalidad:
                 <span className='font-normal'>No Escolarizada</span>
               </p>
@@ -88,15 +105,43 @@ const Hero = () => {
           </div>
         </div>
         <div className="flex flex-1 basis-[20rem] justify-center items-center mt-2 animate-fade lg:mx-4 sm:mx-8">
-          {
-            < img src={currentImage} alt="imagen hero" className='w-[800px] h-[500px] object-cover object-top shadow-sm rounded-sm' />
-          }
-
+          {currentImage && <img src={currentImage} alt="imagen hero" className='w-[800px] h-[500px] sm:w-[600px] sm:h-[400px] xs:w-[400px] xs:h-[300px] object-cover object-top shadow-sm rounded-sm' />}
         </div>
       </div>
 
+      {/* Imagen CongresoLaHabana2025 */}
+      <div className='flex w-full justify-center mt-10'>
+        <img 
+            src={CongresoLaHabana2025} 
+            alt="Congreso La Habana 2025" 
+            className='w-11/12 rounded-[20px]'
+        />
+      </div>
+
+      <div className="w-full flex justify-center">
+        <div className="mt-8 w-11/12">
+        <h1 className="text-center mt-8 mb-3 font-bold text-6xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent animate-gradient-x">
+          Congreso Internacional de Pedagogía 2025
+        </h1>
+          <Slider {...carouselSettings}>
+            {importedImages.map((image, index) => (
+              <div key={index} className="px-4">
+                <img
+                  src={image}
+                  alt={`pedagogia2025-${index}`}
+                  className="w-full h-96 object-cover rounded-lg shadow-lg" // Altura reducida a h-64 (16rem)
+                />
+              </div>
+            ))}
+          </Slider>
+          {/* Descripción general debajo del carrusel */}
+          <p className="text-center mt-[32px] text-[25px] font-semibold text-gray-700">
+            El Centro Regional de Educación Superior Paulo Freire, presente en la inauguración del Congreso Internacional de Pedagogia 2025, en la Habana, Cuba. Participan 32 países con el objetivo de intercambiar políticas públicas, estrategias y recomendaciones para mejorar la práctica educativa en el mundo.
+          </p>
+        </div>
+      </div>
     </div>
-  )
-}
+  );
+};
 
 export default Hero;
