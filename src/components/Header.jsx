@@ -38,7 +38,7 @@ const Header = () => {
       }
     };
     fetchLogo();
-    const intervalId = setInterval(fetchLogo, 5000); // Llamar a fetchLogo cada 5 segundos
+    const intervalId = setInterval(fetchLogo, 10000); // Llamar a fetchLogo cada 5 segundos
     return () => clearInterval(intervalId);
   }, []);
 
@@ -50,12 +50,12 @@ const Header = () => {
           data.title || "Centro Regional de Educación Superior Paulo Freire"
         ); // Fallback en caso de no haber título
       } catch (error) {
-        console.error("Error al obtener el título:", error);
+        // console.error("Error al obtener el título:", error);
       }
     };
 
     fetchTitle();
-    const intervalId = setInterval(fetchTitle, 5000); // Llamar a fetchTitle cada 5 segundos
+    const intervalId = setInterval(fetchTitle, 10000); // Llamar a fetchTitle cada 5 segundos
     return () => clearInterval(intervalId);
   }, []);
 
@@ -103,7 +103,7 @@ const Header = () => {
                 })}
               </div>
             </div>
-            |
+            
             {toggle && (
               <motion.div
                 initial={{ x: -500, opacity: 0 }}

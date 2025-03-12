@@ -6,12 +6,13 @@ import { MdDelete } from "react-icons/md";
 import AllImagesCustomsize from "../components/AllImagesCustomsize";
 import clientAxios from "../../config/clientAxios";
 import useAuth from "../../hooks/useAuth";
+import toast from "react-hot-toast";
 
 const Dashboard = () => {
 
-
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
+    const [refreshKey, setRefreshKey] = useState(0)
 
     const { token } = useAuth();
 
@@ -28,22 +29,20 @@ const Dashboard = () => {
                     Authorization: `Bearer ${token}`
                 }
             });
-            console.log(response);
+            toast.success('Imagen subida correctamente');
+            setRefreshKey(prev => prev + 1); // Trigger refresh
             setLoading(false);
         } catch (error) {
             console.log(error);
+            toast.error('Error al subir la imagen');
             setLoading(false);
         }
     }
-
 
     return (
         <>
             <section className="container mx-auto bg-slate-50">
                 <h1 className="text-4xl font-bold text-center mt-10">Dashboard</h1>
-
-                {/* Link agregar nueva imagen */}
-
 
                 <p className="text-center  my-10 mx-2">
                     Administra la sección de noticias, la biblioteca, la oferta educativa, las actividades de la academia, las convocatorias y la organización.
@@ -94,11 +93,9 @@ const Dashboard = () => {
                         />
                     </div>
 
-                    <AllImagesCustomsize loading={loading} />
+                    <AllImagesCustomsize loading={loading} key={refreshKey} />
 
                 </div>
-
-
 
             </section>
         </>

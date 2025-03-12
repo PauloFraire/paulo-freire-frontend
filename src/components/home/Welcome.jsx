@@ -48,7 +48,7 @@ const Welcome = () => {
                         <div className='flex items-center  mb-4' id='vision'>
                             <div className=''>
                                 <h2 className='font-bold text-xl'>Visión</h2>
-                                <p className='leading-relaxed mt-5 text-lg'>Ser una escuela de posgrado con referente internacional, generadora de conocimiento e innovación comprometida con la formación sólida e integral de profesionales, especialistas e investigadores de excelencia, brindando una oferta académica flexible y dinámica que responda a las necesidades del mundo globalizado. </p>
+                                <p className='leading-relaxed mt-5 text-lg'>Ser una escuela de posgrado con referente internacional, generadora de conocimiento e innovación comprometida con la formación sólida e integral de profesionales, especialistas e investigadores de excelencia, brindando una oferta educativa flexible y dinámica que responda a las necesidades del mundo globalizado. </p>
                             </div>
                         </div>
 
