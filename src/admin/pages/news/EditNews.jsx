@@ -104,8 +104,8 @@ const EditNews = () => {
             }
 
         } catch (error) {
-            console.log(error.response.data.msg);
-            toast.error(error.response.data.msg);
+            // console.log(error.response.data.msg);
+            // toast.error(error.response.data.msg);
             setLoading(false);
         }
     }

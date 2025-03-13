@@ -82,7 +82,7 @@ const AddNews = () => {
             });
 
 
-            console.log(response.data);
+            // console.log(response.data);
             setLoading(false);
 
             if (response.status === 200) {

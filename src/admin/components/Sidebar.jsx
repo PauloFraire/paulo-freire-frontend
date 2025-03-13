@@ -44,7 +44,7 @@ const adminNavItems = [
   {
     to: "/admin/becas",
     icon: <AiFillDollarCircle className="text-2xl" />,
-    label: "Beca",
+    label: "Becas",
   },
 
   {
