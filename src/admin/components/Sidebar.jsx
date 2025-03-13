@@ -5,6 +5,7 @@ import { TiThMenuOutline } from "react-icons/ti";
 import { BiHomeAlt, BiSelectMultiple } from "react-icons/bi";
 import { SiGoogleclassroom, SiInstructure } from "react-icons/si";
 import { GiThink } from "react-icons/gi";
+import { AiFillDollarCircle } from "react-icons/ai";
 import { TbLogin } from "react-icons/tb";
 
 const adminNavItems = [
@@ -39,6 +40,11 @@ const adminNavItems = [
     to: "/admin/ofertaeducativa",
     icon: <SiInstructure className="text-2xl" />,
     label: "Oferta Educativa",
+  },
+  {
+    to: "/admin/becas",
+    icon: <AiFillDollarCircle className="text-2xl" />,
+    label: "Beca",
   },
 
   {
