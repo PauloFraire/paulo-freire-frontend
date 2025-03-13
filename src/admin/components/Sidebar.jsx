@@ -35,8 +35,6 @@ const adminNavItems = [
     label: "Usuarios",
   },
   {
-    //-----------------------------------------------------------------------------------------------------
-    //to: "/admin/admin-",
     to: "/admin/ofertaeducativa",
     icon: <SiInstructure className="text-2xl" />,
     label: "Oferta Educativa",
