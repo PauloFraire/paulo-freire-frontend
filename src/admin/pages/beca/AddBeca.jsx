@@ -1,4 +1,3 @@
-//AddBeca.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import clientAxios from "../../../config/clientAxios";
@@ -60,35 +59,38 @@ const AddBeca = () => {
   };
 
   return (
-    <section className="container mx-auto p-6">
-      <h1 className="text-center text-3xl font-bold">Crear Beca</h1>
-      <form onSubmit={handleSubmit} className="bg-white p-6 shadow-lg rounded-lg">
+    <section className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md mt-10">
+      <h1 className="text-center text-3xl font-bold text-gray-700 mb-6">Crear Beca</h1>
+      <form onSubmit={handleSubmit} className="space-y-5">
         <div>
-          <label>Título:</label>
-          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full p-2 border rounded" />
+          <label className="block text-gray-600 font-semibold">Título</label>
+          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
         </div>
         <div>
-          <label>Descripción:</label>
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)} className="w-full p-2 border rounded"></textarea>
+          <label className="block text-gray-600 font-semibold">Descripción</label>
+          <textarea value={description} onChange={(e) => setDescription(e.target.value)} className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
         </div>
         <div>
-          <label>Requisitos:</label>
-          <textarea value={requisitos} onChange={(e) => setRequisitos(e.target.value)} className="w-full p-2 border rounded"></textarea>
+          <label className="block text-gray-600 font-semibold">Requisitos</label>
+          <textarea value={requisitos} onChange={(e) => setRequisitos(e.target.value)} className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
         </div>
         <div>
-          <label>Imagen:</label>
-          <input type="file" accept="image/*" onChange={handleImageChange} />
+          <label className="block text-gray-600 font-semibold">Imagen</label>
+          <input type="file" accept="image/*" onChange={handleImageChange} className="w-full p-2 border border-gray-300 rounded-lg" />
         </div>
         <div>
-          <label>PDFs:</label>
-          <input type="file" accept=".pdf" multiple onChange={handlePdfChange} />
-          {pdfs.map((pdf, index) => (
-            <p key={index}>
-              {pdf.name} <button type="button" onClick={() => removePdf(index)}>Eliminar</button>
-            </p>
-          ))}
+          <label className="block text-gray-600 font-semibold">PDFs</label>
+          <input type="file" accept=".pdf" multiple onChange={handlePdfChange} className="w-full p-2 border border-gray-300 rounded-lg" />
+          <div className="mt-2 space-y-2">
+            {pdfs.map((pdf, index) => (
+              <div key={index} className="flex justify-between bg-gray-100 p-2 rounded-lg">
+                <span className="text-gray-700">{pdf.name}</span>
+                <button type="button" onClick={() => removePdf(index)} className="text-red-500 hover:text-red-700">Eliminar</button>
+              </div>
+            ))}
+          </div>
         </div>
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded" disabled={isLoading}>
+        <button type="submit" className="w-full bg-blue-500 text-white p-3 rounded-lg font-semibold hover:bg-blue-600 transition disabled:opacity-50" disabled={isLoading}>
           {isLoading ? "Enviando..." : "Guardar"}
         </button>
       </form>

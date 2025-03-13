@@ -61,28 +61,32 @@ const CallsEducational = () => {
                   </h1>
                   <p className="mt-3">{beca.description}</p>
 
-                  {/* Mostrar requisitos */}
+                  {/* Mostrar requisitos con icono FiCheck */}
+                  {/* Mostrar requisitos con icono FiCheck en color naranja */}
                   {beca.requisitos && (
                     <div className="mt-4">
-                      <h2 className="text-lg font-semibold">Requisitos:</h2>
-                      <ul className="mt-2 list-disc ml-5">
+                      <ul className="mt-2 ml-5">
                         {beca.requisitos.split("\n").map((req, i) => (
-                          <li key={i}>{req}</li>
+                          <li key={i} className="flex items-center gap-2">
+                            <div className="rounded-full p-2 text-orange-600 !bg-orange-400/20">
+                              <FiCheck />
+                            </div>
+                            {req}
+                          </li>
                         ))}
                       </ul>
                     </div>
                   )}
-                  
+
+                  {/* Mostrar PDFs solo con puntos */}
                   <div className="mt-4">
-                    {beca.pdfs.map((pdf, i) => (
-                      <div key={i} className="mt-2 flex items-center gap-x-2">
-                        <div className="rounded-full p-2 text-orange-600 !bg-orange-400/20">
-                          <FiCheck />
-                        </div>
-                        <p>{pdf.name}</p>
-                      </div>
-                    ))}
+                    <ul className="mt-2 ml-5 list-disc">
+                      {beca.pdfs.map((pdf, i) => (
+                        <li key={i}>{pdf.name}</li>
+                      ))}
+                    </ul>
                   </div>
+
                   {beca.pdfs.length > 0 && (
                     <a
                       href={beca.pdfs[0].url}
