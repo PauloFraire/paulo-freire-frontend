@@ -119,7 +119,7 @@ export default function Registro() {
   
       if (response.status === 201) {
         toast.success('Se ha enviado un token de verificación a tu correo');
-        console.log(response.data.message); // Mensaje de éxito
+        // console.log(response.data.message); // Mensaje de éxito
         setShowModal(true); // Mostrar el modal
       }
     } catch (error) {
