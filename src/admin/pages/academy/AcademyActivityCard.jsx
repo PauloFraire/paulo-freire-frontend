@@ -37,9 +37,8 @@ const AcademyActivityCard = ({ activity }) => {
 
             if (response.status === 200) {
                 toast.success('Imagen subida correctamente');
-                // window.location.reload();
+                window.location.reload();
             }
-            console.log(response);
         } catch (error) {
             setLoading(false);
             console.log(error);
@@ -65,10 +64,10 @@ const AcademyActivityCard = ({ activity }) => {
                     }
                 });
 
-                toast.success(response.data)
-
+                window.location.reload();
             } catch (error) {
                 toast.error('No se pudo eliminar la actividad');
+                console.error('Error:', error);
             }
         }
     }

@@ -1,87 +1,96 @@
-import React, { useState } from 'react';
-import { Link, json, useNavigate } from 'react-router-dom';
+import React, { useState, useRef } from 'react'; // Importa useRef para manejar el captcha
+import { Link, useNavigate } from 'react-router-dom';
 import { IoIosEyeOff } from "react-icons/io";
 import { IoLogIn } from "react-icons/io5";
-import Spinner from '../../components/Spinner'
+import Spinner from '../../components/Spinner';
 import { toast } from 'react-hot-toast';
 import clientAxios from '../../config/clientAxios';
+import ReCAPTCHA from 'react-google-recaptcha';
+import ErrorHandler from '../../components/ErrorHandler'; // Importa el ErrorHandler
 
 const Login = () => {
-
-
     const navigate = useNavigate();
     const [user, setUser] = useState({
         email: '',
         password: ''
-    })
-    const [showPassword, setShowPassword] = useState(false)
-    const [loading, setLoading] = useState(false)
+    });
+    const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [captchaValue, setCaptchaValue] = useState(null);
+    const [error, setError] = useState(null); // Estado para manejar errores
+    const captchaRef = useRef(null); // Crea una referencia para el captcha
+
     const togglePassword = () => {
-        setShowPassword(!showPassword)
-    }
+        setShowPassword(!showPassword);
+    };
+
+    const handleCaptchaChange = (value) => {
+        setCaptchaValue(value);
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        //fetch to backend
-
+    
+        if (!captchaValue) {
+            toast.error('Por favor verifica que no eres un robot.');
+            return;
+        }
+    
         if (user.email.trim() === '' || user.password.trim() === '') {
-            toast.error('No puede haber campos vacios')
-            return
+            toast.error('No puede haber campos vacíos');
+            return;
         }
-        setLoading(true)
+    
+        setLoading(true);
         try {
-            const response = await clientAxios.post('/login', user);
-            setLoading(false)
-            console.log(response.data)
-
+            const response = await clientAxios.post('/login', { 
+                ...user, 
+                captcha: captchaValue 
+            });
+    
             if (response.status === 200) {
-                localStorage.setItem('token', JSON.stringify(response.data.user))
-                navigate('/admin/home')
+                const userResponse = await clientAxios.get(`/user/email/${user.email}`);
+                // const userResponse = await clientAxios.get('/error400'); // Prueba para error
+                const userData = userResponse.data;
+
+                localStorage.setItem('token', JSON.stringify(response.data.user));
+
+                if (userData.role === 0) {
+                    navigate('/user/profile');
+                } else if (userData.role === 1) {
+                    navigate('/admin/home');
+                } else {
+                    toast.error('Rol desconocido. Contacta al administrador.');
+                }
             }
-
         } catch (error) {
-            console.log(error)
-            toast.error('Hubo un error')
+            setError(error); // Establece el error para que el ErrorHandler lo maneje
+            console.log(error);
+            toast.error(error.response.data);
+        } finally {
             setLoading(false);
+            setCaptchaValue(null); // Reinicia el valor del captcha
+            if (captchaRef.current) {
+                captchaRef.current.reset(); // Reinicia el captcha visualmente
+            }
         }
-    }
-
+    };      
 
     const updateState = (e) => {
         setUser({
             ...user,
             [e.target.name]: e.target.value
-        })
-    }
+        });
+    };
 
     return (
-        <div className="max-w-lg mx-auto  bg-white p-8 rounded-xl shadow shadow-slate-300 my-16  from-sky-800 to-blue-100">
+        <div className="max-w-lg mx-auto bg-white p-8 rounded-xl shadow shadow-slate-300 my-16 from-sky-800 to-blue-100">
+            <h1 className="text-4xl font-bold text-center text-slate-700">Iniciar Sesión</h1>
 
-            <h1 className="text-4xl font-bold text-center text-slate-700">
-                Iniciar Sesión
-            </h1>
-            <p className="text-slate-500 font-bold">
-
-            </p>
-
-            {/* <div className="my-5 flex gap-x-2 sm:flex-row flex-col">
-                <button className="btn-auth">
-                    <FcGoogle className='w-6 h-6' /> <span>Continua con Google</span>
-                </button>
-                <button className="btn-auth">
-                    <FaFacebook className="w-6 h-6 text-blue-700" /><span>Continua con Facebook</span>
-                </button>
-            </div> */}
-
-            <form
-                onSubmit={handleSubmit}
-                className="my-5"
-            >
+            <form onSubmit={handleSubmit} className="my-5">
                 <div className="flex flex-col space-y-5">
-                    <div >
-                        <label htmlFor="email" className="font-medium text-slate-700 pb-2">
-                            Correo:
-                        </label>
+                    <div>
+                        <label htmlFor="email" className="font-medium text-slate-700 pb-2">Correo:</label>
                         <input
                             type="email"
                             name="email"
@@ -92,13 +101,14 @@ const Login = () => {
                             onChange={updateState}
                         />
                     </div>
-                    <div >
+                    <div>
                         <label htmlFor="password" className="font-medium text-slate-700 pb-2">Contraseña:</label>
                         <div className='relative'>
                             <input
                                 type={showPassword ? 'text' : 'password'}
                                 name="password"
-                                id="password" className='input-auth'
+                                id="password"
+                                className='input-auth'
                                 placeholder="Ingrese su Contraseña"
                                 defaultValue={user.password}
                                 onChange={updateState}
@@ -107,26 +117,18 @@ const Login = () => {
                                 className={`absolute top-1/2 right-3 transform -translate-y-1/3 hover:cursor-pointer hover:scale-110 ${showPassword ? 'text-blue-600' : 'text-slate-500'}`}
                                 onClick={togglePassword}
                             />
-
                         </div>
                     </div>
 
-                    {/* o inicie sesion con */}
-
                     <div className='flex items-center justify-center'>
-                        {
-                            // Widget()
-                            // < Turnstile siteKey={import.meta.env.VITE_TURNSTILE} />
-                        }
+                        <ReCAPTCHA
+                            sitekey="6LeHymIqAAAAAIZGIyMwk1w749yFwuajNcPCUdNq"
+                            onChange={handleCaptchaChange}
+                            ref={captchaRef} // Asigna la referencia al captcha
+                        />
                     </div>
 
                     <div className="flex flex-row justify-between">
-                        <div>
-                            <label htmlFor="remember" className="">
-                                <input type="checkbox" id="remember" className="w-4 h-4 border-slate-200 focus:bg-blue-600" />
-                                Recordar contraseña
-                            </label>
-                        </div>
                         <div>
                             <Link to='/olvide-password' className="font-medium text-blue-600">Recuperar Contraseña?</Link>
                         </div>
@@ -139,14 +141,13 @@ const Login = () => {
                             </button> :
                             <Spinner />
                     }
-
                 </div>
             </form>
 
-
+            {/* Integra el ErrorHandler para manejar errores */}
+            <ErrorHandler error={error} />
         </div>
+    );
+};
 
-    )
-}
-
-export default Login
+export default Login;

@@ -25,16 +25,13 @@ const Galery = () => {
 
         getAcademyActivities();
 
-
-
     }, []);
 
     return (
-        <div className="pt-10 pb-10 space-y-8 bg-gray-100">
+        <div className="pt-10 pb-10 space-y-8 bg-gray-100 justify-center">
 
             {
                 loading ? <Spinner /> :
-
 
                     academyActivities.map((activity) => (
                         <CardGalery

@@ -4,11 +4,33 @@ import { Link } from 'react-router-dom';
 import { TiEdit } from 'react-icons/ti';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { IoIosAddCircle } from 'react-icons/io';
-
+import { toast } from 'react-hot-toast';
+import Swal from 'sweetalert2';
 
 const AdminUsers = () => {
-
     const [users, setUsers] = useState([]);
+    const handleDeleteClick = async (userId) => {
+        const result = await Swal.fire({
+            title: '¿Estas seguro?',
+            text: "Una vez eliminado, no podrás recuperar el usuario",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, Eliminar'
+        });
+
+        if (result.isConfirmed) {
+            try {
+                await clientAxios.delete(`/user/${userId}`);
+                setUsers(users.filter(user => user._id !== userId));
+                toast.success('Usuario eliminado correctamente');
+            } catch (error) {
+                console.log(error);
+                toast.error('Error al eliminar el usuario');
+            }
+        }
+    };
 
     useEffect(() => {
         const getUsers = async () => {
@@ -17,28 +39,28 @@ const AdminUsers = () => {
                 setUsers(response.data);
             } catch (error) {
                 console.log(error);
+                toast.error('Error al cargar los usuarios');
             }
         }
         getUsers();
     }, [])
 
-
     const roleDefault = (role) => {
-        switch (role) {
+        switch (parseInt(role)) {
+            case 0:
+                return 'Estudiante';
             case 1:
-                return 'Editor';
-            case 2:
-                return 'Bibloteca';
-            default:
                 return 'Administrador';
+            case 2:
+                return 'Editor';
+            default:
+                return 'Usuario básico';
         }
     }
 
     return (
         <section className="container mx-auto bg-slate-50">
             <h1 className="text-center text-3xl font-bold text-slate-600 mt-10">Administra Los Usuarios</h1>
-
-            {/* Link agregar nueva imagen */}
 
             <p className="text-center  my-4 mx-2">
                 Aqui podras administrar los usuarios de la pagina web
@@ -62,12 +84,10 @@ const AdminUsers = () => {
                                 <th className="px-2 py-2 border text-gray-600">Nombre</th>
                                 <th scope="col" className="px-2 py-2 border text-gray-600">Correo</th>
                                 <th className="px-2 py-2 border text-gray-600">Rol</th>
-                                {/* <th className="px-2 py-2 border text-gray-600">Acciones</th>
-                                <th scope="col" className="px-2 py-2 border text-gray-600">Ver</th> */}
+                                <th className="px-2 py-2 border text-gray-600">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
-
                             {
                                 users.length === 0 ? (
                                     <tr>
@@ -90,35 +110,27 @@ const AdminUsers = () => {
                                                     roleDefault(user.role)
                                                 }
                                             </td>
-                                            {/* <td className="px-2 py-2 border">
+                                            <td className="px-2 py-2 border">
                                                 <div className="flex items-center justify-center gap-2">
-                                                    <Link to={`/admin/edit-news/${user._id}`} className="">
+                                                    <Link to={`/admin/add-user?id=${user._id}`} className="">
                                                         <TiEdit className="text-2xl text-blue-600" />
                                                     </Link>
                                                     <button
-                                                        onClick={() => handleDelete(user._id)}
+                                                        onClick={() => handleDeleteClick(user._id)}
                                                         className="hover:scale-105 transition-all ease-in-out duration-300"
                                                     >
                                                         <RiDeleteBin6Line className="text-2xl text-red-600" />
                                                     </button>
                                                 </div>
                                             </td>
-                                            <td className="px-2 py-2 border text-center">
-                                                <Link to={`/new-item/${user._id}`} className="btn-action p-2">
-                                                    Ver
-                                                </Link>
-                                            </td> */}
                                         </tr>
                                     )))
-
                             }
                         </tbody>
                     </table>
-                    <div className="text-sm text-gray-600 mt-2">
-
-                    </div>
                 </div>
             </div>
+
 
         </section>
     )

@@ -100,14 +100,12 @@ const EditNews = () => {
 
             if (response.status === 200) {
                 toast.success('Noticia actualizada correctamente');
-                setTimeout(() => {
-                    navigate('/admin/news');
-                }, 2000);
+                navigate('/admin/news');
             }
 
         } catch (error) {
-            console.log(error.response.data.msg);
-            toast.error(error.response.data.msg);
+            // console.log(error.response.data.msg);
+            // toast.error(error.response.data.msg);
             setLoading(false);
         }
     }

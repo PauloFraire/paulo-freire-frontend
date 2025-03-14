@@ -111,14 +111,9 @@ export const navLinks = [
     },
     {
         id: 6,
-        link: "Análisis educativo contamporáneo",
+        link: "Análisis del contexto educativo contamporáneo",
         path: "/contexto-educativo"
-    },    
-    {
-        id: 7,
-        link: "Login",
-        path: "/login"
-    },
+    }
 ];
 
 //autoridadeS
